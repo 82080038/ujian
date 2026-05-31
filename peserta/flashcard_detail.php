@@ -61,6 +61,8 @@ require_once __DIR__ . '/../includes/navbar_peserta.php';
     </div>
 </div>
 
+<?php require_once __DIR__ . '/../includes/footer.php'; ?>
+
 <script>
 const cards = <?= json_encode($cards) ?>;
 let current = 0;
@@ -89,5 +91,3 @@ $('#btn-prev').on('click', function() {
     if (current > 0) showCard(current - 1);
 });
 </script>
-
-<?php require_once __DIR__ . '/../includes/footer.php'; ?>

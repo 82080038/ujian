@@ -107,6 +107,8 @@ require_once __DIR__ . '/../includes/header.php';
     </div>
 </div>
 
+<?php require_once __DIR__ . '/../includes/footer.php'; ?>
+
 <script>
 $('.latihan-opsi').on('click', function() {
     if ($(this).hasClass('disabled-opsi')) return;
@@ -124,5 +126,3 @@ $('.reveal-btn').on('click', function() {
     });
 });
 </script>
-
-<?php require_once __DIR__ . '/../includes/footer.php'; ?>

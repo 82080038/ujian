@@ -138,6 +138,8 @@ require_once __DIR__ . '/../includes/header.php';
     </div>
 </div>
 
+<?php require_once __DIR__ . '/../includes/footer.php'; ?>
+
 <script>
 // Simpan jawaban mini via AJAX
 $('.mini-opsi').on('click', function() {
@@ -157,7 +159,7 @@ $('.toggle-ragu-mini').on('change', function() {
 });
 
 // Timer (20 menit default untuk mini)
-startTimer(20 * 60, '#timer', null);
+if (typeof startTimer === 'function') {
+    startTimer(20 * 60, '#timer', null);
+}
 </script>
-
-<?php require_once __DIR__ . '/../includes/footer.php'; ?>
