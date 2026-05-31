@@ -73,7 +73,7 @@ $(document).ready(function() {
         const isRagu = $('#ragu-' + soalId).is(':checked') ? 1 : 0;
 
         $.ajax({
-            url: 'api/simpan_jawaban_temp.php',
+            url: '../api/simpan_jawaban_temp.php',
             method: 'POST',
             data: { soal_id: soalId, opsi_id: opsiId, paket_id: paketId, is_ragu: isRagu },
             dataType: 'json',
