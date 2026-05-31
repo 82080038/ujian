@@ -52,8 +52,12 @@ require_once __DIR__ . '/../includes/navbar_peserta.php';
                         <li><i class="bi bi-clock text-primary"></i> Waktu: <?= $row['waktu_menit'] ?> menit</li>
                         <li><i class="bi bi-trophy text-warning"></i> Kumulatif PG: <?= $row['passing_grade_kumulatif'] ?></li>
                     </ul>
-                    <a href="tryout_kerja.php?paket=<?= $row['id'] ?>" class="btn btn-success w-100 fw-bold">
-                        <?= $status ? 'Kerjakan Lagi' : 'Mulai Try-Out' ?> <i class="bi bi-arrow-right"></i>
+                    <?php
+                        $btnLink = $status ? ($status['status_lulus'] === 'proses' ? "tryout_kerja.php?paket={$row['id']}" : "tryout_hasil.php?id={$status['id']}") : "tryout_kerja.php?paket={$row['id']}";
+                        $btnText = $status ? ($status['status_lulus'] === 'proses' ? 'Lanjutkan' : 'Lihat Hasil') : 'Mulai Try-Out';
+                    ?>
+                    <a href="<?= $btnLink ?>" class="btn btn-success w-100 fw-bold">
+                        <?= $btnText ?> <i class="bi bi-arrow-right"></i>
                     </a>
                 </div>
             </div>

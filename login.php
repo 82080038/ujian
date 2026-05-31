@@ -9,7 +9,18 @@ if (isLoggedIn()) {
 
 $error = '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+// Rate limiting
+$maxAttempts = 5;
+$lockoutMinutes = 15;
+if (!isset($_SESSION['login_attempts'])) $_SESSION['login_attempts'] = 0;
+if (!isset($_SESSION['login_locked_until'])) $_SESSION['login_locked_until'] = 0;
+
+if (time() < $_SESSION['login_locked_until']) {
+    $remaining = ceil(($_SESSION['login_locked_until'] - time()) / 60);
+    $error = "Terlalu banyak percobaan login. Silakan coba lagi dalam $remaining menit.";
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$error) {
     $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
 
@@ -29,6 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['nama'] = $user['nama'];
                 $_SESSION['email'] = $user['email'];
                 $_SESSION['role'] = $user['role'];
+                $_SESSION['login_attempts'] = 0;
+                $_SESSION['login_locked_until'] = 0;
 
                 if ($user['role'] === 'admin') {
                     redirect('admin/dashboard.php');
@@ -36,7 +49,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     redirect('peserta/dashboard.php');
                 }
             } else {
-                $error = 'Password salah.';
+                $_SESSION['login_attempts']++;
+                if ($_SESSION['login_attempts'] >= $maxAttempts) {
+                    $_SESSION['login_locked_until'] = time() + ($lockoutMinutes * 60);
+                    $error = "Terlalu banyak percobaan. Akun dikunci selama $lockoutMinutes menit.";
+                } else {
+                    $remaining = $maxAttempts - $_SESSION['login_attempts'];
+                    $error = "Password salah. ($remaining percobaan tersisa)";
+                }
             }
         } else {
             $error = 'Email tidak terdaftar.';

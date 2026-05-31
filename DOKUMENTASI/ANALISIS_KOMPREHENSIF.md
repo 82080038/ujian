@@ -91,48 +91,49 @@ index.php (landing)
 
 ### 🔴 Critical (Security)
 
-| # | File | Line | Issue | Risk |
-|---|------|------|-------|------|
-| 1 | `api/get_topik_by_jenis.php` | 13 | `$jenis` langsung di-query tanpa prepared statement | SQL Injection |
-| 2 | `peserta/latihan_kerja.php` | 14 | `$jenis` + `$topik` dalam string query | SQL Injection |
-| 3 | `peserta/mini_tryout_kerja.php` | 16 | `$jenis` dalam WHERE clause string | SQL Injection |
-| 4 | `peserta/profil.php` | 45 | Update password pakai raw query | SQL Injection (meski hash) |
-| 5 | `admin/kelola_soal.php` | ~95 | WHERE clause built dari user input | SQL Injection |
-| 6 | Semua | - | Tidak ada rate limiting | Brute force login |
-| 7 | `login.php` | - | Tidak ada session_regenerate_id() | Session fixation |
-| 8 | `api/simpan_jawaban_temp.php` | - | Tidak ada CSRF token | CSRF attack potential |
+| # | File | Line | Issue | Risk | Status |
+|---|------|------|-------|------|--------|
+| 1 | `api/get_topik_by_jenis.php` | 13 | `$jenis` langsung di-query tanpa prepared statement | SQL Injection | **FIXED** |
+| 2 | `peserta/latihan_kerja.php` | 14 | `$jenis` + `$topik` dalam string query | SQL Injection | **FIXED** |
+| 3 | `peserta/mini_tryout_kerja.php` | 16 | `$jenis` dalam WHERE clause string | SQL Injection | **FIXED** |
+| 4 | `peserta/profil.php` | 45 | Update password pakai raw query | SQL Injection (meski hash) | **FIXED** |
+| 5 | `admin/kelola_soal.php` | ~95 | WHERE clause built dari user input | SQL Injection | **TODO** |
+| 6 | Semua | - | Tidak ada rate limiting | Brute force login | **FIXED** (session-based, 5 attempts, 15min lockout) |
+| 7 | `login.php` | - | Tidak ada session_regenerate_id() | Session fixation | **FIXED** |
+| 8 | `api/simpan_jawaban_temp.php` | - | Tidak ada CSRF token | CSRF attack potential | **TODO** |
 
 ### 🟠 High (Functional)
 
-| # | File | Issue | Impact |
-|---|------|-------|--------|
-| 1 | `peserta/mini_tryout_kerja.php` | `location.reload()` setelah setiap jawaban | UX buruk, flashing screen |
-| 2 | `peserta/latihan_kerja.php` | `location.reload()` setelah setiap jawaban | UX buruk |
-| 3 | `peserta/tryout_list.php` | "Kerjakan Lagi" tetap ke `tryout_kerja.php` meski sudah selesai | Bisa mengerjakan ulang yang sudah selesai |
-| 4 | `peserta/tryout_kerja.php` | Saat refresh, timer bisa reset jika localStorage key tidak ketemu | Waktu exam tidak akurat |
-| 5 | `api/submit_psikologi.php` | `paket_ujian_id = 0` untuk psikologi | Collision risk jika ada paket id=0 |
-| 6 | `peserta/leaderboard.php` | SQL ORDER BY aggregate (sudah diperbaiki) | - |
+| # | File | Issue | Impact | Status |
+|---|------|-------|--------|--------|
+| 1 | `peserta/mini_tryout_kerja.php` | `location.reload()` setelah setiap jawaban | UX buruk, flashing screen | **TODO** (needs SPA refactor) |
+| 2 | `peserta/latihan_kerja.php` | `location.reload()` setelah setiap jawaban | UX buruk | **TODO** (needs SPA refactor) |
+| 3 | `peserta/tryout_list.php` | "Kerjakan Lagi" tetap ke `tryout_kerja.php` meski sudah selesai | Bisa mengerjakan ulang yang sudah selesai | **FIXED** (redirect ke hasil) |
+| 4 | `peserta/tryout_kerja.php` | Saat refresh, timer bisa reset jika localStorage key tidak ketemu | Waktu exam tidak akurat | **FIXED** (per-paket localStorage key) |
+| 5 | `api/submit_psikologi.php` | `paket_ujian_id = 0` untuk psikologi | Collision risk jika ada paket id=0 | **TODO** (use nullable or separate table) |
+| 6 | `peserta/leaderboard.php` | SQL ORDER BY aggregate | MySQL strict mode error | **FIXED** |
 
 ### 🟡 Medium (UX/Mobile)
 
-| # | File | Issue |
-|---|------|-------|
-| 1 | `peserta/latihan_kerja.php` | Tidak ada bottom-nav-mobile |
-| 2 | `peserta/psikologi_kraepelin.php` | Tidak ada bottom-nav-mobile |
-| 3 | `peserta/psikologi_kerja.php` | Tidak ada bottom-nav-mobile |
-| 4 | `admin/*` | Tidak ada responsive bottom nav |
-| 5 | `peserta/rapor.php` | Chart.js external CDN — offline tidak bekerja |
-| 6 | `peserta/tryout_hasil.php` | Skor cards pakai `col-6 col-sm-4` tapi beberapa pakai `col-12 col-sm-4` (inkonsisten) |
+| # | File | Issue | Status |
+|---|------|-------|--------|
+| 1 | `peserta/latihan_kerja.php` | Tidak ada bottom-nav-mobile | **FIXED** |
+| 2 | `peserta/psikologi_kraepelin.php` | Tidak ada bottom-nav-mobile | **FIXED** |
+| 3 | `peserta/psikologi_kerja.php` | Tidak ada bottom-nav-mobile | N/A (exam page, no nav needed) |
+| 4 | `admin/*` | Tidak ada responsive bottom nav | **TODO** (low priority) |
+| 5 | `peserta/rapor.php` | Chart.js external CDN — offline tidak bekerja | **TODO** (self-host or CDN fallback) |
+| 6 | `peserta/tryout_hasil.php` | Skor cards layout inconsistency | **FIXED** (col-12 col-sm-4) |
+| 7 | Semua | Tidak ada halaman 404 | **FIXED** (404.php created) |
 
 ### 🟢 Low (Code Quality)
 
-| # | File | Issue |
-|---|------|-------|
-| 1 | `includes/functions.php` | `escapeLike()` didefinisikan tapi tidak pernah dipakai |
-| 2 | `includes/functions.php` | `generateCSRF()` / `verifyCSRF()` ada tapi tidak dipakai di form |
-| 3 | `peserta/dashboard.php` | `$rekom->data_seek(0)` setelah `$rekom->num_rows` — potensial issue |
-| 4 | `admin/analisis_butir.php` | Daya pembeda hanya dihitung kalau `total >= 10` |
-| 5 | `peserta/forum.php` | Search pakai `LIKE '%keyword%'` bisa lambat tanpa FULLTEXT index |
+| # | File | Issue | Status |
+|---|------|-------|--------|
+| 1 | `includes/functions.php` | `escapeLike()` didefinisikan tapi tidak pernah dipakai | **TODO** (remove or use) |
+| 2 | `includes/functions.php` | `generateCSRF()` / `verifyCSRF()` ada tapi tidak dipakai di form | **TODO** (implement in forms) |
+| 3 | `peserta/dashboard.php` | `$rekom->data_seek(0)` setelah `$rekom->num_rows` | **TODO** (verify cursor position) |
+| 4 | `admin/analisis_butir.php` | Daya pembeda hanya dihitung kalau `total >= 10` | **BY DESIGN** |
+| 5 | `peserta/forum.php` | Search pakai `LIKE '%keyword%'` bisa lambat tanpa FULLTEXT index | **TODO** (add FULLTEXT or optimize) |
 
 ---
 
