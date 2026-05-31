@@ -11,6 +11,7 @@ Aplikasi web try-out dan bimbingan belajar (bimbel) mandiri untuk persiapan ujia
 - **Mini Try-Out** - Ujian singkat 15 soal untuk latihan cepat
 - **Latihan per Topik** - Fokus latihan pada topik tertentu
 - **Flashcard** - Belajar materi dengan kartu interaktif
+- **Tes Psikologi** - Kraepelin, Wartegg, dan EPPS untuk seleksi kedinasan
 - **Materi Ajar** - Artikel dan rumus untuk setiap topik soal
 - **Forum Q&A Pintar** - Tanya jawab dengan pencarian keyword otomatis
 - **Rapor & Grafik** - Statistik skor dengan Chart.js (radar chart)
@@ -192,6 +193,9 @@ ujian/
 |-- insert_bank_twk.py           # Python: Insert 50 soal TWK
 |-- insert_bank_tiu.py           # Python: Insert 38 soal TIU
 |-- insert_bank_tkp.py           # Python: Insert 34 soal TKP
+|-- insert_soal_psikologi.py     # Python: Insert 35 soal Psikologi (Wartegg + EPPS)
+|-- insert_materi_psikologi.py   # Python: Insert materi Psikologi
+|-- alter_enum_psikologi.php     # PHP: Migration tambah 'psikologi' ke enum DB
 |
 |-- manifest.json               # PWA manifest
 |-- sw.js                       # Service Worker (PWA-lite)
@@ -250,8 +254,18 @@ cd C:\xampp\htdocs\ujian
 python insert_bank_twk.py
 python insert_bank_tiu.py
 python insert_bank_tkp.py
+python insert_soal_psikologi.py
 ```
-Insert 50 TWK + 38 TIU + 34 TKP = 122 soal baru secara batch.
+Insert 50 TWK + 38 TIU + 34 TKP + 35 Psikologi = 157 soal baru secara batch.
+
+### Migration Psikologi ke Database
+```bash
+cd C:\xampp\htdocs\ujian
+C:\xampp\php\php.exe alter_enum_psikologi.php
+python insert_soal_psikologi.py
+python insert_materi_psikologi.py
+```
+Tambah enum 'psikologi' ke DB, insert soal Wartegg & EPPS, dan materi ajar.
 
 ---
 

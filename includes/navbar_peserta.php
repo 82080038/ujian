@@ -17,6 +17,7 @@ require_once __DIR__ . '/functions.php';
                 <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>peserta/latihan_topik.php"><i class="bi bi-journal-check"></i> Latihan</a></li>
                 <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>peserta/belajar.php"><i class="bi bi-book"></i> Belajar</a></li>
                 <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>peserta/flashcard.php"><i class="bi bi-card-text"></i> Flashcard</a></li>
+                <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>peserta/psikologi.php"><i class="bi bi-emoji-smile"></i> Psikologi</a></li>
                 <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>peserta/rapor.php"><i class="bi bi-file-earmark-bar-graph"></i> Rapor</a></li>
             </ul>
             <ul class="navbar-nav">

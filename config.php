@@ -24,6 +24,7 @@ define('PG_TWK', 65);
 define('PG_TIU', 80);
 define('PG_TKP', 166);
 define('PG_KUMULATIF', 311);
+define('PG_PSIKOLOGI', 100);
 
 // Maks peserta
 define('MAX_PESERTA', 10);
