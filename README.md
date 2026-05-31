@@ -188,6 +188,10 @@ ujian/
 |-- scraper_cpns.py             # Python: Scraping soal dari internet
 |-- generate_materi_otomatis.py # Python: Generate materi dari pembahasan
 |-- verifikasi_materi.py        # Python: Verifikasi coverage materi
+|-- insert_materi_berkualitas.py # Python: Insert materi ajar berkualitas per topik
+|-- insert_bank_twk.py           # Python: Insert 50 soal TWK
+|-- insert_bank_tiu.py           # Python: Insert 38 soal TIU
+|-- insert_bank_tkp.py           # Python: Insert 34 soal TKP
 |
 |-- manifest.json               # PWA manifest
 |-- sw.js                       # Service Worker (PWA-lite)
@@ -232,6 +236,22 @@ cd C:\xampp\htdocs\ujian
 python verifikasi_materi.py
 ```
 Cek coverage: apakah semua topik soal sudah punya materi.
+
+### Insert Materi Ajar Berkualitas (Python)
+```bash
+cd C:\xampp\htdocs\ujian
+python insert_materi_berkualitas.py
+```
+Insert 10 materi ajar berkualitas per topik besar (Pancasila, UUD 1945, Sejarah, NKRI, Verbal, Numerik, Logika, Profesionalisme, Integritas, Pelayanan).
+
+### Tambah Bank Soal Bulk (Python)
+```bash
+cd C:\xampp\htdocs\ujian
+python insert_bank_twk.py
+python insert_bank_tiu.py
+python insert_bank_tkp.py
+```
+Insert 50 TWK + 38 TIU + 34 TKP = 122 soal baru secara batch.
 
 ---
 
@@ -295,8 +315,8 @@ Ini memastikan tidak ada soal duplikat meski script dijalankan berulang kali.
 ## Tips Penggunaan
 
 1. **Setup database** selalu lewat `setup_db.php` pertama kali
-2. **Generate soal** dengan `import_soal_ai.py` untuk memperbanyak bank soal
-3. **Generate materi** dengan `generate_materi_otomatis.py` agar setiap topik punya materi pembelajaran
+2. **Insert materi berkualitas** dengan `insert_materi_berkualitas.py`
+3. **Tambah bank soal** dengan `insert_bank_twk.py`, `insert_bank_tiu.py`, `insert_bank_tkp.py`
 4. **Verifikasi** dengan `verifikasi_materi.py` untuk cek coverage
 5. **Testing** dengan Playwright sebelum deploy
 
