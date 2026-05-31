@@ -10,7 +10,6 @@ module.exports = defineConfig({
     screenshot: 'only-on-failure',
     launchOptions: {
       args: ['--disable-web-security'],
-      slowMo: 2000,
     },
   },
   reporter: [['list'], ['html', { outputFolder: 'playwright-report' }]],

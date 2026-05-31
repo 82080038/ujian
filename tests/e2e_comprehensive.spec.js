@@ -270,15 +270,25 @@ test.describe('TryOutKu Comprehensive E2E', () => {
   test('18. No console errors on all peserta pages', async ({ page }) => {
     const pages = [
       'peserta/dashboard.php',
+      'peserta/profil.php',
       'peserta/tryout_list.php',
+      'peserta/tryout_kerja.php?paket=1',
+      'peserta/tryout_hasil.php',
       'peserta/mini_tryout.php',
+      'peserta/mini_tryout_kerja.php?jenis=twk&jumlah=5&topik=&level=',
+      'peserta/mini_tryout_hasil.php',
       'peserta/latihan_topik.php',
+      'peserta/latihan_kerja.php?jenis=twk&topik=Pancasila&jumlah=5',
       'peserta/belajar.php',
+      'peserta/belajar_detail.php?id=1',
       'peserta/flashcard.php',
+      'peserta/flashcard_detail.php?id=1',
       'peserta/rapor.php',
       'peserta/leaderboard.php',
       'peserta/forum.php',
-      'peserta/profil.php'
+      'peserta/psikologi.php',
+      'peserta/psikologi_kraepelin.php',
+      'peserta/psikologi_kerja.php?jenis=wartegg',
     ];
 
     await page.goto('login.php');
@@ -305,13 +315,15 @@ test.describe('TryOutKu Comprehensive E2E', () => {
     const pages = [
       'admin/dashboard.php',
       'admin/kelola_soal.php',
+      'admin/kelola_soal_form.php',
       'admin/kelola_materi.php',
       'admin/kelola_paket.php',
       'admin/laporan.php',
       'admin/analisis_butir.php',
       'admin/catatan_pengajar.php',
       'admin/jawab_forum.php',
-      'admin/export.php'
+      'admin/export.php',
+      'admin/detail_peserta.php',
     ];
 
     await page.goto('login.php');
