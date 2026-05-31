@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Test results
+test-results/
+playwright-report/
+
+# Uploads (user-generated)
+uploads/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Environment (jika ada)
+.env
+.env.local
+
+# Cache
+*.cache
