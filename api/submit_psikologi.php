@@ -39,4 +39,4 @@ $stmt2->execute();
 $hasil_id = $stmt2->insert_id;
 
 flash('success', "Hasil Tes Psikologi ($jenis): Skor $skor. Status: " . strtoupper($status));
-redirect('peserta/psikologi.php');
+redirect('peserta/psikologi_hasil.php');

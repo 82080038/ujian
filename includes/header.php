@@ -16,7 +16,7 @@ require_once __DIR__ . '/functions.php';
         <?= $extraCss ?>
     <?php endif; ?>
 </head>
-<body class="bg-light">
+<body class="<?= $bodyClass ?? 'bg-light' ?>">
 
 <!-- Toast Container -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1060;">

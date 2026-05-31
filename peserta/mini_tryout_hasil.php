@@ -79,21 +79,21 @@ require_once __DIR__ . '/../includes/navbar_peserta.php';
                 </div>
             </div>
         </div>
-        <div class="col-4">
+        <div class="col-6 col-sm-4">
             <div class="card text-center">
                 <div class="card-body">
                     <h5 class="fw-bold text-danger"><?= $salah ?></h5><small>Salah</small>
                 </div>
             </div>
         </div>
-        <div class="col-4">
+        <div class="col-6 col-sm-4">
             <div class="card text-center">
                 <div class="card-body">
                     <h5 class="fw-bold text-secondary"><?= $kosong ?></h5><small>Kosong</small>
                 </div>
             </div>
         </div>
-        <div class="col-4">
+        <div class="col-6 col-sm-4">
             <div class="card text-center">
                 <div class="card-body">
                     <h5 class="fw-bold text-primary"><?= $jumlah ?></h5><small>Total</small>
@@ -128,5 +128,12 @@ require_once __DIR__ . '/../includes/navbar_peserta.php';
         <a href="dashboard.php" class="btn btn-secondary"><i class="bi bi-house"></i> Dashboard</a>
     </div>
 </div>
+
+<nav class="bottom-nav-mobile d-lg-none">
+    <a href="dashboard.php"><i class="bi bi-house fs-4"></i> Beranda</a>
+    <a href="tryout_list.php" class="active"><i class="bi bi-pencil-square fs-4"></i> Try-Out</a>
+    <a href="belajar.php"><i class="bi bi-book fs-4"></i> Belajar</a>
+    <a href="rapor.php"><i class="bi bi-file-earmark-bar-graph fs-4"></i> Rapor</a>
+</nav>
 
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>

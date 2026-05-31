@@ -155,4 +155,11 @@ document.getElementById('btn-selesai').addEventListener('click', () => {
 });
 </script>
 
+<nav class="bottom-nav-mobile d-lg-none">
+    <a href="dashboard.php"><i class="bi bi-house fs-4"></i> Beranda</a>
+    <a href="tryout_list.php"><i class="bi bi-pencil-square fs-4"></i> Try-Out</a>
+    <a href="belajar.php"><i class="bi bi-book fs-4"></i> Belajar</a>
+    <a href="rapor.php"><i class="bi bi-file-earmark-bar-graph fs-4"></i> Rapor</a>
+</nav>
+
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>

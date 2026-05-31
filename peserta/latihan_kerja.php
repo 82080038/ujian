@@ -11,8 +11,10 @@ if (!$jenis || !$topik || !in_array($jenis, ['twk','tiu','tkp'])) {
     redirect('peserta/latihan_topik.php');
 }
 
-$where = "jenis_tes = '$jenis' AND topik = '" . $conn->real_escape_string($topik) . "'";
-$soalRes = $conn->query("SELECT * FROM soal WHERE $where ORDER BY RAND() LIMIT $jumlah");
+$stmt = $conn->prepare("SELECT * FROM soal WHERE jenis_tes = ? AND topik = ? ORDER BY RAND() LIMIT ?");
+$stmt->bind_param('ssi', $jenis, $topik, $jumlah);
+$stmt->execute();
+$soalRes = $stmt->get_result();
 $soalAll = [];
 while ($r = $soalRes->fetch_assoc()) $soalAll[] = $r;
 
@@ -38,10 +40,9 @@ $opsiList = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 shuffle($opsiList);
 
 $pageTitle = 'Latihan ' . e($topik);
+$bodyClass = 'bg-light mode-ujian';
 require_once __DIR__ . '/../includes/header.php';
 ?>
-
-<body class="bg-light mode-ujian">
 
 <div class="sticky-top bg-white border-bottom py-2">
     <div class="container d-flex justify-content-between align-items-center">
@@ -106,6 +107,13 @@ require_once __DIR__ . '/../includes/header.php';
         <?php endif; ?>
     </div>
 </div>
+
+<nav class="bottom-nav-mobile d-lg-none">
+    <a href="dashboard.php"><i class="bi bi-house fs-4"></i> Beranda</a>
+    <a href="tryout_list.php"><i class="bi bi-pencil-square fs-4"></i> Try-Out</a>
+    <a href="belajar.php"><i class="bi bi-book fs-4"></i> Belajar</a>
+    <a href="rapor.php"><i class="bi bi-file-earmark-bar-graph fs-4"></i> Rapor</a>
+</nav>
 
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>
 

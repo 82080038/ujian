@@ -42,7 +42,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = 'Konfirmasi password tidak cocok.';
         } else {
             $hash = password_hash($new_pass, PASSWORD_DEFAULT);
-            $conn->query("UPDATE users SET password = '$hash' WHERE id = $user_id");
+            $stmt = $conn->prepare('UPDATE users SET password = ? WHERE id = ?');
+            $stmt->bind_param('si', $hash, $user_id);
+            $stmt->execute();
             $success = 'Password berhasil diubah.';
         }
     }

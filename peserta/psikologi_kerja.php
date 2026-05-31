@@ -23,10 +23,7 @@ if (count($soal) < 5) {
     $soal = $stmt2->get_result()->fetch_all(MYSQLI_ASSOC);
 }
 
-if (count($soal) < 1) {
-    flash('warning', 'Soal psikologi masih dalam persiapan. Silakan coba lagi nanti atau hubungi admin.');
-    redirect('peserta/psikologi.php');
-}
+$dalamPersiapan = count($soal) < 1;
 
 // Ambil opsi
 foreach ($soal as $k => $s) {
@@ -41,8 +38,19 @@ require_once __DIR__ . '/../includes/navbar_peserta.php';
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h4><i class="bi <?= $jenis === 'wartegg' ? 'bi-grid-3x3 text-info' : 'bi-person-check text-warning' ?>"></i> <?= $title ?></h4>
+        <?php if (!$dalamPersiapan): ?>
         <div class="badge bg-dark fs-5"><i class="bi bi-clock"></i> <span id="timer">15:00</span></div>
+        <?php endif; ?>
     </div>
+
+    <?php if ($dalamPersiapan): ?>
+    <div class="text-center py-5">
+        <div class="display-1 text-muted mb-3"><i class="bi bi-tools"></i></div>
+        <h4 class="fw-bold text-muted">Tes <?= $title ?> Dalam Persiapan</h4>
+        <p class="text-muted mb-4">Soal untuk tes ini sedang disusun oleh tim pengajar.<br>Silakan kembali lagi nanti atau hubungi admin untuk informasi lebih lanjut.</p>
+        <a href="psikologi.php" class="btn btn-primary"><i class="bi bi-arrow-left"></i> Kembali ke Tes Psikologi</a>
+    </div>
+    <?php else: ?>
 
     <form id="form-psikologi" method="POST" action="<?= BASE_URL ?>api/submit_psikologi.php">
         <input type="hidden" name="jenis" value="<?= $jenis ?>">
@@ -84,6 +92,7 @@ require_once __DIR__ . '/../includes/navbar_peserta.php';
         </div>
         <?php endforeach; ?>
     </form>
+    <?php endif; ?>
 </div>
 
 <script>

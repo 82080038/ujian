@@ -12,12 +12,19 @@ if (!in_array($jenis, ['twk','tiu','tkp']) || $jumlah < 1 || $jumlah > 50) {
     redirect('peserta/mini_tryout.php');
 }
 
-// Build query
-$where = "jenis_tes = '$jenis'";
-if ($topik) $where .= " AND topik = '" . $conn->real_escape_string($topik) . "'";
-if ($level) $where .= " AND tingkat_kesulitan = '" . $conn->real_escape_string($level) . "'";
+// Build query dengan prepared statement
+$params = [$jenis];
+$types = 's';
+$where = "jenis_tes = ?";
+if ($topik) { $where .= " AND topik = ?"; $params[] = $topik; $types .= 's'; }
+if ($level) { $where .= " AND tingkat_kesulitan = ?"; $params[] = $level; $types .= 's'; }
 
-$soalRes = $conn->query("SELECT * FROM soal WHERE $where ORDER BY RAND() LIMIT $jumlah");
+$stmt = $conn->prepare("SELECT * FROM soal WHERE $where ORDER BY RAND() LIMIT ?");
+$types .= 'i';
+$params[] = $jumlah;
+$stmt->bind_param($types, ...$params);
+$stmt->execute();
+$soalRes = $stmt->get_result();
 $soalAll = [];
 while ($r = $soalRes->fetch_assoc()) $soalAll[] = $r;
 
@@ -47,10 +54,9 @@ $opsiList = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 shuffle($opsiList);
 
 $pageTitle = 'Mini Try-Out ' . strtoupper($jenis);
+$bodyClass = 'bg-light mode-ujian';
 require_once __DIR__ . '/../includes/header.php';
 ?>
-
-<body class="bg-light mode-ujian">
 
 <div class="sticky-top bg-white border-bottom py-2">
     <div class="container">
@@ -107,6 +113,7 @@ require_once __DIR__ . '/../includes/header.php';
                 <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#modalSubmit"><i class="bi bi-check-lg"></i> Selesai</button>
             <?php endif; ?>
         </div>
+        <div class="swipe-hint"><i class="bi bi-arrow-left-right"></i> Geser kiri/kanan untuk navigasi</div>
     </div>
 
     <div class="card mt-3">

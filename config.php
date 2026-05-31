@@ -28,3 +28,7 @@ define('PG_PSIKOLOGI', 100);
 
 // Maks peserta
 define('MAX_PESERTA', 10);
+
+// Development Mode: nonaktifkan PWA/service worker saat develop
+// Ubah ke false saat production
+define('DEV_MODE', true);

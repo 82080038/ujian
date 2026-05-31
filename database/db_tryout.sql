@@ -1,162 +1,101 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
+-- MariaDB dump 10.19  Distrib 10.4.32-MariaDB, for Win64 (AMD64)
 --
--- Host: 127.0.0.1
--- Waktu pembuatan: 31 Bulan Mei 2026 pada 15.59
--- Versi server: 10.4.32-MariaDB
--- Versi PHP: 8.2.12
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
+-- Host: localhost    Database: db_tryout
+-- ------------------------------------------------------
+-- Server version	10.4.32-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Database: `db_tryout`
+-- Current Database: `db_tryout`
 --
 
--- --------------------------------------------------------
+/*!40000 DROP DATABASE IF EXISTS `db_tryout`*/;
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `db_tryout` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
+
+USE `db_tryout`;
 
 --
--- Struktur dari tabel `catatan_pengajar`
+-- Table structure for table `catatan_pengajar`
 --
 
+DROP TABLE IF EXISTS `catatan_pengajar`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `catatan_pengajar` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `catatan` text NOT NULL,
   `created_by` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_user` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Struktur dari tabel `detail_jawaban`
+-- Dumping data for table `catatan_pengajar`
 --
 
+LOCK TABLES `catatan_pengajar` WRITE;
+/*!40000 ALTER TABLE `catatan_pengajar` DISABLE KEYS */;
+/*!40000 ALTER TABLE `catatan_pengajar` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `detail_jawaban`
+--
+
+DROP TABLE IF EXISTS `detail_jawaban`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `detail_jawaban` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `hasil_ujian_id` int(11) NOT NULL,
   `soal_id` int(11) NOT NULL,
   `opsi_dipilih_id` int(11) DEFAULT NULL,
   `nilai_diperoleh` int(2) NOT NULL DEFAULT 0,
   `waktu_detik` int(5) DEFAULT 0,
   `is_ragu` tinyint(1) NOT NULL DEFAULT 0,
-  `created_at` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `created_at` datetime DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `hasil_ujian_id` (`hasil_ujian_id`),
+  KEY `soal_id` (`soal_id`),
+  CONSTRAINT `dj_hu` FOREIGN KEY (`hasil_ujian_id`) REFERENCES `hasil_ujian` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `dj_soal` FOREIGN KEY (`soal_id`) REFERENCES `soal` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=136 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data untuk tabel `detail_jawaban`
+-- Dumping data for table `detail_jawaban`
 --
 
-INSERT INTO `detail_jawaban` (`id`, `hasil_ujian_id`, `soal_id`, `opsi_dipilih_id`, `nilai_diperoleh`, `waktu_detik`, `is_ragu`, `created_at`) VALUES
-(1, 1, 1, 2, 5, 78, 0, '2026-05-31 20:17:26'),
-(2, 1, 2, 7, 5, 102, 0, '2026-05-31 20:17:26'),
-(3, 1, 3, 14, 5, 63, 0, '2026-05-31 20:17:26'),
-(4, 1, 4, 19, 5, 63, 0, '2026-05-31 20:17:26'),
-(5, 1, 5, 21, 5, 57, 0, '2026-05-31 20:17:26'),
-(6, 1, 6, 26, 0, 72, 0, '2026-05-31 20:17:26'),
-(7, 1, 7, 34, 5, 82, 0, '2026-05-31 20:17:26'),
-(8, 1, 8, 37, 1, 107, 1, '2026-05-31 20:17:26'),
-(9, 1, 9, 43, 5, 111, 0, '2026-05-31 20:17:26'),
-(10, 1, 10, 46, 5, 97, 0, '2026-05-31 20:17:26'),
-(11, 1, 21, 101, 5, 78, 0, '2026-05-31 20:17:26'),
-(12, 1, 22, 106, 5, 86, 0, '2026-05-31 20:17:26'),
-(13, 1, 29, 142, 1, 64, 0, '2026-05-31 20:17:26'),
-(14, 1, 30, 147, 1, 115, 1, '2026-05-31 20:17:26'),
-(15, 1, 31, 151, 5, 46, 0, '2026-05-31 20:17:26'),
-(16, 2, 1, 2, 5, 113, 0, '2026-05-31 20:18:41'),
-(17, 2, 2, 7, 5, 57, 1, '2026-05-31 20:18:41'),
-(18, 2, 3, 14, 5, 52, 1, '2026-05-31 20:18:42'),
-(19, 2, 4, 19, 5, 60, 0, '2026-05-31 20:18:42'),
-(20, 2, 5, 22, 0, 114, 0, '2026-05-31 20:18:42'),
-(21, 2, 6, 27, 5, 72, 0, '2026-05-31 20:18:42'),
-(22, 2, 7, 34, 5, 35, 0, '2026-05-31 20:18:42'),
-(23, 2, 8, 37, 1, 89, 1, '2026-05-31 20:18:42'),
-(24, 2, 9, 44, 1, 67, 0, '2026-05-31 20:18:42'),
-(25, 2, 10, 46, 5, 56, 0, '2026-05-31 20:18:42'),
-(26, 2, 21, 101, 5, 80, 0, '2026-05-31 20:18:42'),
-(27, 2, 22, 107, 0, 88, 0, '2026-05-31 20:18:42'),
-(28, 2, 29, 141, 5, 31, 0, '2026-05-31 20:18:42'),
-(29, 2, 30, 147, 1, 61, 0, '2026-05-31 20:18:42'),
-(30, 2, 31, 152, 1, 89, 1, '2026-05-31 20:18:42'),
-(31, 3, 1, 2, 5, 104, 0, '2026-05-31 20:19:33'),
-(32, 3, 2, 7, 5, 83, 0, '2026-05-31 20:19:33'),
-(33, 3, 3, 14, 5, 96, 0, '2026-05-31 20:19:33'),
-(34, 3, 4, 19, 5, 43, 1, '2026-05-31 20:19:33'),
-(35, 3, 5, 22, 0, 78, 0, '2026-05-31 20:19:33'),
-(36, 3, 6, 26, 0, 108, 0, '2026-05-31 20:19:33'),
-(37, 3, 7, 34, 5, 101, 0, '2026-05-31 20:19:33'),
-(38, 3, 8, 37, 1, 36, 1, '2026-05-31 20:19:33'),
-(39, 3, 9, 44, 1, 117, 0, '2026-05-31 20:19:33'),
-(40, 3, 10, 46, 5, 70, 1, '2026-05-31 20:19:33'),
-(41, 3, 21, 101, 5, 32, 0, '2026-05-31 20:19:33'),
-(42, 3, 22, 107, 0, 84, 0, '2026-05-31 20:19:33'),
-(43, 3, 29, 141, 5, 81, 0, '2026-05-31 20:19:33'),
-(44, 3, 30, 147, 1, 104, 1, '2026-05-31 20:19:33'),
-(45, 3, 31, 152, 1, 68, 0, '2026-05-31 20:19:33'),
-(46, 4, 1, 1, 0, 32, 0, '2026-05-31 20:19:33'),
-(47, 4, 2, 7, 5, 110, 0, '2026-05-31 20:19:33'),
-(48, 4, 3, 14, 5, 55, 0, '2026-05-31 20:19:33'),
-(49, 4, 4, 16, 0, 73, 1, '2026-05-31 20:19:33'),
-(50, 4, 5, 22, 0, 54, 0, '2026-05-31 20:19:33'),
-(51, 4, 6, 27, 5, 40, 0, '2026-05-31 20:19:33'),
-(52, 4, 7, 34, 5, 65, 1, '2026-05-31 20:19:33'),
-(53, 4, 8, 37, 1, 117, 0, '2026-05-31 20:19:33'),
-(54, 4, 9, 44, 1, 52, 1, '2026-05-31 20:19:33'),
-(55, 4, 10, 46, 5, 110, 0, '2026-05-31 20:19:33'),
-(56, 4, 21, 101, 5, 94, 1, '2026-05-31 20:19:33'),
-(57, 4, 22, 106, 5, 108, 1, '2026-05-31 20:19:33'),
-(58, 4, 29, 141, 5, 91, 0, '2026-05-31 20:19:33'),
-(59, 4, 30, 146, 5, 98, 1, '2026-05-31 20:19:33'),
-(60, 4, 31, 151, 5, 40, 1, '2026-05-31 20:19:33'),
-(61, 5, 30, NULL, 0, 0, 0, '2026-05-31 20:22:05'),
-(62, 5, 8, NULL, 0, 0, 0, '2026-05-31 20:22:05'),
-(63, 5, 1, NULL, 0, 0, 0, '2026-05-31 20:22:05'),
-(64, 5, 10, NULL, 0, 0, 0, '2026-05-31 20:22:05'),
-(65, 5, 5, NULL, 0, 0, 0, '2026-05-31 20:22:05'),
-(66, 5, 22, NULL, 0, 0, 0, '2026-05-31 20:22:05'),
-(67, 5, 2, NULL, 0, 0, 0, '2026-05-31 20:22:05'),
-(68, 5, 4, NULL, 0, 0, 0, '2026-05-31 20:22:05'),
-(69, 5, 6, NULL, 0, 0, 0, '2026-05-31 20:22:05'),
-(70, 5, 3, NULL, 0, 0, 0, '2026-05-31 20:22:05'),
-(71, 5, 29, NULL, 0, 0, 0, '2026-05-31 20:22:05'),
-(72, 5, 7, NULL, 0, 0, 0, '2026-05-31 20:22:05'),
-(73, 5, 31, NULL, 0, 0, 0, '2026-05-31 20:22:05'),
-(74, 5, 9, NULL, 0, 0, 0, '2026-05-31 20:22:05'),
-(75, 5, 21, NULL, 0, 0, 0, '2026-05-31 20:22:05'),
-(76, 6, 5, NULL, 0, 0, 0, '2026-05-31 20:22:30'),
-(77, 6, 8, NULL, 0, 0, 0, '2026-05-31 20:22:30'),
-(78, 6, 22, NULL, 0, 0, 0, '2026-05-31 20:22:30'),
-(79, 6, 29, NULL, 0, 0, 0, '2026-05-31 20:22:30'),
-(80, 6, 4, NULL, 0, 0, 0, '2026-05-31 20:22:30'),
-(81, 6, 7, NULL, 0, 0, 0, '2026-05-31 20:22:30'),
-(82, 6, 3, NULL, 0, 0, 0, '2026-05-31 20:22:30'),
-(83, 6, 10, NULL, 0, 0, 0, '2026-05-31 20:22:30'),
-(84, 6, 6, NULL, 0, 0, 0, '2026-05-31 20:22:30'),
-(85, 6, 30, NULL, 0, 0, 0, '2026-05-31 20:22:30'),
-(86, 6, 9, NULL, 0, 0, 0, '2026-05-31 20:22:30'),
-(87, 6, 21, NULL, 0, 0, 0, '2026-05-31 20:22:30'),
-(88, 6, 2, NULL, 0, 0, 0, '2026-05-31 20:22:30'),
-(89, 6, 31, NULL, 0, 0, 0, '2026-05-31 20:22:30'),
-(90, 6, 1, NULL, 0, 0, 0, '2026-05-31 20:22:30');
-
--- --------------------------------------------------------
+LOCK TABLES `detail_jawaban` WRITE;
+/*!40000 ALTER TABLE `detail_jawaban` DISABLE KEYS */;
+INSERT INTO `detail_jawaban` VALUES (1,1,1,2,5,78,0,'2026-05-31 20:17:26'),(2,1,2,7,5,102,0,'2026-05-31 20:17:26'),(3,1,3,14,5,63,0,'2026-05-31 20:17:26'),(4,1,4,19,5,63,0,'2026-05-31 20:17:26'),(5,1,5,21,5,57,0,'2026-05-31 20:17:26'),(6,1,6,26,0,72,0,'2026-05-31 20:17:26'),(7,1,7,34,5,82,0,'2026-05-31 20:17:26'),(8,1,8,37,1,107,1,'2026-05-31 20:17:26'),(9,1,9,43,5,111,0,'2026-05-31 20:17:26'),(10,1,10,46,5,97,0,'2026-05-31 20:17:26'),(11,1,21,101,5,78,0,'2026-05-31 20:17:26'),(12,1,22,106,5,86,0,'2026-05-31 20:17:26'),(13,1,29,142,1,64,0,'2026-05-31 20:17:26'),(14,1,30,147,1,115,1,'2026-05-31 20:17:26'),(15,1,31,151,5,46,0,'2026-05-31 20:17:26'),(16,2,1,2,5,113,0,'2026-05-31 20:18:41'),(17,2,2,7,5,57,1,'2026-05-31 20:18:41'),(18,2,3,14,5,52,1,'2026-05-31 20:18:42'),(19,2,4,19,5,60,0,'2026-05-31 20:18:42'),(20,2,5,22,0,114,0,'2026-05-31 20:18:42'),(21,2,6,27,5,72,0,'2026-05-31 20:18:42'),(22,2,7,34,5,35,0,'2026-05-31 20:18:42'),(23,2,8,37,1,89,1,'2026-05-31 20:18:42'),(24,2,9,44,1,67,0,'2026-05-31 20:18:42'),(25,2,10,46,5,56,0,'2026-05-31 20:18:42'),(26,2,21,101,5,80,0,'2026-05-31 20:18:42'),(27,2,22,107,0,88,0,'2026-05-31 20:18:42'),(28,2,29,141,5,31,0,'2026-05-31 20:18:42'),(29,2,30,147,1,61,0,'2026-05-31 20:18:42'),(30,2,31,152,1,89,1,'2026-05-31 20:18:42'),(31,3,1,2,5,104,0,'2026-05-31 20:19:33'),(32,3,2,7,5,83,0,'2026-05-31 20:19:33'),(33,3,3,14,5,96,0,'2026-05-31 20:19:33'),(34,3,4,19,5,43,1,'2026-05-31 20:19:33'),(35,3,5,22,0,78,0,'2026-05-31 20:19:33'),(36,3,6,26,0,108,0,'2026-05-31 20:19:33'),(37,3,7,34,5,101,0,'2026-05-31 20:19:33'),(38,3,8,37,1,36,1,'2026-05-31 20:19:33'),(39,3,9,44,1,117,0,'2026-05-31 20:19:33'),(40,3,10,46,5,70,1,'2026-05-31 20:19:33'),(41,3,21,101,5,32,0,'2026-05-31 20:19:33'),(42,3,22,107,0,84,0,'2026-05-31 20:19:33'),(43,3,29,141,5,81,0,'2026-05-31 20:19:33'),(44,3,30,147,1,104,1,'2026-05-31 20:19:33'),(45,3,31,152,1,68,0,'2026-05-31 20:19:33'),(46,4,1,1,0,32,0,'2026-05-31 20:19:33'),(47,4,2,7,5,110,0,'2026-05-31 20:19:33'),(48,4,3,14,5,55,0,'2026-05-31 20:19:33'),(49,4,4,16,0,73,1,'2026-05-31 20:19:33'),(50,4,5,22,0,54,0,'2026-05-31 20:19:33'),(51,4,6,27,5,40,0,'2026-05-31 20:19:33'),(52,4,7,34,5,65,1,'2026-05-31 20:19:33'),(53,4,8,37,1,117,0,'2026-05-31 20:19:33'),(54,4,9,44,1,52,1,'2026-05-31 20:19:33'),(55,4,10,46,5,110,0,'2026-05-31 20:19:33'),(56,4,21,101,5,94,1,'2026-05-31 20:19:33'),(57,4,22,106,5,108,1,'2026-05-31 20:19:33'),(58,4,29,141,5,91,0,'2026-05-31 20:19:33'),(59,4,30,146,5,98,1,'2026-05-31 20:19:33'),(60,4,31,151,5,40,1,'2026-05-31 20:19:33'),(61,5,30,NULL,0,0,0,'2026-05-31 20:22:05'),(62,5,8,NULL,0,0,0,'2026-05-31 20:22:05'),(63,5,1,NULL,0,0,0,'2026-05-31 20:22:05'),(64,5,10,NULL,0,0,0,'2026-05-31 20:22:05'),(65,5,5,NULL,0,0,0,'2026-05-31 20:22:05'),(66,5,22,NULL,0,0,0,'2026-05-31 20:22:05'),(67,5,2,NULL,0,0,0,'2026-05-31 20:22:05'),(68,5,4,NULL,0,0,0,'2026-05-31 20:22:05'),(69,5,6,NULL,0,0,0,'2026-05-31 20:22:05'),(70,5,3,NULL,0,0,0,'2026-05-31 20:22:05'),(71,5,29,NULL,0,0,0,'2026-05-31 20:22:05'),(72,5,7,NULL,0,0,0,'2026-05-31 20:22:05'),(73,5,31,NULL,0,0,0,'2026-05-31 20:22:05'),(74,5,9,NULL,0,0,0,'2026-05-31 20:22:05'),(75,5,21,NULL,0,0,0,'2026-05-31 20:22:05'),(76,6,5,NULL,0,0,0,'2026-05-31 20:22:30'),(77,6,8,NULL,0,0,0,'2026-05-31 20:22:30'),(78,6,22,NULL,0,0,0,'2026-05-31 20:22:30'),(79,6,29,NULL,0,0,0,'2026-05-31 20:22:30'),(80,6,4,NULL,0,0,0,'2026-05-31 20:22:30'),(81,6,7,NULL,0,0,0,'2026-05-31 20:22:30'),(82,6,3,NULL,0,0,0,'2026-05-31 20:22:30'),(83,6,10,NULL,0,0,0,'2026-05-31 20:22:30'),(84,6,6,NULL,0,0,0,'2026-05-31 20:22:30'),(85,6,30,NULL,0,0,0,'2026-05-31 20:22:30'),(86,6,9,NULL,0,0,0,'2026-05-31 20:22:30'),(87,6,21,NULL,0,0,0,'2026-05-31 20:22:30'),(88,6,2,NULL,0,0,0,'2026-05-31 20:22:30'),(89,6,31,NULL,0,0,0,'2026-05-31 20:22:30'),(90,6,1,NULL,0,0,0,'2026-05-31 20:22:30'),(91,8,6,NULL,0,0,0,'2026-06-01 01:45:00'),(92,8,30,NULL,0,0,0,'2026-06-01 01:45:00'),(93,8,1,NULL,0,0,0,'2026-06-01 01:45:00'),(94,8,10,NULL,0,0,0,'2026-06-01 01:45:00'),(95,8,2,NULL,0,0,0,'2026-06-01 01:45:00'),(96,8,29,NULL,0,0,0,'2026-06-01 01:45:00'),(97,8,7,NULL,0,0,0,'2026-06-01 01:45:00'),(98,8,8,NULL,0,0,0,'2026-06-01 01:45:00'),(99,8,21,NULL,0,0,0,'2026-06-01 01:45:00'),(100,8,3,NULL,0,0,0,'2026-06-01 01:45:00'),(101,8,31,NULL,0,0,0,'2026-06-01 01:45:00'),(102,8,22,NULL,0,0,0,'2026-06-01 01:45:00'),(103,8,9,NULL,0,0,0,'2026-06-01 01:45:00'),(104,8,4,NULL,0,0,0,'2026-06-01 01:45:00'),(105,8,5,NULL,0,0,0,'2026-06-01 01:45:00'),(106,9,10,NULL,0,0,0,'2026-06-01 01:48:48'),(107,9,31,NULL,0,0,0,'2026-06-01 01:48:48'),(108,9,29,NULL,0,0,0,'2026-06-01 01:48:48'),(109,9,1,NULL,0,0,0,'2026-06-01 01:48:48'),(110,9,2,NULL,0,0,0,'2026-06-01 01:48:48'),(111,9,8,NULL,0,0,0,'2026-06-01 01:48:48'),(112,9,9,NULL,0,0,0,'2026-06-01 01:48:48'),(113,9,4,NULL,0,0,0,'2026-06-01 01:48:48'),(114,9,21,NULL,0,0,0,'2026-06-01 01:48:48'),(115,9,7,NULL,0,0,0,'2026-06-01 01:48:48'),(116,9,3,NULL,0,0,0,'2026-06-01 01:48:48'),(117,9,30,NULL,0,0,0,'2026-06-01 01:48:48'),(118,9,6,NULL,0,0,0,'2026-06-01 01:48:48'),(119,9,5,NULL,0,0,0,'2026-06-01 01:48:48'),(120,9,22,NULL,0,0,0,'2026-06-01 01:48:48'),(121,10,9,NULL,0,0,0,'2026-06-01 01:53:04'),(122,10,10,NULL,0,0,0,'2026-06-01 01:53:04'),(123,10,2,NULL,0,0,0,'2026-06-01 01:53:04'),(124,10,7,NULL,0,0,0,'2026-06-01 01:53:04'),(125,10,5,NULL,0,0,0,'2026-06-01 01:53:04'),(126,10,1,NULL,0,0,0,'2026-06-01 01:53:04'),(127,10,22,NULL,0,0,0,'2026-06-01 01:53:04'),(128,10,21,NULL,0,0,0,'2026-06-01 01:53:04'),(129,10,4,NULL,0,0,0,'2026-06-01 01:53:04'),(130,10,30,NULL,0,0,0,'2026-06-01 01:53:04'),(131,10,29,NULL,0,0,0,'2026-06-01 01:53:04'),(132,10,6,NULL,0,0,0,'2026-06-01 01:53:04'),(133,10,3,NULL,0,0,0,'2026-06-01 01:53:04'),(134,10,31,NULL,0,0,0,'2026-06-01 01:53:04'),(135,10,8,NULL,0,0,0,'2026-06-01 01:53:04');
+/*!40000 ALTER TABLE `detail_jawaban` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
--- Struktur dari tabel `hasil_ujian`
+-- Table structure for table `hasil_ujian`
 --
 
+DROP TABLE IF EXISTS `hasil_ujian`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hasil_ujian` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `paket_ujian_id` int(11) NOT NULL,
   `tanggal_mulai` datetime DEFAULT NULL,
@@ -166,29 +105,34 @@ CREATE TABLE `hasil_ujian` (
   `skor_tkp` int(5) NOT NULL DEFAULT 0,
   `skor_kumulatif` int(5) NOT NULL DEFAULT 0,
   `status_lulus` enum('lulus','gugur','proses') DEFAULT 'proses',
-  `created_at` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `created_at` datetime DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `paket_ujian_id` (`paket_ujian_id`),
+  CONSTRAINT `hu_paket` FOREIGN KEY (`paket_ujian_id`) REFERENCES `paket_ujian` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `hu_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data untuk tabel `hasil_ujian`
+-- Dumping data for table `hasil_ujian`
 --
 
-INSERT INTO `hasil_ujian` (`id`, `user_id`, `paket_ujian_id`, `tanggal_mulai`, `tanggal_selesai`, `skor_twk`, `skor_tiu`, `skor_tkp`, `skor_kumulatif`, `status_lulus`, `created_at`) VALUES
-(1, 6, 1, '2026-05-31 20:17:26', NULL, 0, 0, 0, 0, 'proses', '2026-05-31 20:17:26'),
-(2, 8, 1, '2026-05-31 20:18:41', '2026-05-31 20:18:42', 25, 15, 9, 49, 'gugur', '2026-05-31 20:18:41'),
-(3, 10, 1, '2026-05-31 20:19:33', '2026-05-31 20:19:33', 25, 10, 9, 44, 'gugur', '2026-05-31 20:19:33'),
-(4, 11, 1, '2026-05-31 20:19:33', '2026-05-31 20:19:33', 15, 20, 17, 52, 'gugur', '2026-05-31 20:19:33'),
-(5, 10, 1, '2026-05-31 20:22:05', '2026-05-31 20:24:05', 0, 0, 0, 0, 'gugur', '2026-05-31 20:22:05'),
-(6, 11, 1, '2026-05-31 20:22:30', '2026-05-31 20:24:34', 0, 0, 0, 0, 'gugur', '2026-05-31 20:22:30');
-
--- --------------------------------------------------------
+LOCK TABLES `hasil_ujian` WRITE;
+/*!40000 ALTER TABLE `hasil_ujian` DISABLE KEYS */;
+INSERT INTO `hasil_ujian` VALUES (1,6,1,'2026-05-31 20:17:26',NULL,0,0,0,0,'proses','2026-05-31 20:17:26'),(2,8,1,'2026-05-31 20:18:41','2026-05-31 20:18:42',25,15,9,49,'gugur','2026-05-31 20:18:41'),(3,10,1,'2026-05-31 20:19:33','2026-05-31 20:19:33',25,10,9,44,'gugur','2026-05-31 20:19:33'),(4,11,1,'2026-05-31 20:19:33','2026-05-31 20:19:33',15,20,17,52,'gugur','2026-05-31 20:19:33'),(5,10,1,'2026-05-31 20:22:05','2026-05-31 20:24:05',0,0,0,0,'gugur','2026-05-31 20:22:05'),(6,11,1,'2026-05-31 20:22:30','2026-05-31 20:24:34',0,0,0,0,'gugur','2026-05-31 20:22:30'),(7,13,1,'2026-06-01 01:40:41','2026-06-01 01:40:41',25,20,25,70,'gugur','2026-06-01 01:40:41'),(8,2,1,'2026-06-01 01:45:00','2026-06-01 01:45:24',0,0,0,0,'gugur','2026-06-01 01:45:00'),(9,2,1,'2026-06-01 01:48:48','2026-06-01 01:51:26',0,0,0,0,'gugur','2026-06-01 01:48:48'),(10,2,1,'2026-06-01 01:53:04',NULL,0,0,0,0,'proses','2026-06-01 01:53:04');
+/*!40000 ALTER TABLE `hasil_ujian` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
--- Struktur dari tabel `kategori_ujian`
+-- Table structure for table `kategori_ujian`
 --
 
+DROP TABLE IF EXISTS `kategori_ujian`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `kategori_ujian` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `nama` varchar(50) NOT NULL,
   `deskripsi` text DEFAULT NULL,
   `passing_grade_twk` int(5) NOT NULL DEFAULT 65,
@@ -200,418 +144,122 @@ CREATE TABLE `kategori_ujian` (
   `jumlah_soal_twk` int(5) NOT NULL DEFAULT 35,
   `jumlah_soal_tiu` int(5) NOT NULL DEFAULT 30,
   `jumlah_soal_tkp` int(5) NOT NULL DEFAULT 35,
-  `created_at` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `created_at` datetime DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data untuk tabel `kategori_ujian`
+-- Dumping data for table `kategori_ujian`
 --
 
-INSERT INTO `kategori_ujian` (`id`, `nama`, `deskripsi`, `passing_grade_twk`, `passing_grade_tiu`, `passing_grade_tkp`, `passing_grade_kumulatif`, `waktu_pengerjaan`, `jumlah_soal`, `jumlah_soal_twk`, `jumlah_soal_tiu`, `jumlah_soal_tkp`, `created_at`) VALUES
-(1, 'CPNS SKD 2024', 'Seleksi Kompetensi Dasar CPNS 2024', 65, 80, 166, 311, 90, 100, 35, 30, 35, '2026-05-31 20:12:21'),
-(2, 'Kedinasan STAN', 'SKD PKN STAN', 65, 80, 156, 311, 100, 110, 30, 35, 45, '2026-05-31 20:12:21'),
-(3, 'Kedinasan STIS', 'SKD Polstat STIS', 65, 80, 156, 311, 100, 110, 30, 35, 45, '2026-05-31 20:12:21'),
-(4, 'Kedinasan IPDN', 'SKD IPDN', 65, 80, 156, 311, 100, 110, 30, 35, 45, '2026-05-31 20:12:21');
-
--- --------------------------------------------------------
+LOCK TABLES `kategori_ujian` WRITE;
+/*!40000 ALTER TABLE `kategori_ujian` DISABLE KEYS */;
+INSERT INTO `kategori_ujian` VALUES (1,'CPNS SKD 2024','Seleksi Kompetensi Dasar CPNS 2024',65,80,166,311,90,100,35,30,35,'2026-05-31 20:12:21'),(2,'Kedinasan STAN','SKD PKN STAN',65,80,156,311,100,110,30,35,45,'2026-05-31 20:12:21'),(3,'Kedinasan STIS','SKD Polstat STIS',65,80,156,311,100,110,30,35,45,'2026-05-31 20:12:21'),(4,'Kedinasan IPDN','SKD IPDN',65,80,156,311,100,110,30,35,45,'2026-05-31 20:12:21');
+/*!40000 ALTER TABLE `kategori_ujian` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
--- Struktur dari tabel `materi`
+-- Table structure for table `materi`
 --
 
+DROP TABLE IF EXISTS `materi`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `materi` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `kategori_ujian_id` int(11) DEFAULT NULL,
   `judul` varchar(255) NOT NULL,
   `topik` varchar(100) NOT NULL,
-  `jenis_tes` enum('twk','tiu','tkp') DEFAULT NULL,
+  `jenis_tes` enum('twk','tiu','tkp','psikologi') DEFAULT NULL,
   `konten_html` longtext DEFAULT NULL,
   `tipe` enum('artikel','video','flashcard','rumus') DEFAULT 'artikel',
   `level` enum('dasar','menengah','lanjut') DEFAULT 'dasar',
-  `created_at` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `created_at` datetime DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `kategori_ujian_id` (`kategori_ujian_id`),
+  CONSTRAINT `materi_kategori` FOREIGN KEY (`kategori_ujian_id`) REFERENCES `kategori_ujian` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data untuk tabel `materi`
+-- Dumping data for table `materi`
 --
 
-INSERT INTO `materi` (`id`, `kategori_ujian_id`, `judul`, `topik`, `jenis_tes`, `konten_html`, `tipe`, `level`, `created_at`) VALUES
-(1, 1, 'Pengantar Pancasila', 'Pancasila', 'twk', '<h4>Pengertian Pancasila</h4><p>Pancasila adalah dasar filsafat negara dan pandangan hidup bangsa Indonesia. Terdiri dari 5 sila yang menjadi fondasi kehidupan berbangsa dan bernegara.</p><h5>5 Sila Pancasila:</h5><ol><li>Ketuhanan Yang Maha Esa</li><li>Kemanusiaan yang Adil dan Beradab</li><li>Persatuan Indonesia</li><li>Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan dalam Permusyawaratan/Perwakilan</li><li>Keadilan Sosial bagi Seluruh Rakyat Indonesia</li></ol>', 'artikel', 'dasar', '2026-05-31 20:12:22'),
-(2, 1, 'Rumus Cepat TIU - Perbandingan', 'Perbandingan', 'tiu', '<h4>Rumus Perbandingan</h4><p><strong>Perbandingan Senilai:</strong> a/b = c/d => a x d = b x c</p><p><strong>Perbandingan Berbalik Nilai (Pekerja & Waktu):</strong></p><p style=\"background:#f0f0f0;padding:10px;border-radius:5px\"><strong>(Orang 1 x Hari 1) = (Orang 2 x Hari 2)</strong></p><p>Contoh: 6 orang menyelesaikan pekerjaan dalam 12 hari. Berapa hari jika 9 orang?</p><p>Jawaban: 6 x 12 = 9 x hari => 72/9 = 8 hari.</p>', 'rumus', 'menengah', '2026-05-31 20:12:22'),
-(3, 1, 'Tips Menjawab TKP', 'Pelayanan Publik', 'tkp', '<h4>Strategi TKP</h4><ul><li><strong>Prioritaskan integritas:</strong> Jujur, akui kesalahan, bertanggung jawab.</li><li><strong>Pelayanan terbaik:</strong> Pilih opsi yang paling membantu masyarakat.</li><li><strong>Hindari:</strong> Opsi pasif, egois, menyalahkan orang lain, atau menunda penyelesaian.</li><li><strong>Skoring:</strong> 5 = terbaik, 1 = terburuk. Semua opsi memiliki nilai.</li></ul>', 'artikel', 'dasar', '2026-05-31 20:12:22'),
-(4, 1, 'Materi Numerik - Aritmatika - TIU', 'Numerik - Aritmatika', 'tiu', '<h2>Pengantar Numerik - Aritmatika</h2>\n<p>Materi ini membahas topik <strong>Numerik - Aritmatika</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting:</h3>\n<ul>\n<li>Tidak perlu buru-buru menyelesaikannya karena pekerjaan tersebut bukan merupakan tugas pokoknya</li>\n<li>Pilihan A juga bukan pilihan yang tepat, mengingat membentuk panitia tidak membutuhkan kerja keras</li>\n<li>pilihan BE bukan tindakan yang tepat karena kata âmenunjukâ tidak sesuai dengan nilai komunikatif dan koordinatif seorang pemimpin</li>\n<li>Segera berusaha memulai dan menyelesaikan sebisanya saja yang penting selesai</li>\n<li>tdk maksimal dalam bekerja\n\n\nC</li>\n<li>(menganggap rendah pekerjaan, tidak profesional)\n\n\nD</li>\n<li>Segera berusaha memulai untuk menyelesaikan tugas itu dan berusaha menyelesaikannya sesempurna mungkin</li>\n<li>Mempertanyakan dan menegosiasi manajernya karena merasa takut hasilnya tidak maksimal</li>\n</ul>\n<h3>Ringkasan Numerik - Aritmatika</h3>\n<p>Pelajari dengan teliti materi ini agar dapat menjawab soal-soal TIU dengan baik.</p>\n', 'artikel', 'dasar', '2026-05-31 20:32:52'),
-(5, 1, 'Materi UUD 1945 Sistem Pemerintahan', 'UUD 1945 - Sistem Pemerintahan', 'twk', '<h2>Sistem Pemerintahan Indonesia</h2><p>Indonesia menganut sistem pemerintahan presidensial. Kekuasaan negara terbagi: legislatif (DPR/DPD), eksekutif (Presiden), yudikatif (Mahkamah Agung).</p><ul><li>Pasal 1: Bentuk & Kedaulatan</li><li>Pasal 4: Presiden</li><li>Pasal 24: Kekuasaan Kehakiman</li></ul>', 'artikel', 'dasar', '2026-05-31 20:35:55'),
-(6, 1, 'Materi Pancasila Implementasi', 'Pancasila - Implementasi', 'twk', '<h2>Implementasi Pancasila</h2><p>Setiap sila Pancasila memiliki implementasi konkret dalam kehidupan bermasyarakat, berbangsa, dan bernegara.</p><ul><li>Sila 1: Toleransi beragama</li><li>Sila 2: Penghargaan HAM</li><li>Sila 3: Rela berkorban untuk bangsa</li><li>Sila 4: Musyawarah mufakat</li><li>Sila 5: Keadilan sosial</li></ul>', 'artikel', 'dasar', '2026-05-31 20:35:55'),
-(7, 1, 'Materi Sejarah Kemerdekaan', 'Sejarah - Proklamasi', 'twk', '<h2>Sejarah Kemerdekaan Indonesia</h2><p>Indonesia memproklamasikan kemerdekaan pada 17 Agustus 1945. Peristiwa penting: Sumpah Pemuda 1928, BPUPKI/PPKI 1945.</p>', 'artikel', 'dasar', '2026-05-31 20:35:55'),
-(8, 1, 'Materi Numerik CPNS', 'Numerik - Persentase', 'tiu', '<h2>Trik Numerik CPNS</h2><p><strong>Persentase:</strong> Harga Asli = Harga Jual / (1 - Diskon)<br><strong>Pecahan:</strong> Total = Bagian / Fraksi<br><strong>Perbandingan:</strong> Orang1×Hari1 = Orang2×Hari2</p>', 'artikel', 'dasar', '2026-05-31 20:35:55'),
-(9, 1, 'Materi Logika CPNS', 'Logika - Pola Angka', 'tiu', '<h2>Trik Logika CPNS</h2><p><strong>Fibonacci:</strong> n = (n-1) + (n-2)<br><strong>Deret kuadrat:</strong> n² ± k<br><strong>Silogisme:</strong> Semua A=B, C=A → C=B</p>', 'artikel', 'dasar', '2026-05-31 20:35:55'),
-(10, 1, 'Materi TKP Profesionalisme', 'Profesionalisme', 'tkp', '<h2>Profesionalisme PNS</h2><p>Ciri profesionalisme: komitmen, integritas, pelayanan prima, adaptasi, dan kerja sama tim. Selalu pilih jawaban yang solutif dan profesional.</p>', 'artikel', 'dasar', '2026-05-31 20:35:55'),
-(11, 1, 'Materi Hubungan Kerja - TKP', 'Hubungan Kerja', 'tkp', '<h2>Materi Hubungan Kerja</h2>\n<p>Materi pembahasan untuk topik <strong>Hubungan Kerja</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Memahami perbedaan karakter wajar, namun tetap memberitahu secara sopan untuk menghindari konflik.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Tips: Pilih jawaban yang menunjukkan empati tapi tetap korektif. Hindari balas dendam atau pasif menerima.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TKP.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52'),
-(12, 1, 'Materi Integritas - TKP', 'Integritas', 'tkp', '<h2>Materi Integritas</h2>\n<p>Materi pembahasan untuk topik <strong>Integritas</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Integritas: menolak gratifikasi dalam bentuk apapun. Melaporkan ke atasan atau penyelenggara negara.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Integritas = kejujuran, menolak suap/gratifikasi, melaporkan pelanggaran. Pilih yang paling tegas menolak dan melaporkan.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TKP.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52'),
-(13, 1, 'Materi Integritas - Konflik Kepentingan - TKP', 'Integritas - Konflik Kepentingan', 'tkp', '<h2>Materi Integritas - Konflik Kepentingan</h2>\n<p>Materi pembahasan untuk topik <strong>Integritas - Konflik Kepentingan</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Integritas mengharuskan kita melaporkan pelanggaran aturan, meskipun dilakukan oleh atasan. Melaporkan ke penyelenggara negara/inspektorat adalah langkah tepat.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Integritas: laporkan pelanggaran, jangan tutupi meski dilakukan atasan. Pilih yang tegas dan prosedural.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TKP.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52'),
-(14, 1, 'Materi Komitmen - TKP', 'Komitmen', 'tkp', '<h2>Materi Komitmen</h2>\n<p>Materi pembahasan untuk topik <strong>Komitmen</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Komitmen: menjaga produktivitas tim. Tegur secara pribadi dan profesional, berikan solusi.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Komitmen: pilih pendekatan persuasif dan profesional sebelum melapor. Tegur pribadi â†’ solusi â†’ lapor jika tidak berubah.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TKP.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52'),
-(15, 1, 'Materi Komitmen - Deadline - TKP', 'Komitmen - Deadline', 'tkp', '<h2>Materi Komitmen - Deadline</h2>\n<p>Materi pembahasan untuk topik <strong>Komitmen - Deadline</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Komitmen organisasi: komunikasikan kendala ke atasan, usahakan selesaikan dengan data tersedia, atau minta perpanjangan dengan alasan yang jelas.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Komitmen: komunikasi + usaha maksimal. Jangan menyerah tanpa mencoba.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TKP.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52'),
-(16, 1, 'Materi Logika - Analitis - TIU', 'Logika - Analitis', 'tiu', '<h2>Materi Logika - Analitis</h2>\n<p>Materi pembahasan untuk topik <strong>Logika - Analitis</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Urutan: Andi &gt; Budi &gt; Cici &gt; Dedi. Andi lebih tinggi dari Dedi.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Buat diagram urutan. Panah ke bawah = lebih pendek. Susun dari yang tertinggi.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TIU.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52'),
-(17, 1, 'Materi Logika - Silogisme - TIU', 'Logika - Silogisme', 'tiu', '<h2>Materi Logika - Silogisme</h2>\n<p>Materi pembahasan untuk topik <strong>Logika - Silogisme</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Jika semua karyawan berdasi DAN berjas, maka sebagian karyawan berdasi dan berjas. Tidak bisa simpulkan semua berdasi saja karena semua juga berjas.</li>\n<li>Silogisme: Semua A adalah B. C adalah A. Maka C adalah B. Budi wajib pelatihan.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Silogisme sederhana: perhatikan subjek dan predikat. Jika premis valid, kesimpulan mengikuti pola logis.</li>\n<li>Tips: Perhatikan kata \"semua\" pada kedua premis. Simpulan yang valid harus mencakup kedua sifat.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TIU.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52'),
-(18, 1, 'Materi NKRI - TWK', 'NKRI', 'twk', '<h2>Materi NKRI</h2>\n<p>Materi pembahasan untuk topik <strong>NKRI</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Merah melambangkan keberanian (berani mengorbankan jiwa dan raga). Putih melambangkan kesucian (kesucian hati dan niat).</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Tips: Merah = Keberanian, Putih = Kesucian. Ingat dengan mnemonik: \"Merah Berani, Putih Suci\".</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TWK.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52'),
-(19, 1, 'Materi NKRI - Bela Negara - TWK', 'NKRI - Bela Negara', 'twk', '<h2>Materi NKRI - Bela Negara</h2>\n<p>Materi pembahasan untuk topik <strong>NKRI - Bela Negara</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Pasal 27 ayat (3): Pembelaan negara adalah hak dan kewajiban setiap warga negara. Cara: jabatan pemerintahan, tentara, atau swakelola.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Pasal 27 ayat (3) = hak dan kewajiban. Cara: jabatan pemerintahan, tentara, atau swakelola.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TWK.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52'),
-(20, 1, 'Materi NKRI - Bhinneka Tunggal Ika - TWK', 'NKRI - Bhinneka Tunggal Ika', 'twk', '<h2>Materi NKRI - Bhinneka Tunggal Ika</h2>\n<p>Materi pembahasan untuk topik <strong>NKRI - Bhinneka Tunggal Ika</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Bhinneka Tunggal Ika berasal dari kitab Sutasoma karangan Mpu Tantular (abad XIV). Artinya: Berbeda-beda tetapi tetap satu jua.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Hafal: Mpu Tantular, kitab Sutasoma, abad XIV. Jangan tertukar dengan Negarakertagama (Mpu Prapanca).</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TWK.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52'),
-(21, 1, 'Materi Numerik - Deret - TIU', 'Numerik - Deret', 'tiu', '<h2>Materi Numerik - Deret</h2>\n<p>Materi pembahasan untuk topik <strong>Numerik - Deret</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Pola: +4, +6, +8, +10, +12, +14. Jadi 29 + 12 = 41, dan 41 + 14 = 55.</li>\n<li>Pola: nÂ² + 1. 1Â²+1=2, 2Â²+1=5, 3Â²+1=10, 4Â²+1=17, 5Â²+1=26, maka 6Â²+1=37.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Rumus cepat: perhatikan selisih antar angka. Selisih: 3,5,7,9 â†’ selanjutnya 11 â†’ 26+11=37.</li>\n<li>Tips: Cek selisih antar angka. Jika selisih bertambah konstan (2), berarti pola kuadratik.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TIU.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52'),
-(22, 1, 'Materi Numerik - Kecepatan - TIU', 'Numerik - Kecepatan', 'tiu', '<h2>Materi Numerik - Kecepatan</h2>\n<p>Materi pembahasan untuk topik <strong>Numerik - Kecepatan</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Kecepatan = Jarak / Waktu = 240 km / 4 jam = 60 km/jam.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Rumus dasar: v = s/t.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TIU.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52'),
-(23, 1, 'Materi Numerik - Pecahan - TIU', 'Numerik - Pecahan', 'tiu', '<h2>Materi Numerik - Pecahan</h2>\n<p>Materi pembahasan untuk topik <strong>Numerik - Pecahan</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>3/4 = 180 liter. Maka 1/4 = 60 liter. Kapasitas penuh = 4/4 = 4 × 60 = 240 liter.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Rumus: Total = Bagian / Fraksi. 180 / (3/4) = 180 × 4/3 = 240.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TIU.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52'),
-(24, 1, 'Materi Numerik - Perbandingan - TIU', 'Numerik - Perbandingan', 'tiu', '<h2>Materi Numerik - Perbandingan</h2>\n<p>Materi pembahasan untuk topik <strong>Numerik - Perbandingan</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>6Ã—10=60 orang-hari. 15 orang butuh: 60/15=4 hari.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Perbandingan berbalik: Orang bertambah, hari berkurang. 6Ã—10 = 15Ã—x â†’ x=4.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TIU.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52'),
-(25, 1, 'Materi Pancasila - Sila ke-1 - TWK', 'Pancasila - Sila ke-1', 'twk', '<h2>Materi Pancasila - Sila ke-1</h2>\n<p>Materi pembahasan untuk topik <strong>Pancasila - Sila ke-1</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Pancasila sebagai ideologi terbuka memungkinkan perkembangan norma dengan konsensus, namun tetap melarang ideologi radikal seperti Marxisme-Leninisme dan mempertahankan stabilitas nasional. Penciptaan</li>\n<li>Sila 1: pengamalan keyakinan dalam kehidupan bermasyarakat, berbangsa, bernegara. Contoh: menghormati kebebasan beragama.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Fokus pada implementasi nilai ketuhanan dalam kehidupan sosial dan politik.</li>\n<li>Tips: Ingat, ideologi terbuka bukan berarti tanpa batas. Konsensus tetap diperlukan untuk setiap perubahan norma.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TWK.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52'),
-(26, 1, 'Materi Pancasila - Sila ke-2 - TWK', 'Pancasila - Sila ke-2', 'twk', '<h2>Materi Pancasila - Sila ke-2</h2>\n<p>Materi pembahasan untuk topik <strong>Pancasila - Sila ke-2</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Sila ke-2: Kemanusiaan yang Adil dan Beradab. Contoh: menghargai HAM, tidak diskriminasi.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Ingat: Sila 2 = Kemanusiaan. Jika soal tentang HAM â†’ jawaban Sila 2.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TWK.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52'),
-(27, 1, 'Materi Pancasila - Sila ke-3 - TWK', 'Pancasila - Sila ke-3', 'twk', '<h2>Materi Pancasila - Sila ke-3</h2>\n<p>Materi pembahasan untuk topik <strong>Pancasila - Sila ke-3</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Sila ke-2 Pancasila: Kemanusiaan yang Adil dan Beradab. Mengakui persamaan derajat dan martabat setiap manusia secara universal.</li>\n<li>Sila ke-3: persatuan dan kesatuan bangsa. Warga harus rela berkorban untuk kepentingan bangsa.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Kata kunci: persatuan, kesatuan, NKRI, korban untuk bangsa.</li>\n<li>Tips: Sila ke-2 berhubungan dengan kemanusiaan universal. Jika soal tentang hubungan antar-manusia global, jawabannya Sila 2.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TWK.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52'),
-(28, 1, 'Materi Pancasila - Sila ke-4 - TWK', 'Pancasila - Sila ke-4', 'twk', '<h2>Materi Pancasila - Sila ke-4</h2>\n<p>Materi pembahasan untuk topik <strong>Pancasila - Sila ke-4</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Sila ke-4: kekuasaan di tangan rakyat, dijalankan melalui permusyawaratan. Dasar demokrasi Pancasila.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Demokrasi Pancasila â‰  liberal. Ciri: musyawarah, kekeluargaan, kepentingan bersama.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TWK.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52'),
-(29, 1, 'Materi Pancasila - Sila ke-5 - TWK', 'Pancasila - Sila ke-5', 'twk', '<h2>Materi Pancasila - Sila ke-5</h2>\n<p>Materi pembahasan untuk topik <strong>Pancasila - Sila ke-5</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Sila ke-5: distribusi keadilan merata di bidang sosial, ekonomi, hukum.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Kata kunci: keadilan, merata, seluruh rakyat, tidak memihak, pembangunan merata.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TWK.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52'),
-(30, 1, 'Materi Pelayanan Publik - Prioritas - TKP', 'Pelayanan Publik - Prioritas', 'tkp', '<h2>Materi Pelayanan Publik - Prioritas</h2>\n<p>Materi pembahasan untuk topik <strong>Pelayanan Publik - Prioritas</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Pelayanan publik harus mengutamakan kelompok rentan. Bantu lansia dengan menyediakan tempat duduk atau prioritas pelayanan sesuai ketentuan.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Pelayanan: utamakan kelompok rentan (lansia, ibu hamil, difabel).</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TKP.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52'),
-(31, 1, 'Materi Profesionalisme - Kritik - TKP', 'Profesionalisme - Kritik', 'tkp', '<h2>Materi Profesionalisme - Kritik</h2>\n<p>Materi pembahasan untuk topik <strong>Profesionalisme - Kritik</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Profesionalisme: dengarkan kritik, evaluasi diri, minta saran perbaikan. Jangan defensif atau menyalahkan orang lain di depan umum.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Profesional: terima kritik dengan lapang dada, jadikan pembelajaran.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TKP.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52'),
-(32, 1, 'Materi Sejarah - Sumpah Pemuda - TWK', 'Sejarah - Sumpah Pemuda', 'twk', '<h2>Materi Sejarah - Sumpah Pemuda</h2>\n<p>Materi pembahasan untuk topik <strong>Sejarah - Sumpah Pemuda</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Sumpah Pemuda 28 Oktober 1928 berisi tiga ikrar: Tanah Air, Bangsa, dan Bahasa Indonesia.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Hafalkan 3 ikrar: Tanah Air, Bangsa, Bahasa.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TWK.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52'),
-(33, 1, 'Materi Sosial Budaya - TKP', 'Sosial Budaya', 'tkp', '<h2>Materi Sosial Budaya</h2>\n<p>Materi pembahasan untuk topik <strong>Sosial Budaya</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Sosial Budaya: menghargai keberagaman, tidak memaksakan kebiasaan sendiri, memperlakukan setiap orang setara.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Keberagaman: pilih jawaban yang menunjukkan penghargaan, adaptasi, dan tidak diskriminatif.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TKP.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52'),
-(34, 1, 'Materi Sosial Budaya - Adaptasi - TKP', 'Sosial Budaya - Adaptasi', 'tkp', '<h2>Materi Sosial Budaya - Adaptasi</h2>\n<p>Materi pembahasan untuk topik <strong>Sosial Budaya - Adaptasi</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Sosial Budaya: menghargai perbedaan, beradaptasi dengan norma setempat, tetap profesional. Ini menunjukkan fleksibilitas dan penghargaan terhadap keberagaman.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Adaptasi: hormati norma lokal, pelajari budaya baru, tetap profesional.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TKP.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52'),
-(35, 1, 'Materi UUD 1945 - TWK', 'UUD 1945', 'twk', '<h2>Materi UUD 1945</h2>\n<p>Materi pembahasan untuk topik <strong>UUD 1945</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Pancasila sebagai Dasar Negara (opening UUD 1945). Menjadi fondasi bagi seluruh sistem ketatanegaraan Indonesia.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Tips: Kalimat \"mengatur penyelenggaraan ketatanegaraan\" selalu merujuk pada kedudukan Pancasila sebagai DASAR NEGARA.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TWK.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52'),
-(36, 1, 'Materi UUD 1945 - HAM - TWK', 'UUD 1945 - HAM', 'twk', '<h2>Materi UUD 1945 - HAM</h2>\n<p>Materi pembahasan untuk topik <strong>UUD 1945 - HAM</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Pasal 28A UUD 1945: Setiap orang berhak untuk hidup serta berhak mempertahankan hidup dan kehidupannya.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Pasal 28A = hak hidup. Jangan tertukar dengan Pasal 27 (warga negara) atau 28E (kebebasan).</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TWK.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52'),
-(37, 1, 'Materi UUD 1945 - Ketahanan Nasional - TWK', 'UUD 1945 - Ketahanan Nasional', 'twk', '<h2>Materi UUD 1945 - Ketahanan Nasional</h2>\n<p>Materi pembahasan untuk topik <strong>UUD 1945 - Ketahanan Nasional</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Pasal 30 ayat (1) UUD 1945: Tiap-tiap orang berhak dan wajib ikut serta dalam upaya pembelaan negara. Pasal 30 mengatur pertahanan keamanan negara.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Pasal 30 = pertahanan negara. Semesta = melibatkan seluruh komponen bangsa.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TWK.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52'),
-(38, 1, 'Materi UUD 1945 - Pasal 1-5 - TWK', 'UUD 1945 - Pasal 1-5', 'twk', '<h2>Materi UUD 1945 - Pasal 1-5</h2>\n<p>Materi pembahasan untuk topik <strong>UUD 1945 - Pasal 1-5</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Pasal 1 ayat (1): Negara Indonesia ialah Negara Kesatuan, yang berbentuk Republik.</li>\n<li>Pasal 1 ayat (2): Kedaulatan berada di tangan rakyat dan dilaksanakan menurut Undang-Undang Dasar.</li>\n<li>Pasal 4 ayat (1): Presiden Republik Indonesia memegang kekuasaan pemerintahan menurut UUD.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Hafalkan: Pasal 1 = Bentuk & Kedaulatan. (1) Negara Kesatuan Republik. (2) Kedaulatan rakyat. (3) Negara hukum.</li>\n<li>Pasal 1 ayat (2) = Kedaulatan rakyat. Jangan tertukar dengan ayat (3) tentang negara hukum.</li>\n<li>Pasal 4 = Presiden. (1) Pemerintahan. (2) Kepala negara. Lengkapi dengan Pasal 5.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TWK.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52'),
-(39, 1, 'Materi UUD 1945 - Pasal 27-34 - TWK', 'UUD 1945 - Pasal 27-34', 'twk', '<h2>Materi UUD 1945 - Pasal 27-34</h2>\n<p>Materi pembahasan untuk topik <strong>UUD 1945 - Pasal 27-34</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Pasal 27 ayat (2): Tiap-tiap warga negara berhak atas pekerjaan dan penghidupan yang layak untuk kemanusiaan.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Pasal 27 = Warga negara & penduduk. ayat (1) sama di muka hukum. ayat (2) pekerjaan layak. ayat (3) ikut pembelaan negara.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TWK.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52'),
-(40, 1, 'Materi Verbal - Analogi - TIU', 'Verbal - Analogi', 'tiu', '<h2>Materi Verbal - Analogi</h2>\n<p>Materi pembahasan untuk topik <strong>Verbal - Analogi</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Analogi hubungan tempat bekerja. Guru bekerja di sekolah. Dokter bekerja di rumah sakit.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Cari pola hubungan: tempat bekerja, alat kerja, fungsi, atau lawan.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TIU.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52'),
-(41, 1, 'Materi Verbal - Antonim - TIU', 'Verbal - Antonim', 'tiu', '<h2>Materi Verbal - Antonim</h2>\n<p>Materi pembahasan untuk topik <strong>Verbal - Antonim</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Ekstensif = luas, merata, menyeluruh. Antonimnya intensif = mendalam, terpusat.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Ekstensif vs Intensif sering muncul di soal CPNS. Ekstensif = luas. Intensif = mendalam.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TIU.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52'),
-(42, 1, 'Materi Verbal - Penjelasan - TIU', 'Verbal - Penjelasan', 'tiu', '<h2>Materi Verbal - Penjelasan</h2>\n<p>Materi pembahasan untuk topik <strong>Verbal - Penjelasan</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Paragraf tersebut menjelaskan pengaruh perkembangan teknologi informasi dan komunikasi terhadap berbagai aspek kehidupan, khususnya pendidikan.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Cari kalimat utama yang menyatakan topik utama paragraf.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TIU.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52'),
-(43, 1, 'Materi Verbal - Sinonim - TIU', 'Verbal - Sinonim', 'tiu', '<h2>Materi Verbal - Sinonim</h2>\n<p>Materi pembahasan untuk topik <strong>Verbal - Sinonim</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Konsisten = tetap, tidak berubah-ubah, teguh, konsekuen.</li>\n<li>Mortasitas berasal dari kata \"mortal\" yang berarti kematian. Jadi mortalitas = angka kematian.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Gunakan konteks kalimat. Konsisten sering dipasangkan dengan sikap, perilaku, atau komitmen.</li>\n<li>Tips: Ingat kata Latin \"mort\" = mati. Mortalitas = mortal = kematian.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TIU.</em></p>\n', 'artikel', 'dasar', '2026-05-31 20:36:52');
-
--- --------------------------------------------------------
+LOCK TABLES `materi` WRITE;
+/*!40000 ALTER TABLE `materi` DISABLE KEYS */;
+INSERT INTO `materi` VALUES (44,1,'Panduan Lengkap Pancasila untuk CPNS','Pancasila','twk','<h2>1. Pengantar Pancasila</h2><p>Pancasila adalah dasar falsafah dan ideologi bangsa Indonesia. Dalam ujian CPNS, soal Pancasila muncul di Tes Wawasan Kebangsaan (TWK).</p>\n<h2>2. Sila Pertama: Ketuhanan Yang Maha Esa</h2><ul><li>Menghormati kebebasan beragama</li><li>Toleransi antar umat beragama</li><li>Tidak memaksakan keyakinan</li></ul><p><strong>Tip:</strong> Pilih jawaban yang menunjukkan toleransi.</p>\n<h2>3. Sila Kedua: Kemanusiaan yang Adil dan Beradab</h2><ul><li>Penghargaan HAM</li><li>Tidak diskriminasi</li><li>Saling menghormati</li></ul>\n<h2>4. Sila Ketiga: Persatuan Indonesia</h2><ul><li>Rela berkorban untuk bangsa</li><li>Menjaga keutuhan NKRI</li><li>Kepentingan bersama > pribadi</li></ul>\n<h2>5. Sila Keempat: Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan</h2><ul><li>Demokrasi Pancasila = musyawarah mufakat</li><li>Kekeluargaan dalam pengambilan keputusan</li></ul>\n<h2>6. Sila Kelima: Keadilan Sosial bagi Seluruh Rakyat Indonesia</h2><ul><li>Pembangunan merata</li><li>Akses pendidikan & kesehatan merata</li><li>Perlindungan kelompok rentan</li></ul>\n<h2>7. Tips Menjawab Soal Pancasila</h2><ul><li>Toleransi/beragama &rarr; Sila 1</li><li>HAM/diskriminasi &rarr; Sila 2</li><li>Korban/bangsa/NKRI &rarr; Sila 3</li><li>Musyawarah/demokrasi &rarr; Sila 4</li><li>Merata/keadilan/sosial &rarr; Sila 5</li></ul>','artikel','dasar','2026-06-01 01:27:03'),(45,1,'Panduan Lengkap UUD 1945 untuk CPNS','UUD 1945','twk','<h2>1. Pasal 1: Bentuk & Kedaulatan</h2><ul><li>Ayat (1): Negara Kesatuan Republik</li><li>Ayat (2): Kedaulatan di tangan rakyat</li><li>Ayat (3): Negara berdasar atas hukum</li></ul>\n<h2>2. Pasal 2-3: MPR</h2><ul><li>Pasal 2: MPR = DPR + DPD</li><li>Pasal 3: MPR mengubah UUD, melantik Presiden</li></ul>\n<h2>3. Pasal 4-7: Presiden</h2><ul><li>Pasal 4: Presiden memegang kekuasaan pemerintahan</li><li>Pasal 5: Presiden membuat UU bersama DPR</li><li>Pasal 6: Syarat jadi Presiden (WNI, 40+ tahun, percaya Tuhan)</li></ul>\n<h2>4. Pasal 24: Kekuasaan Kehakiman</h2><ul><li>Mahkamah Agung + badan peradilan</li><li>Peradilan umum, agama, militer, TUN, MK</li></ul>\n<h2>5. Pasal 27-34: Hak & Kewajiban</h2><ul><li>Pasal 27: Warga negara (sama di muka hukum, pekerjaan layak, pembelaan negara)</li><li>Pasal 28A: Hak hidup</li><li>Pasal 28E: Kebebasan beragama, berpendapat, berserikat</li><li>Pasal 28G: Perlindungan diri & keluarga</li><li>Pasal 30: Pertahanan negara</li><li>Pasal 31: Pendidikan wajib & gratis</li></ul>\n<h2>6. Tips Hafalan</h2><ul><li>Pasal 1 = Bentuk & Kedaulatan</li><li>Pasal 4 = Presiden</li><li>Pasal 5 = Perundang-undangan</li><li>Pasal 24 = Kehakiman</li><li>Pasal 27 = Warga negara</li><li>Pasal 28A = Hidup | 28E = Kebebasan | 28G = Perlindungan</li></ul>','artikel','dasar','2026-06-01 01:27:03'),(46,1,'Sejarah Kemerdekaan & Pahlawan untuk CPNS','Sejarah Indonesia','twk','<h2>1. Era Kolonialisme</h2><p>Indonesia dijajah Belanda ~350 tahun (1602-1942), dijajah Jepang 1942-1945.</p>\n<h2>2. Organisasi Pergerakan</h2><ul><li>Budi Utomo (20 Mei 1908) = hari Kebangkitan Nasional</li><li>Indische Partij (1912) - E.F.E. Douwes Dekker</li><li>PNI (1927) - Soekarno</li></ul>\n<h2>3. Sumpah Pemuda (28 Oktober 1928)</h2><ul><li>Tiga ikrar: Tanah Air, Bangsa, Bahasa Indonesia</li><li>Di Jakarta (Rapenburg)</li></ul>\n<h2>4. Proklamasi 17 Agustus 1945</h2><ul><li>Dibacakan Soekarno & Mohammad Hatta</li><li>Jalan Pegangsaan Timur No. 56, Jakarta</li></ul>\n<h2>5. Konferensi & Perjanjian</h2><ul><li>KMB (23 Agustus 1949) - Belanda akui kedaulatan</li><li>Round Table Conference - Den Haag</li></ul>\n<h2>6. Tips Soal Sejarah</h2><ul><li>Tanggal: 20 Mei 1908, 28 Oktober 1928, 17 Agustus 1945, 23 Agustus 1949</li><li>Tokoh: Soekarno, Hatta, Yamin, Douwes Dekker</li><li>Organisasi: Budi Utomo, PNI, BPUPKI, PPKI</li></ul>','artikel','dasar','2026-06-01 01:27:03'),(47,1,'NKRI, Bela Negara & Bhinneka Tunggal Ika','NKRI','twk','<h2>1. Bhinneka Tunggal Ika</h2><ul><li>Dari kitab <strong>Sutasoma</strong> karya <strong>Mpu Tantular</strong> (abad XIV)</li><li>Arti: Berbeda-beda tetapi tetap satu jua</li></ul>\n<h2>2. Keberagaman Indonesia</h2><ul><li>1.300+ suku bangsa, 700+ bahasa daerah</li><li>6 agama resmi: Islam, Kristen, Katolik, Hindu, Buddha, Konghucu</li></ul>\n<h2>3. Bela Negara (Pasal 27 ayat 3)</h2><ul><li>Hak & kewajiban warga negara</li><li>Cara: jabatan pemerintahan, TNI, swakelola</li></ul>\n<h2>4. Tips Soal NKRI</h2><ul><li>Mpu Tantular = Sutasoma</li><li>Mpu Prapanca = Negarakertagama</li><li>Bhinneka Tunggal Ika = keberagaman diterima</li><li>Bela negara = hak + kewajiban (Pasal 27 ayat 3)</li></ul>','artikel','dasar','2026-06-01 01:27:03'),(48,1,'Panduan Kemampuan Verbal untuk TIU CPNS','Verbal','tiu','<h2>1. Sinonim</h2><ul><li>Konsisten = tetap, teguh, konsekuen</li><li>Ekstensif = luas, merata</li><li>Autentik = asli, genuine</li></ul>\n<h2>2. Antonim</h2><ul><li>Ekstensif &harr; Intensif</li><li>Stagnan &harr; Progresif</li></ul>\n<h2>3. Analogi</h2><ul><li>Tempat bekerja: Guru : Sekolah = Dokter : Rumah Sakit</li><li>Fungsi: Mata : Melihat = Telinga : Mendengar</li></ul>\n<h2>4. Penjelasan & Ringkasan</h2><ul><li>Cari kalimat utama (awal/akhir paragraf)</li><li>Identifikasi kata kunci</li></ul>\n<h2>5. Tips</h2><ul><li>Cocokkan dengan konteks kalimat</li><li>Hindari jawaban terlalu spesifik atau terlalu umum</li></ul>','artikel','dasar','2026-06-01 01:27:03'),(49,1,'Panduan Kemampuan Numerik untuk TIU CPNS','Numerik','tiu','<h2>1. Deret & Pola</h2><ul><li>Aritmatika: beda tetap (2,5,8,11... +3)</li><li>Geometri: rasio tetap (2,4,8,16... x2)</li><li>Kuadrat: n&sup2; &pm; k (2,5,10,17,26... n&sup2;+1)</li><li>Fibonacci: n=(n-1)+(n-2) (1,1,2,3,5,8,13...)</li></ul>\n<h2>2. Aritmatika Sosial</h2><ul><li><strong>Orang &times; Hari = konstan</strong></li><li>Contoh: 12 org &times; 20 hr = 240. 20 org butuh 240/20 = 12 hr</li></ul>\n<h2>3. Persentase</h2><ul><li>Harga Asli = Harga Jual / (100% - Diskon%)</li><li>Contoh: Rp 240.000 (diskon 20%) &rarr; 240.000 / 0.8 = Rp 300.000</li></ul>\n<h2>4. Pecahan</h2><ul><li>Total = Bagian / Fraksi</li><li>Contoh: 3/4 tangki = 180 liter &rarr; 180 / (3/4) = 240 liter</li></ul>\n<h2>5. Kecepatan</h2><ul><li>v = s / t</li><li>Contoh: 240 km / 4 jam = 60 km/jam</li></ul>\n<h2>6. Tips Cepat</h2><ul><li>Selisih bertambah 2 &rarr; pola kuadrat</li><li>Kalikan silang untuk perbandingan berbalik nilai</li></ul>','artikel','dasar','2026-06-01 01:27:03'),(50,1,'Panduan Logika Penalaran untuk TIU CPNS','Logika','tiu','<h2>1. Silogisme</h2><ul><li>Pola: Semua A adalah B. C adalah A. Maka C adalah B.</li><li>Premis harus benar dan relevan</li></ul>\n<h2>2. Logika Analitis</h2><ul><li>Buat diagram/tabel</li><li>Susun dari kriteria paling pasti</li><li>Contoh: Andi &gt; Budi &gt; Cici &gt; Dedi &rarr; Andi &gt; Dedi</li></ul>\n<h2>3. Pola Gambar</h2><ul><li>Cari rotasi, pencerminan, translasi</li><li>Perhatikan jumlah elemen bertambah/berkurang</li></ul>\n<h2>4. Tips</h2><ul><li>Baca 1x lalu analisis</li><li>Coret opsi yang jelas salah</li></ul>','artikel','dasar','2026-06-01 01:27:03'),(51,1,'Panduan Profesionalisme PNS untuk TKP CPNS','Profesionalisme','tkp','<h2>1. Komitmen Organisasi</h2><ul><li>Prioritaskan kepentingan organisasi</li><li>Tepat waktu, tidak meninggalkan tugas</li></ul>\n<h2>2. Integritas</h2><ul><li>Kejujuran dalam bertindak dan berkata</li><li>Menolak gratifikasi/suap</li><li>Melaporkan pelanggaran</li></ul>\n<h2>3. Kerja Sama Tim</h2><ul><li>Musyawarah mufakat</li><li>Tidak menyalahkan rekan di depan umum</li></ul>\n<h2>4. Pelayanan</h2><ul><li>Ramah, cepat, solusi-oriented</li><li>Prioritaskan kelompok rentan</li></ul>\n<h2>5. Tips TKP</h2><ul><li><strong>Terbaik:</strong> solutif, profesional, empati</li><li><strong>Terburuk:</strong> pasif, defensif, menghindar</li></ul>','artikel','dasar','2026-06-01 01:27:04'),(52,1,'Panduan Integritas & Anti Korupsi untuk TKP CPNS','Integritas','tkp','<h2>1. Integritas PNS</h2><ul><li>Kejujuran, keteladanan, tanggung jawab, konsistensi</li></ul>\n<h2>2. Gratifikasi</h2><ul><li>Menolak segala bentuk hadiah dari pihak terkait</li><li>Melaporkan ke inspektorat</li></ul>\n<h2>3. Konflik Kepentingan</h2><ul><li>Hindari tabrakan kepentingan pribadi & tugas</li><li>Laporkan jika terpaksa</li></ul>\n<h2>4. Tips Soal</h2><ul><li>Ditawari suap &rarr; <strong>tolak + laporkan</strong></li><li>Tahu pelanggaran atasan &rarr; <strong>laporkan ke instansi berwenang</strong></li></ul>','artikel','dasar','2026-06-01 01:27:04'),(53,1,'Panduan Pelayanan Publik untuk TKP CPNS','Pelayanan Publik','tkp','<h2>1. Prinsip Pelayanan</h2><ul><li>Kesederhanaan, kejelasan, keamanan, keterbukaan, keadilan, ketepatan waktu</li></ul>\n<h2>2. Menghadapi Warga Marah</h2><ul><li>Tenang, sopan, dengarkan</li><li>Minta maaf jika salah</li><li>Berikan solusi alternatif</li></ul>\n<h2>3. Prioritas Pelayanan</h2><ul><li>Lansia, ibu hamil, difabel</li><li>Warga dengan urgensitas tinggi</li></ul>\n<h2>4. Tips</h2><ul><li>Pilih: <strong>mendengarkan, tenang, solusi</strong></li><li>Hindari: marah balik, mengabaikan, suruh datang lain hari</li></ul>','artikel','dasar','2026-06-01 01:27:04'),(54,1,'Materi Hubungan Kerja - TKP','Hubungan Kerja','tkp','<h2>Materi Hubungan Kerja</h2>\n<p>Materi pembahasan untuk topik <strong>Hubungan Kerja</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Memahami perbedaan karakter wajar, namun tetap memberitahu secara sopan untuk menghindari konflik.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Tips: Pilih jawaban yang menunjukkan empati tapi tetap korektif. Hindari balas dendam atau pasif menerima.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TKP.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(55,1,'Materi Integritas - Konflik Kepentingan - TKP','Integritas - Konflik Kepentingan','tkp','<h2>Materi Integritas - Konflik Kepentingan</h2>\n<p>Materi pembahasan untuk topik <strong>Integritas - Konflik Kepentingan</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Integritas mengharuskan kita melaporkan pelanggaran aturan, meskipun dilakukan oleh atasan. Melaporkan ke penyelenggara negara/inspektorat adalah langkah tepat.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Integritas: laporkan pelanggaran, jangan tutupi meski dilakukan atasan. Pilih yang tegas dan prosedural.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TKP.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(56,1,'Materi Komitmen - TKP','Komitmen','tkp','<h2>Materi Komitmen</h2>\n<p>Materi pembahasan untuk topik <strong>Komitmen</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Bagi tugas rekan yang sakit ke anggota lain & tetap komunikasi.</li>\n<li>Evaluasi bersama tim, identifikasi penyebab, susun rencana perbaikan.</li>\n<li>Komitmen: menjaga produktivitas tim. Tegur secara pribadi dan profesional, berikan solusi.</li>\n<li>Komunikasi dengan atasan + konfirmasi ke keluarga.</li>\n<li>Komunikasikan ke atasan untuk efisiensi atau penambahan SDM.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Komitmen tim: gotong royong, jangan biarkan proyek gagal.</li>\n<li>Komitmen Γëá self-exploitation. Cari solusi berkelanjutan.</li>\n<li>Komitmen: kegagalan adalah pembelajaran, bukan akhir.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TKP.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(57,1,'Materi Komitmen - Deadline - TKP','Komitmen - Deadline','tkp','<h2>Materi Komitmen - Deadline</h2>\n<p>Materi pembahasan untuk topik <strong>Komitmen - Deadline</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Komitmen organisasi: komunikasikan kendala ke atasan, usahakan selesaikan dengan data tersedia, atau minta perpanjangan dengan alasan yang jelas.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Komitmen: komunikasi + usaha maksimal. Jangan menyerah tanpa mencoba.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TKP.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(58,1,'Materi Logika - Analitis - TIU','Logika - Analitis','tiu','<h2>Materi Logika - Analitis</h2>\n<p>Materi pembahasan untuk topik <strong>Logika - Analitis</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Urutan: Andi &gt; Budi &gt; Cici &gt; Dedi. Andi lebih tinggi dari Dedi.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Buat diagram urutan. Panah ke bawah = lebih pendek. Susun dari yang tertinggi.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TIU.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(59,1,'Materi Logika - Pola Angka - TIU','Logika - Pola Angka','tiu','<h2>Materi Logika - Pola Angka</h2>\n<p>Materi pembahasan untuk topik <strong>Logika - Pola Angka</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Pola Fibonacci: setiap angka adalah jumlah dua angka sebelumnya. 5+8=13, maka 8+13=21.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Fibonacci: 1, 1, 2, 3, 5, 8, 13, 21, 34...</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TIU.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(60,1,'Materi Logika - Silogisme - TIU','Logika - Silogisme','tiu','<h2>Materi Logika - Silogisme</h2>\n<p>Materi pembahasan untuk topik <strong>Logika - Silogisme</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Jika semua karyawan berdasi DAN berjas, maka sebagian karyawan berdasi dan berjas. Tidak bisa simpulkan semua berdasi saja karena semua juga berjas.</li>\n<li>Silogisme: Semua A adalah B. C adalah A. Maka C adalah B. Budi wajib pelatihan.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Silogisme sederhana: perhatikan subjek dan predikat. Jika premis valid, kesimpulan mengikuti pola logis.</li>\n<li>Tips: Perhatikan kata \"semua\" pada kedua premis. Simpulan yang valid harus mencakup kedua sifat.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TIU.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(61,1,'Materi NKRI - Bela Negara - TWK','NKRI - Bela Negara','twk','<h2>Materi NKRI - Bela Negara</h2>\n<p>Materi pembahasan untuk topik <strong>NKRI - Bela Negara</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Pasal 27 ayat (3): Pembelaan negara adalah hak dan kewajiban setiap warga negara. Cara: jabatan pemerintahan, tentara, atau swakelola.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Pasal 27 ayat (3) = hak dan kewajiban. Cara: jabatan pemerintahan, tentara, atau swakelola.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TWK.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(62,1,'Materi NKRI - Bhinneka Tunggal Ika - TWK','NKRI - Bhinneka Tunggal Ika','twk','<h2>Materi NKRI - Bhinneka Tunggal Ika</h2>\n<p>Materi pembahasan untuk topik <strong>NKRI - Bhinneka Tunggal Ika</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Bhinneka Tunggal Ika berasal dari kitab Sutasoma karangan Mpu Tantular (abad XIV). Artinya: Berbeda-beda tetapi tetap satu jua.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Hafal: Mpu Tantular, kitab Sutasoma, abad XIV. Jangan tertukar dengan Negarakertagama (Mpu Prapanca).</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TWK.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(63,1,'Materi Numerik - Aritmatika - TIU','Numerik - Aritmatika','tiu','<h2>Materi Numerik - Aritmatika</h2>\n<p>Materi pembahasan untuk topik <strong>Numerik - Aritmatika</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Jawaban: BACDE\n\n\njejaring kerja kerja sama dan kolaborasi dengan panitia pemungutan suara\n\n\nHak pilih adalah sesuatu hak yang bersifat personal dan tidak bisa diwakili oleh siapapun.\n\n\nPilihan E, Memb</li>\n<li>Jawaban: CDAEB\n\n\nSebagaimana telah dijelaskan sebelumnya: ├ó┬Ç┬£Dalam kaitan dengan topik kepemimpinan, maka pastikan bahwa komunikasi dan koordinasi menjadi kata kunci dari setiap kebijakan atau tindaka</li>\n<li>Jawaban: DEBAC\n\n\nA. Meminta orang lain mengerjakan asalkan bisa selesai tepat waktu. tdk profesional\n\n\nB. Segera berusaha memulai dan menyelesaikan sebisanya saja yang penting selesai. tdk maksimal da</li>\n<li>Orang ├âΓÇö Hari = konstan. 12├âΓÇö20=240. Pekerja baru=20. Hari=240/20=12.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Perhatikan pola logika pada soal Numerik - Aritmatika</li>\n<li>Rumus cepat: Orang1 ├âΓÇö Hari1 = Orang2 ├âΓÇö Hari2. 12├âΓÇö20 = 20├âΓÇöx ├óΓÇáΓÇÖ x=12.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TIU.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(64,1,'Materi Numerik - Deret - TIU','Numerik - Deret','tiu','<h2>Materi Numerik - Deret</h2>\n<p>Materi pembahasan untuk topik <strong>Numerik - Deret</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Pola: +4, +6, +8, +10, +12, +14. Jadi 29 + 12 = 41, dan 41 + 14 = 55.</li>\n<li>Pola: n├é┬▓ + 1. 1├é┬▓+1=2, 2├é┬▓+1=5, 3├é┬▓+1=10, 4├é┬▓+1=17, 5├é┬▓+1=26, maka 6├é┬▓+1=37.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Rumus cepat: perhatikan selisih antar angka. Selisih: 3,5,7,9 ├óΓÇáΓÇÖ selanjutnya 11 ├óΓÇáΓÇÖ 26+11=37.</li>\n<li>Tips: Cek selisih antar angka. Jika selisih bertambah konstan (2), berarti pola kuadratik.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TIU.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(65,1,'Materi Numerik - Kecepatan - TIU','Numerik - Kecepatan','tiu','<h2>Materi Numerik - Kecepatan</h2>\n<p>Materi pembahasan untuk topik <strong>Numerik - Kecepatan</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Kecepatan = Jarak / Waktu = 240 km / 4 jam = 60 km/jam.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Rumus dasar: v = s/t.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TIU.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(66,1,'Materi Numerik - Pecahan - TIU','Numerik - Pecahan','tiu','<h2>Materi Numerik - Pecahan</h2>\n<p>Materi pembahasan untuk topik <strong>Numerik - Pecahan</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>3/4 = 180 liter. Maka 1/4 = 60 liter. Kapasitas penuh = 4/4 = 4 ├ù 60 = 240 liter.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Rumus: Total = Bagian / Fraksi. 180 / (3/4) = 180 ├ù 4/3 = 240.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TIU.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(67,1,'Materi Numerik - Perbandingan - TIU','Numerik - Perbandingan','tiu','<h2>Materi Numerik - Perbandingan</h2>\n<p>Materi pembahasan untuk topik <strong>Numerik - Perbandingan</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>6├âΓÇö10=60 orang-hari. 15 orang butuh: 60/15=4 hari.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Perbandingan berbalik: Orang bertambah, hari berkurang. 6├âΓÇö10 = 15├âΓÇöx ├óΓÇáΓÇÖ x=4.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TIU.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(68,1,'Materi Numerik - Persentase - TIU','Numerik - Persentase','tiu','<h2>Materi Numerik - Persentase</h2>\n<p>Materi pembahasan untuk topik <strong>Numerik - Persentase</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Jika diskon 20%, maka harga jual = 80% dari harga asli. Harga asli = 240.000 / 0.8 = 300.000.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Rumus: Harga Asli = Harga Jual / (100% - Diskon%). 240.000 / 0.8 = 300.000.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TIU.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(69,1,'Materi Pancasila - Implementasi - TWK','Pancasila - Implementasi','twk','<h2>Materi Pancasila - Implementasi</h2>\n<p>Materi pembahasan untuk topik <strong>Pancasila - Implementasi</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Sila ke-1 Ketuhanan Yang Maha Esa mengharuskan saling menghormati dan toleransi antar pemeluk agama. Ini adalah implementasi nilai ketuhanan dalam kehidupan bermasyarakat.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Sila 1 = Ketuhanan. Implementasi: toleransi, kebebasan beragama, tidak memaksakan keyakinan.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TWK.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(70,1,'Materi Pancasila - Sila ke-1 - TWK','Pancasila - Sila ke-1','twk','<h2>Materi Pancasila - Sila ke-1</h2>\n<p>Materi pembahasan untuk topik <strong>Pancasila - Sila ke-1</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Pancasila sebagai ideologi terbuka memungkinkan perkembangan norma dengan konsensus, namun tetap melarang ideologi radikal seperti Marxisme-Leninisme dan mempertahankan stabilitas nasional. Penciptaan</li>\n<li>Sila 1: pengamalan keyakinan dalam kehidupan bermasyarakat, berbangsa, bernegara. Contoh: menghormati kebebasan beragama.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Fokus pada implementasi nilai ketuhanan dalam kehidupan sosial dan politik.</li>\n<li>Tips: Ingat, ideologi terbuka bukan berarti tanpa batas. Konsensus tetap diperlukan untuk setiap perubahan norma.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TWK.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(71,1,'Materi Pancasila - Sila ke-2 - TWK','Pancasila - Sila ke-2','twk','<h2>Materi Pancasila - Sila ke-2</h2>\n<p>Materi pembahasan untuk topik <strong>Pancasila - Sila ke-2</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Sila ke-2: Kemanusiaan yang Adil dan Beradab. Contoh: menghargai HAM, tidak diskriminasi.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Ingat: Sila 2 = Kemanusiaan. Jika soal tentang HAM ├óΓÇáΓÇÖ jawaban Sila 2.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TWK.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(72,1,'Materi Pancasila - Sila ke-3 - TWK','Pancasila - Sila ke-3','twk','<h2>Materi Pancasila - Sila ke-3</h2>\n<p>Materi pembahasan untuk topik <strong>Pancasila - Sila ke-3</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Sila ke-2 Pancasila: Kemanusiaan yang Adil dan Beradab. Mengakui persamaan derajat dan martabat setiap manusia secara universal.</li>\n<li>Sila ke-3: persatuan dan kesatuan bangsa. Warga harus rela berkorban untuk kepentingan bangsa.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Kata kunci: persatuan, kesatuan, NKRI, korban untuk bangsa.</li>\n<li>Tips: Sila ke-2 berhubungan dengan kemanusiaan universal. Jika soal tentang hubungan antar-manusia global, jawabannya Sila 2.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TWK.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(73,1,'Materi Pancasila - Sila ke-4 - TWK','Pancasila - Sila ke-4','twk','<h2>Materi Pancasila - Sila ke-4</h2>\n<p>Materi pembahasan untuk topik <strong>Pancasila - Sila ke-4</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Sila ke-4: kekuasaan di tangan rakyat, dijalankan melalui permusyawaratan. Dasar demokrasi Pancasila.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Demokrasi Pancasila ├óΓÇ░┬á liberal. Ciri: musyawarah, kekeluargaan, kepentingan bersama.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TWK.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(74,1,'Materi Pancasila - Sila ke-5 - TWK','Pancasila - Sila ke-5','twk','<h2>Materi Pancasila - Sila ke-5</h2>\n<p>Materi pembahasan untuk topik <strong>Pancasila - Sila ke-5</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Sila ke-5: distribusi keadilan merata di bidang sosial, ekonomi, hukum.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Kata kunci: keadilan, merata, seluruh rakyat, tidak memihak, pembangunan merata.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TWK.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(75,1,'Materi Pelayanan Publik - Prioritas - TKP','Pelayanan Publik - Prioritas','tkp','<h2>Materi Pelayanan Publik - Prioritas</h2>\n<p>Materi pembahasan untuk topik <strong>Pelayanan Publik - Prioritas</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Pelayanan publik harus mengutamakan kelompok rentan. Bantu lansia dengan menyediakan tempat duduk atau prioritas pelayanan sesuai ketentuan.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Pelayanan: utamakan kelompok rentan (lansia, ibu hamil, difabel).</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TKP.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(76,1,'Materi Profesionalisme - Kritik - TKP','Profesionalisme - Kritik','tkp','<h2>Materi Profesionalisme - Kritik</h2>\n<p>Materi pembahasan untuk topik <strong>Profesionalisme - Kritik</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Profesionalisme: dengarkan kritik, evaluasi diri, minta saran perbaikan. Jangan defensif atau menyalahkan orang lain di depan umum.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Profesional: terima kritik dengan lapang dada, jadikan pembelajaran.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TKP.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(77,1,'Materi Sejarah - Proklamasi - TWK','Sejarah - Proklamasi','twk','<h2>Materi Sejarah - Proklamasi</h2>\n<p>Materi pembahasan untuk topik <strong>Sejarah - Proklamasi</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Proklamasi Kemerdekaan Indonesia dibacakan oleh Soekarno dan Mohammad Hatta pada tanggal 17 Agustus 1945 di Jalan Pegangsaan Timur No. 56 Jakarta.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Hafal: 17 Agustus 1945. Soekarno & Hatta. Jalan Pegangsaan Timur 56.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TWK.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(78,1,'Materi Sejarah - Sumpah Pemuda - TWK','Sejarah - Sumpah Pemuda','twk','<h2>Materi Sejarah - Sumpah Pemuda</h2>\n<p>Materi pembahasan untuk topik <strong>Sejarah - Sumpah Pemuda</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Sumpah Pemuda 28 Oktober 1928 berisi tiga ikrar: Tanah Air, Bangsa, dan Bahasa Indonesia.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Hafalkan 3 ikrar: Tanah Air, Bangsa, Bahasa.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TWK.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(79,1,'Materi Sosial Budaya - TKP','Sosial Budaya','tkp','<h2>Materi Sosial Budaya</h2>\n<p>Materi pembahasan untuk topik <strong>Sosial Budaya</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Belajar dan hormati budaya setempat, tetap profesional.</li>\n<li>Hormati acara, pilih menu halal yang tersedia, jadikan ajang silaturahmi.</li>\n<li>Hormati ritual adat dengan tetap menjaga keyakinan pribadi.</li>\n<li>Ikuti tradisi makan bersama dengan tangan, jadikan pengalaman budaya.</li>\n<li>Ingatkan rekan bahwa setiap dialek adalah kekayaan budaya dan harus dihormati.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Adaptasi: hormati norma lokal.</li>\n<li>Keberagaman: pilih jawaban yang menunjukkan penghargaan, adaptasi, dan tidak diskriminatif.</li>\n<li>Sila 1: toleransi. Hormati adat tanpa meninggalkan keyakinan.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TKP.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(80,1,'Materi Sosial Budaya - Adaptasi - TKP','Sosial Budaya - Adaptasi','tkp','<h2>Materi Sosial Budaya - Adaptasi</h2>\n<p>Materi pembahasan untuk topik <strong>Sosial Budaya - Adaptasi</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Sosial Budaya: menghargai perbedaan, beradaptasi dengan norma setempat, tetap profesional. Ini menunjukkan fleksibilitas dan penghargaan terhadap keberagaman.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Adaptasi: hormati norma lokal, pelajari budaya baru, tetap profesional.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TKP.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(81,1,'Materi UUD 1945 - HAM - TWK','UUD 1945 - HAM','twk','<h2>Materi UUD 1945 - HAM</h2>\n<p>Materi pembahasan untuk topik <strong>UUD 1945 - HAM</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Pasal 28A UUD 1945: Setiap orang berhak untuk hidup serta berhak mempertahankan hidup dan kehidupannya.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Pasal 28A = hak hidup. Jangan tertukar dengan Pasal 27 (warga negara) atau 28E (kebebasan).</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TWK.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(82,1,'Materi UUD 1945 - Ketahanan Nasional - TWK','UUD 1945 - Ketahanan Nasional','twk','<h2>Materi UUD 1945 - Ketahanan Nasional</h2>\n<p>Materi pembahasan untuk topik <strong>UUD 1945 - Ketahanan Nasional</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Pasal 30 ayat (1) UUD 1945: Tiap-tiap orang berhak dan wajib ikut serta dalam upaya pembelaan negara. Pasal 30 mengatur pertahanan keamanan negara.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Pasal 30 = pertahanan negara. Semesta = melibatkan seluruh komponen bangsa.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TWK.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(83,1,'Materi UUD 1945 - Pasal 1-5 - TWK','UUD 1945 - Pasal 1-5','twk','<h2>Materi UUD 1945 - Pasal 1-5</h2>\n<p>Materi pembahasan untuk topik <strong>UUD 1945 - Pasal 1-5</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Pasal 1 ayat (1): Negara Indonesia ialah Negara Kesatuan, yang berbentuk Republik.</li>\n<li>Pasal 1 ayat (2): Kedaulatan berada di tangan rakyat dan dilaksanakan menurut Undang-Undang Dasar.</li>\n<li>Pasal 4 ayat (1): Presiden Republik Indonesia memegang kekuasaan pemerintahan menurut UUD.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Hafalkan: Pasal 1 = Bentuk & Kedaulatan. (1) Negara Kesatuan Republik. (2) Kedaulatan rakyat. (3) Negara hukum.</li>\n<li>Pasal 1 ayat (2) = Kedaulatan rakyat. Jangan tertukar dengan ayat (3) tentang negara hukum.</li>\n<li>Pasal 4 = Presiden. (1) Pemerintahan. (2) Kepala negara. Lengkapi dengan Pasal 5.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TWK.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(84,1,'Materi UUD 1945 - Pasal 27-34 - TWK','UUD 1945 - Pasal 27-34','twk','<h2>Materi UUD 1945 - Pasal 27-34</h2>\n<p>Materi pembahasan untuk topik <strong>UUD 1945 - Pasal 27-34</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Pasal 27 ayat (2): Tiap-tiap warga negara berhak atas pekerjaan dan penghidupan yang layak untuk kemanusiaan.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Pasal 27 = Warga negara & penduduk. ayat (1) sama di muka hukum. ayat (2) pekerjaan layak. ayat (3) ikut pembelaan negara.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TWK.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(85,1,'Materi UUD 1945 - Sistem Pemerintahan - TWK','UUD 1945 - Sistem Pemerintahan','twk','<h2>Materi UUD 1945 - Sistem Pemerintahan</h2>\n<p>Materi pembahasan untuk topik <strong>UUD 1945 - Sistem Pemerintahan</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Pasal 24 UUD 1945: Kekuasaan kehakiman dilakukan oleh sebuah Mahkamah Agung dan badan peradilan yang berada di bawahnya dalam susunan peradilan umum, peradilan agama, peradilan militer, peradilan tata</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Hafalkan: Pasal 24 = Kekuasaan kehakiman. Mahkamah Agung + badan peradilan di bawahnya.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TWK.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(86,1,'Materi Verbal - Analogi - TIU','Verbal - Analogi','tiu','<h2>Materi Verbal - Analogi</h2>\n<p>Materi pembahasan untuk topik <strong>Verbal - Analogi</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Analogi hubungan tempat bekerja. Guru bekerja di sekolah. Dokter bekerja di rumah sakit.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Cari pola hubungan: tempat bekerja, alat kerja, fungsi, atau lawan.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TIU.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(87,1,'Materi Verbal - Antonim - TIU','Verbal - Antonim','tiu','<h2>Materi Verbal - Antonim</h2>\n<p>Materi pembahasan untuk topik <strong>Verbal - Antonim</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Ekstensif = luas, merata, menyeluruh. Antonimnya intensif = mendalam, terpusat.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Ekstensif vs Intensif sering muncul di soal CPNS. Ekstensif = luas. Intensif = mendalam.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TIU.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(88,1,'Materi Verbal - Penjelasan - TIU','Verbal - Penjelasan','tiu','<h2>Materi Verbal - Penjelasan</h2>\n<p>Materi pembahasan untuk topik <strong>Verbal - Penjelasan</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Paragraf tersebut menjelaskan pengaruh perkembangan teknologi informasi dan komunikasi terhadap berbagai aspek kehidupan, khususnya pendidikan.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Cari kalimat utama yang menyatakan topik utama paragraf.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TIU.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(89,1,'Materi Verbal - Sinonim - TIU','Verbal - Sinonim','tiu','<h2>Materi Verbal - Sinonim</h2>\n<p>Materi pembahasan untuk topik <strong>Verbal - Sinonim</strong> dalam ujian CPNS.</p>\n<h3>Poin-poin Penting dari Pembahasan Soal:</h3>\n<ul>\n<li>Konsisten = tetap, tidak berubah-ubah, teguh, konsekuen.</li>\n<li>Mortasitas berasal dari kata \"mortal\" yang berarti kematian. Jadi mortalitas = angka kematian.</li>\n</ul>\n<h3>Tips & Trik:</h3>\n<ul>\n<li>Gunakan konteks kalimat. Konsisten sering dipasangkan dengan sikap, perilaku, atau komitmen.</li>\n<li>Tips: Ingat kata Latin \"mort\" = mati. Mortalitas = mortal = kematian.</li>\n</ul>\n<p><em>Pelajari materi ini dengan baik untuk mempersiapkan ujian TIU.</em></p>\n','artikel','dasar','2026-06-01 01:27:34'),(90,1,'Panduan Tes Kraepelin (Pauli)','Kraepelin','psikologi','<h2>1. Pengertian Tes Kraepelin</h2><p>Tes Kraepelin atau Pauli adalah tes psikologi yang mengukur <strong>ketahanan kerja</strong>, <strong>ketelitian</strong>, dan <strong>konsentrasi</strong>. Peserta diminta menjumlahkan dua angka berdampingan secara terus-menerus dalam waktu tertentu.</p>\n<h2>2. Teknik Mengerjakan</h2><ul><li>Jumlahkan angka ke-1 dan ke-2, tulis hasilnya di bawah</li><li>Lanjutkan angka ke-2 dan ke-3, dan seterusnya</li><li>Jika hasil > 9, tulis <strong>angka satuan saja</strong> (contoh: 12 = 2)</li></ul>\n<h2>3. Tips Lulus Kraepelin</h2><ul><li>Konsentrasi pada baris yang sedang dikerjakan</li><li>Jangan melihat ke bawah terlalu jauh</li><li>Latihan rutin untuk meningkatkan kecepatan</li><li>Tenangkan pikiran sebelum tes</li></ul>','artikel','dasar','2026-06-01 01:37:00'),(91,1,'Panduan Tes Wartegg','Wartegg','psikologi','<h2>1. Pengertian Tes Wartegg</h2><p>Tes Wartegg adalah tes proyeksi dan logika visual. Peserta melanjutkan gambar dasar (garis, titik, kurva) menjadi gambar utuh yang bermakna.</p>\n<h2>2. Aspek yang Diukur</h2><ul><li>Daya imaginasi dan kreativitas</li><li>Logika spasial</li><li>Kemampuan problem solving</li><li>Kepribadian (melalui interpretasi gambar)</li></ul>\n<h2>3. Tips Menjawab</h2><ul><li>Lanjutkan gambar secara logis dan kreatif</li><li>Jangan terlalu sederhana (hanya garis) atau terlalu rumit</li><li>Pastikan gambar Anda memiliki makna/ bentuk yang jelas</li></ul>','artikel','dasar','2026-06-01 01:37:00'),(92,1,'Panduan Tes EPPS','EPPS','psikologi','<h2>1. Pengertian EPPS</h2><p>Edwards Personal Preference Schedule (EPPS) mengukur <strong>kebutuhan psikologis</strong>: achievement, affiliation, autonomy, dominance, nurturance, order, dan lainnya.</p>\n<h2>2. Cara Mengerjakan</h2><p>Setiap soal berisi dua pernyataan. Pilih yang <strong>PALING</strong> menggambarkan diri Anda. Tidak ada jawaban benar atau salah.</p>\n<h2>3. Tips</h2><ul><li>Jawab sesuai diri Anda yang sebenarnya, bukan yang \"seharusnya\"</li><li>Jangan terlalu lama memikirkan satu soal</li><li>Konsistensi jawaban menunjukkan kepribadian yang stabil</li></ul>','artikel','dasar','2026-06-01 01:37:00');
+/*!40000 ALTER TABLE `materi` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
--- Struktur dari tabel `opsi_jawaban`
+-- Table structure for table `opsi_jawaban`
 --
 
+DROP TABLE IF EXISTS `opsi_jawaban`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `opsi_jawaban` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `soal_id` int(11) NOT NULL,
   `label` enum('A','B','C','D','E') NOT NULL,
   `teks_jawaban` text NOT NULL,
   `bobot_nilai` int(2) NOT NULL DEFAULT 0,
-  `is_kunci` tinyint(1) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `is_kunci` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `soal_id` (`soal_id`),
+  CONSTRAINT `opsi_soal` FOREIGN KEY (`soal_id`) REFERENCES `soal` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1046 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data untuk tabel `opsi_jawaban`
+-- Dumping data for table `opsi_jawaban`
 --
 
-INSERT INTO `opsi_jawaban` (`id`, `soal_id`, `label`, `teks_jawaban`, `bobot_nilai`, `is_kunci`) VALUES
-(1, 1, 'A', 'Mencegah berkembangnya paham dan ideologi liberal', 0, 0),
-(2, 1, 'B', 'Penciptaan norma baru tidak perlu memiliki konsensus', 5, 1),
-(3, 1, 'C', 'Larangan terhadap ideologi Marxisme, Leninisme, dan Komunisme', 0, 0),
-(4, 1, 'D', 'Larangan terhadap pandangan ekstrim yang meresahkan masyarakat', 0, 0),
-(5, 1, 'E', 'Menekankan pandangan stabilitas nasional yang sehat dan dinamis', 0, 0),
-(6, 2, 'A', '1', 0, 0),
-(7, 2, 'B', '2', 5, 1),
-(8, 2, 'C', '3', 0, 0),
-(9, 2, 'D', '4', 0, 0),
-(10, 2, 'E', '5', 0, 0),
-(11, 3, 'A', 'Pandangan hidup bangsa', 0, 0),
-(12, 3, 'B', 'Moral pembangunan bangsa', 0, 0),
-(13, 3, 'C', 'Jiwa kepribadian bangsa', 0, 0),
-(14, 3, 'D', 'Dasar negara', 5, 1),
-(15, 3, 'E', 'Perjanjian luhur bangsa', 0, 0),
-(16, 4, 'A', 'Darah para pejuang nasional', 0, 0),
-(17, 4, 'B', 'Kegagahan', 0, 0),
-(18, 4, 'C', 'Darah para korban yang gugur di medan perang', 0, 0),
-(19, 4, 'D', 'Keberanian', 5, 1),
-(20, 4, 'E', 'Kesucian', 0, 0),
-(21, 5, 'A', 'Angka kematian', 5, 1),
-(22, 5, 'B', 'Angka kelahiran', 0, 0),
-(23, 5, 'C', 'Sebangsa hewan', 0, 0),
-(24, 5, 'D', 'Gerak', 0, 0),
-(25, 5, 'E', 'Pukulan', 0, 0),
-(26, 6, 'A', '39 dan 69', 0, 0),
-(27, 6, 'B', '41 dan 71', 5, 1),
-(28, 6, 'C', '35 dan 65', 0, 0),
-(29, 6, 'D', '39 dan 65', 0, 0),
-(30, 6, 'E', '40 dan 71', 0, 0),
-(31, 7, 'A', 'Sebagian karyawan bersepatu', 0, 0),
-(32, 7, 'B', 'Sebagian karyawan berdasi dan bersepatu', 0, 0),
-(33, 7, 'C', 'Sebagian karyawan berdasi', 0, 0),
-(34, 7, 'D', 'Sebagian karyawan berdasi dan berjas', 5, 1),
-(35, 7, 'E', 'Semua berdasi dan berjas', 0, 0),
-(36, 8, 'A', 'Spontan berbicara kepada atasan menjelaskan bahwa itu sudah rapuh', 2, 0),
-(37, 8, 'B', 'Spontan berbicara sendiri \"duh ternyata barangnya sudah rapuh\"', 1, 0),
-(38, 8, 'C', 'Langsung berbicara sendiri dengan kata-kata sopan agar atasan memahami', 3, 0),
-(39, 8, 'D', 'Langsung berbicara kepada atasan meminta maaf dan menjelaskannya', 2, 0),
-(40, 8, 'E', 'Langsung berbicara kepada atasan meminta maaf, menjelaskan, dan menggantinya', 5, 1),
-(41, 9, 'A', 'Memahami sifatnya dan balas perlakuan yang sama', 1, 0),
-(42, 9, 'B', 'Tidak terlalu memikirkan, fokus pada diri sendiri', 2, 0),
-(43, 9, 'C', 'Memahami perbedaan dan memberitahu secara sopan', 5, 1),
-(44, 9, 'D', 'Cuek dan hindari interaksi', 1, 0),
-(45, 9, 'E', 'Laporkan ke atasan tanpa diskusi pribadi', 3, 0),
-(46, 10, 'A', 'Menghormati kebebasan beragama dan kepercayaan', 5, 1),
-(47, 10, 'B', 'Menjadikan agama sebagai sumber hukum negara', 0, 0),
-(48, 10, 'C', 'Mewajibkan semua warga mengikuti agama mayoritas', 0, 0),
-(49, 10, 'D', 'Menghapuskan perbedaan keyakinan dalam masyarakat', 0, 0),
-(50, 10, 'E', 'Memisahkan agama dari kehidupan bernegara', 0, 0),
-(51, 11, 'A', 'Menghargai hak asasi manusia setiap individu', 5, 1),
-(52, 11, 'B', 'Mengutamakan kepentingan bangsa di atas individu', 0, 0),
-(53, 11, 'C', 'Membatasi kebebasan untuk menjaga ketertiban', 0, 0),
-(54, 11, 'D', 'Mewajibkan pelayanan sosial oleh negara', 0, 0),
-(55, 11, 'E', 'Memperlakukan semua orang sama tanpa memandang hukum', 0, 0),
-(56, 12, 'A', 'Rela berkorban untuk kepentingan bangsa dan negara', 5, 1),
-(57, 12, 'B', 'Membela kepentingan daerah masing-masing', 0, 0),
-(58, 12, 'C', 'Mengutamakan hak individual', 0, 0),
-(59, 12, 'D', 'Membentuk organisasi berdasarkan suku', 0, 0),
-(60, 12, 'E', 'Menolak kerja sama dengan daerah lain', 0, 0),
-(61, 13, 'A', 'Kekuasaan berada di tangan rakyat melalui permusyawaratan', 5, 1),
-(62, 13, 'B', 'Presiden memegang kekuasaan absolut atas rakyat', 0, 0),
-(63, 13, 'C', 'Rakyat hanya berhak memilih tanpa berpendapat', 0, 0),
-(64, 13, 'D', 'Permusyawaratan hanya dilakukan oleh elit politik', 0, 0),
-(65, 13, 'E', 'Kekuasaan tertinggi ada pada partai politik', 0, 0),
-(66, 14, 'A', 'Membangun dan mendistribusikan keadilan secara merata', 5, 1),
-(67, 14, 'B', 'Memberikan keistimewaan pada kelompok tertentu', 0, 0),
-(68, 14, 'C', 'Memusatkan pembangunan di wilayah strategis saja', 0, 0),
-(69, 14, 'D', 'Mengutamakan pemodal besar dalam ekonomi', 0, 0),
-(70, 14, 'E', 'Membebaskan pasar tanpa intervensi negara', 0, 0),
-(71, 15, 'A', 'Negara Kesatuan yang berbentuk Republik', 5, 1),
-(72, 15, 'B', 'Negara Federasi yang berbentuk Republik', 0, 0),
-(73, 15, 'C', 'Negara Kesatuan yang berbentuk Kerajaan', 0, 0),
-(74, 15, 'D', 'Negara Serikat yang berbentuk Republik', 0, 0),
-(75, 15, 'E', 'Negara Uni yang berbentuk Republik', 0, 0),
-(76, 16, 'A', 'Pasal 1 ayat (2) UUD 1945', 5, 1),
-(77, 16, 'B', 'Pasal 1 ayat (3) UUD 1945', 0, 0),
-(78, 16, 'C', 'Pasal 2 ayat (1) UUD 1945', 0, 0),
-(79, 16, 'D', 'Pasal 3 UUD 1945', 0, 0),
-(80, 16, 'E', 'Pasal 4 UUD 1945', 0, 0),
-(81, 17, 'A', 'Pasal 4 ayat (1) UUD 1945', 5, 1),
-(82, 17, 'B', 'Pasal 3 UUD 1945', 0, 0),
-(83, 17, 'C', 'Pasal 5 ayat (1) UUD 1945', 0, 0),
-(84, 17, 'D', 'Pasal 6 UUD 1945', 0, 0),
-(85, 17, 'E', 'Pasal 7 UUD 1945', 0, 0),
-(86, 18, 'A', 'Pasal 27 ayat (2) UUD 1945', 5, 1),
-(87, 18, 'B', 'Pasal 28 ayat (1) UUD 1945', 0, 0),
-(88, 18, 'C', 'Pasal 28A UUD 1945', 0, 0),
-(89, 18, 'D', 'Pasal 28E ayat (1) UUD 1945', 0, 0),
-(90, 18, 'E', 'Pasal 30 UUD 1945', 0, 0),
-(91, 19, 'A', 'Sutasoma karya Mpu Tantular', 5, 1),
-(92, 19, 'B', 'Negarakertagama karya Mpu Prapanca', 0, 0),
-(93, 19, 'C', 'Arjunawiwaha karya Mpu Kanwa', 0, 0),
-(94, 19, 'D', 'Bharatayuddha karya Mpu Sedah', 0, 0),
-(95, 19, 'E', 'Kakawin Ramayana', 0, 0),
-(96, 20, 'A', 'Mengabdi dalam jabatan pemerintahan, TNI, atau swakelola', 5, 1),
-(97, 20, 'B', 'Membayar pajak lebih besar dari ketentuan', 0, 0),
-(98, 20, 'C', 'Melakukan demonstrasi menentang kebijakan pemerintah', 0, 0),
-(99, 20, 'D', 'Menjadi anggota ormas tertentu', 0, 0),
-(100, 20, 'E', 'Memilih pemimpin daerah setiap periode', 0, 0),
-(101, 21, 'A', 'Tetap', 5, 1),
-(102, 21, 'B', 'Berubah-ubah', 0, 0),
-(103, 21, 'C', 'Ragu-ragu', 0, 0),
-(104, 21, 'D', 'Bimbang', 0, 0),
-(105, 21, 'E', 'Fluktuatif', 0, 0),
-(106, 22, 'A', 'Intensif', 5, 1),
-(107, 22, 'B', 'Ekspansif', 0, 0),
-(108, 22, 'C', 'Luas', 0, 0),
-(109, 22, 'D', 'Merata', 0, 0),
-(110, 22, 'E', 'Menyeluruh', 0, 0),
-(111, 23, 'A', 'Rumah Sakit', 5, 1),
-(112, 23, 'B', 'Pasien', 0, 0),
-(113, 23, 'C', 'Obat', 0, 0),
-(114, 23, 'D', 'Periksa', 0, 0),
-(115, 23, 'E', 'Stetoskop', 0, 0),
-(116, 24, 'A', '37', 5, 1),
-(117, 24, 'B', '35', 0, 0),
-(118, 24, 'C', '39', 0, 0),
-(119, 24, 'D', '41', 0, 0),
-(120, 24, 'E', '43', 0, 0),
-(121, 25, 'A', '12 hari', 5, 1),
-(122, 25, 'B', '14 hari', 0, 0),
-(123, 25, 'C', '15 hari', 0, 0),
-(124, 25, 'D', '16 hari', 0, 0),
-(125, 25, 'E', '18 hari', 0, 0),
-(126, 26, 'A', '4 hari', 5, 1),
-(127, 26, 'B', '5 hari', 0, 0),
-(128, 26, 'C', '6 hari', 0, 0),
-(129, 26, 'D', '7 hari', 0, 0),
-(130, 26, 'E', '8 hari', 0, 0),
-(131, 27, 'A', 'Budi wajib mengikuti pelatihan', 5, 1),
-(132, 27, 'B', 'Budi tidak wajib mengikuti pelatihan', 0, 0),
-(133, 27, 'C', 'Semua yang mengikuti pelatihan adalah PNS', 0, 0),
-(134, 27, 'D', 'Budi bukan PNS', 0, 0),
-(135, 27, 'E', 'Tidak dapat disimpulkan', 0, 0),
-(136, 28, 'A', 'Andi lebih tinggi dari Dedi', 5, 1),
-(137, 28, 'B', 'Dedi lebih tinggi dari Budi', 0, 0),
-(138, 28, 'C', 'Cici lebih tinggi dari Andi', 0, 0),
-(139, 28, 'D', 'Budi lebih pendek dari Dedi', 0, 0),
-(140, 28, 'E', 'Tidak ada kesimpulan yang pasti', 0, 0),
-(141, 29, 'A', 'Mendengarkan keluhan dengan tenang dan menjelaskan alasan sambil menawarkan solusi alternatif', 5, 1),
-(142, 29, 'B', 'Menjadi marah karena warga tidak menghormati petugas', 1, 0),
-(143, 29, 'C', 'Mengabaikan warga dan melayani warga lain', 2, 0),
-(144, 29, 'D', 'Menyuruh warga untuk datang lain hari', 3, 0),
-(145, 29, 'E', 'Menegaskan bahwa keputusan sudah final', 4, 0),
-(146, 30, 'A', 'Menolak hadiah dan melaporkan ke atasan/penyelenggara negara', 5, 1),
-(147, 30, 'B', 'Menerima hadiah karena sudah menjadi tradisi', 1, 0),
-(148, 30, 'C', 'Menerima tapi tidak memberikan keuntungan khusus', 2, 0),
-(149, 30, 'D', 'Menolak secara halus tanpa melaporkan', 4, 0),
-(150, 30, 'E', 'Meminta hadiah yang lebih kecil agar tidak mencurigakan', 3, 0),
-(151, 31, 'A', 'Menghubungi atasan untuk diskusi penyelesaian tugas dan konfirmasi ke keluarga', 5, 1),
-(152, 31, 'B', 'Menolak tugas karena sudah ada janji keluarga', 1, 0),
-(153, 31, 'C', 'Meninggalkan tugas tanpa izin untuk hadir acara keluarga', 2, 0),
-(154, 31, 'D', 'Menyelesaikan tugas tanpa memberi tahu keluarga', 3, 0),
-(155, 31, 'E', 'Meminta rekan menyelesaikan tugas tanpa sepengetahuan atasan', 4, 0),
-(156, 32, 'A', 'Mengingatkan secara pribadi dan profesional serta memberikan solusi', 5, 1),
-(157, 32, 'B', 'Melaporkan langsung ke atasan tanpa peringatan', 3, 0),
-(158, 32, 'C', 'Mengikuti perilakunya karena tidak ada yang peduli', 1, 0),
-(159, 32, 'D', 'Menegurnya di depan umum agar malu', 2, 0),
-(160, 32, 'E', 'Mengabaikan karena bukan tanggung jawab Anda', 4, 0),
-(161, 33, 'A', 'Menghargai perbedaan dan beradaptasi selama tidak melanggar aturan', 5, 1),
-(162, 33, 'B', 'Memintanya menyesuaikan dengan kebanyakan rekan', 2, 0),
-(163, 33, 'C', 'Mengabaikan perbedaan dan fokus pada pekerjaan', 3, 0),
-(164, 33, 'D', 'Melaporkan ke HRD karena mengganggu dinamika tim', 1, 0),
-(165, 33, 'E', 'Menyarankan dipindahkan ke divisi lain', 4, 0),
-(166, 34, 'A', 'Â  14 menit', 5, 1),
-(167, 34, 'B', 'Â  21 menit', 0, 0),
-(168, 34, 'C', 'Â  28 menit', 0, 0),
-(169, 34, 'D', 'Â  35 menit', 0, 0),
-(170, 34, 'E', 'Â  42 menit', 0, 0),
-(171, 35, 'A', 'Kanada : Canberra.', 0, 0),
-(172, 35, 'B', 'Ekuador : Quito.', 5, 1),
-(173, 35, 'C', 'Kamerun: Astana.', 0, 0),
-(174, 35, 'D', 'Maroko : Cetinje.', 0, 0),
-(175, 35, 'E', 'Nigeria : Wellington.', 0, 0),
-(176, 36, 'A', 'Meminta orang lain mengerjakan asalkan bisa selesai tepat waktu.', 0, 0),
-(177, 36, 'B', 'Segera berusaha memulai dan menyelesaikan sebisanya saja yang penting selesai.', 0, 0),
-(178, 36, 'C', 'Tidak perlu buru-buru menyelesaikannya karena pekerjaan tersebut bukan merupakan tugas pokoknya.', 0, 0),
-(179, 36, 'D', 'Segera berusaha memulai untuk menyelesaikan tugas itu dan berusaha menyelesaikannya sesempurna mungkin.', 5, 1),
-(180, 36, 'E', 'Mempertanyakan dan menegosiasi manajernya karena merasa takut hasilnya tidak maksimal.', 0, 0),
-(181, 37, 'A', 'Bekerja keras membentuk panitia persiapan pentas seni ulang tahun perusahaan', 0, 0),
-(182, 37, 'B', 'Menunjuk beberapa anggota untuk tampil pada pentas seni ulang tahun perusahaan', 0, 0),
-(183, 37, 'C', 'Mengumpulkan seluruh anggota untuk membahas bersama-sama persiapan pentas seni ulang tahun perusahaan', 5, 1),
-(184, 37, 'D', 'Melakukan voting untuk mengambil keputusan persiapan pentas seni ulang tahun perusahaan', 0, 0),
-(185, 37, 'E', 'Menunjuk beberapa anggota untuk menampilkan pentas seni yang mengangkat kebudayaan bangsa', 0, 0),
-(186, 38, 'A', 'Kebangsaan Indonesia; Internasionalisme atau perikemanusiaan; Mufakat atau demokrasi; Perdamaian abadi', 0, 0),
-(187, 38, 'B', 'Peri Kebangsaan, Peri Kemanusiaan, Peri keTuhanan, Peri Kerakyatan, dan Mufakat', 0, 0),
-(188, 38, 'C', 'Kebangsaan Indonesia; Internasionalisme atau perikemanusiaan; Mufakat atau demokrasi; Kesejahteraan sosial; Ketuhanan yang berkebudayaan', 5, 1),
-(189, 38, 'D', 'Peri Kebangsaan, Peri Kemanusiaan, Peri keTuhanan, Peri Kerakyatan, dan Kesejahteraan Rakyat', 0, 0),
-(190, 38, 'E', 'Ketuhanan YME, Peri Kemanusiaan, Kebangsaan, Kerakyatan, Keadilan Sosial', 0, 0),
-(191, 39, 'A', 'Mahkamah Agung dan badan peradilan di bawahnya', 5, 1),
-(192, 39, 'B', 'Presiden dan Wakil Presiden', 0, 0),
-(193, 39, 'C', 'DPR dan DPD', 0, 0),
-(194, 39, 'D', 'MPR sebagai lembaga tertinggi negara', 0, 0),
-(195, 39, 'E', 'Komisi Yudisial semata', 0, 0),
-(196, 40, 'A', 'Pasal 28A UUD 1945', 5, 1),
-(197, 40, 'B', 'Pasal 27 ayat (2) UUD 1945', 0, 0),
-(198, 40, 'C', 'Pasal 28E UUD 1945', 0, 0),
-(199, 40, 'D', 'Pasal 28G UUD 1945', 0, 0),
-(200, 40, 'E', 'Pasal 29 UUD 1945', 0, 0),
-(201, 41, 'A', 'Pasal 30 UUD 1945', 5, 1),
-(202, 41, 'B', 'Pasal 27 ayat (3) UUD 1945', 0, 0),
-(203, 41, 'C', 'Pasal 31 UUD 1945', 0, 0),
-(204, 41, 'D', 'Pasal 33 UUD 1945', 0, 0),
-(205, 41, 'E', 'Pasal 34 UUD 1945', 0, 0),
-(206, 42, 'A', 'Ketuhanan Yang Maha Esa', 5, 1),
-(207, 42, 'B', 'Kemanusiaan yang Adil dan Beradab', 0, 0),
-(208, 42, 'C', 'Persatuan Indonesia', 0, 0),
-(209, 42, 'D', 'Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan', 0, 0),
-(210, 42, 'E', 'Keadilan Sosial bagi Seluruh Rakyat Indonesia', 0, 0),
-(211, 43, 'A', 'Tanah Air, Bangsa, dan Bahasa Indonesia', 5, 1),
-(212, 43, 'B', 'Merdeka atau Mati', 0, 0),
-(213, 43, 'C', 'Persatuan Indonesia dan Islam', 0, 0),
-(214, 43, 'D', 'Kemerdekaan Republik Indonesia', 0, 0),
-(215, 43, 'E', 'Penghapusan feudalisme', 0, 0),
-(216, 44, 'A', '17 Agustus 1945', 5, 1),
-(217, 44, 'B', '10 November 1945', 0, 0),
-(218, 44, 'C', '1 Juni 1945', 0, 0),
-(219, 44, 'D', '18 Agustus 1945', 0, 0),
-(220, 44, 'E', '20 Mei 1908', 0, 0),
-(221, 45, 'A', 'Rp 300.000', 5, 1),
-(222, 45, 'B', 'Rp 288.000', 0, 0),
-(223, 45, 'C', 'Rp 320.000', 0, 0),
-(224, 45, 'D', 'Rp 250.000', 0, 0),
-(225, 45, 'E', 'Rp 280.000', 0, 0),
-(226, 46, 'A', '240 liter', 5, 1),
-(227, 46, 'B', '200 liter', 0, 0),
-(228, 46, 'C', '270 liter', 0, 0),
-(229, 46, 'D', '220 liter', 0, 0),
-(230, 46, 'E', '210 liter', 0, 0),
-(231, 47, 'A', '60 km/jam', 5, 1),
-(232, 47, 'B', '48 km/jam', 0, 0),
-(233, 47, 'C', '72 km/jam', 0, 0),
-(234, 47, 'D', '56 km/jam', 0, 0),
-(235, 47, 'E', '64 km/jam', 0, 0),
-(236, 48, 'A', '21', 5, 1),
-(237, 48, 'B', '20', 0, 0),
-(238, 48, 'C', '22', 0, 0),
-(239, 48, 'D', '18', 0, 0),
-(240, 48, 'E', '19', 0, 0),
-(241, 49, 'A', 'Pengaruh perkembangan teknologi terhadap kehidupan manusia', 5, 1),
-(242, 49, 'B', 'Sejarah teknologi informasi', 0, 0),
-(243, 49, 'C', 'Masalah dalam bidang pendidikan', 0, 0),
-(244, 49, 'D', 'Perkembangan teknologi di masa depan', 0, 0),
-(245, 49, 'E', 'Manfaat pendidikan bagi manusia', 0, 0),
-(246, 50, 'A', 'Melaporkan ke inspektorat atau penyelenggara negara', 5, 1),
-(247, 50, 'B', 'Menganggap itu urusan pribadi atasan', 1, 0),
-(248, 50, 'C', 'Menyebarkan ke rekan kerja agar semua tahu', 2, 0),
-(249, 50, 'D', 'Meminta bagian dari fasilitas tersebut', 3, 0),
-(250, 50, 'E', 'Mengabaikan karena takut kehilangan pekerjaan', 4, 0),
-(251, 51, 'A', 'Menyediakan kursi dan memberikan prioritas pelayanan sesuai ketentuan', 5, 1),
-(252, 51, 'B', 'Mengabaikan karena semua orang sama di muka hukum', 1, 0),
-(253, 51, 'C', 'Menyuruh lansia datang lagi besok saat tidak ramai', 2, 0),
-(254, 51, 'D', 'Menyarankan lansia meminta bantuan keluarga', 3, 0),
-(255, 51, 'E', 'Melanjutkan pelayanan antrean tanpa memperhatikan lansia', 4, 0),
-(256, 52, 'A', 'Melaporkan kendala ke atasan dan berusaha menyelesaikan dengan data tersedia', 5, 1),
-(257, 52, 'B', 'Menunggu data lengkap tanpa melapor ke atasan', 1, 0),
-(258, 52, 'C', 'Mengklaim tugas selesai meski data belum lengkap', 2, 0),
-(259, 52, 'D', 'Menolak tugas karena deadline tidak realistis', 3, 0),
-(260, 52, 'E', 'Mengalihkan tanggung jawab ke rekan kerja', 4, 0),
-(261, 53, 'A', 'Mendengarkan kritik, mencatat, dan meminta saran perbaikan setelah rapat', 5, 1),
-(262, 53, 'B', 'Membela diri dan menjelaskan alasannya di depan umum', 1, 0),
-(263, 53, 'C', 'Menolak kritik karena merasa sudah bekerja keras', 2, 0),
-(264, 53, 'D', 'Menyalahkan rekan kerja yang tidak mendukung', 3, 0),
-(265, 53, 'E', 'Meninggalkan rapat karena merasa malu', 4, 0),
-(266, 54, 'A', 'Mempelajari dan menghormati budaya setempat sambil tetap profesional', 5, 1),
-(267, 54, 'B', 'Menolak tugas karena tidak nyaman dengan budaya tersebut', 1, 0),
-(268, 54, 'C', 'Memaksakan budaya asal Anda ke lingkungan baru', 2, 0),
-(269, 54, 'D', 'Mengisolasi diri dan tidak berinteraksi dengan masyarakat', 3, 0),
-(270, 54, 'E', 'Menganggap budaya daerah tersebut inferior', 4, 0);
-
--- --------------------------------------------------------
+LOCK TABLES `opsi_jawaban` WRITE;
+/*!40000 ALTER TABLE `opsi_jawaban` DISABLE KEYS */;
+INSERT INTO `opsi_jawaban` VALUES (1,1,'A','Mencegah berkembangnya paham dan ideologi liberal',0,0),(2,1,'B','Penciptaan norma baru tidak perlu memiliki konsensus',5,1),(3,1,'C','Larangan terhadap ideologi Marxisme, Leninisme, dan Komunisme',0,0),(4,1,'D','Larangan terhadap pandangan ekstrim yang meresahkan masyarakat',0,0),(5,1,'E','Menekankan pandangan stabilitas nasional yang sehat dan dinamis',0,0),(6,2,'A','1',0,0),(7,2,'B','2',5,1),(8,2,'C','3',0,0),(9,2,'D','4',0,0),(10,2,'E','5',0,0),(11,3,'A','Pandangan hidup bangsa',0,0),(12,3,'B','Moral pembangunan bangsa',0,0),(13,3,'C','Jiwa kepribadian bangsa',0,0),(14,3,'D','Dasar negara',5,1),(15,3,'E','Perjanjian luhur bangsa',0,0),(16,4,'A','Darah para pejuang nasional',0,0),(17,4,'B','Kegagahan',0,0),(18,4,'C','Darah para korban yang gugur di medan perang',0,0),(19,4,'D','Keberanian',5,1),(20,4,'E','Kesucian',0,0),(21,5,'A','Angka kematian',5,1),(22,5,'B','Angka kelahiran',0,0),(23,5,'C','Sebangsa hewan',0,0),(24,5,'D','Gerak',0,0),(25,5,'E','Pukulan',0,0),(26,6,'A','39 dan 69',0,0),(27,6,'B','41 dan 71',5,1),(28,6,'C','35 dan 65',0,0),(29,6,'D','39 dan 65',0,0),(30,6,'E','40 dan 71',0,0),(31,7,'A','Sebagian karyawan bersepatu',0,0),(32,7,'B','Sebagian karyawan berdasi dan bersepatu',0,0),(33,7,'C','Sebagian karyawan berdasi',0,0),(34,7,'D','Sebagian karyawan berdasi dan berjas',5,1),(35,7,'E','Semua berdasi dan berjas',0,0),(36,8,'A','Spontan berbicara kepada atasan menjelaskan bahwa itu sudah rapuh',2,0),(37,8,'B','Spontan berbicara sendiri \"duh ternyata barangnya sudah rapuh\"',1,0),(38,8,'C','Langsung berbicara sendiri dengan kata-kata sopan agar atasan memahami',3,0),(39,8,'D','Langsung berbicara kepada atasan meminta maaf dan menjelaskannya',2,0),(40,8,'E','Langsung berbicara kepada atasan meminta maaf, menjelaskan, dan menggantinya',5,1),(41,9,'A','Memahami sifatnya dan balas perlakuan yang sama',1,0),(42,9,'B','Tidak terlalu memikirkan, fokus pada diri sendiri',2,0),(43,9,'C','Memahami perbedaan dan memberitahu secara sopan',5,1),(44,9,'D','Cuek dan hindari interaksi',1,0),(45,9,'E','Laporkan ke atasan tanpa diskusi pribadi',3,0),(46,10,'A','Menghormati kebebasan beragama dan kepercayaan',5,1),(47,10,'B','Menjadikan agama sebagai sumber hukum negara',0,0),(48,10,'C','Mewajibkan semua warga mengikuti agama mayoritas',0,0),(49,10,'D','Menghapuskan perbedaan keyakinan dalam masyarakat',0,0),(50,10,'E','Memisahkan agama dari kehidupan bernegara',0,0),(51,11,'A','Menghargai hak asasi manusia setiap individu',5,1),(52,11,'B','Mengutamakan kepentingan bangsa di atas individu',0,0),(53,11,'C','Membatasi kebebasan untuk menjaga ketertiban',0,0),(54,11,'D','Mewajibkan pelayanan sosial oleh negara',0,0),(55,11,'E','Memperlakukan semua orang sama tanpa memandang hukum',0,0),(56,12,'A','Rela berkorban untuk kepentingan bangsa dan negara',5,1),(57,12,'B','Membela kepentingan daerah masing-masing',0,0),(58,12,'C','Mengutamakan hak individual',0,0),(59,12,'D','Membentuk organisasi berdasarkan suku',0,0),(60,12,'E','Menolak kerja sama dengan daerah lain',0,0),(61,13,'A','Kekuasaan berada di tangan rakyat melalui permusyawaratan',5,1),(62,13,'B','Presiden memegang kekuasaan absolut atas rakyat',0,0),(63,13,'C','Rakyat hanya berhak memilih tanpa berpendapat',0,0),(64,13,'D','Permusyawaratan hanya dilakukan oleh elit politik',0,0),(65,13,'E','Kekuasaan tertinggi ada pada partai politik',0,0),(66,14,'A','Membangun dan mendistribusikan keadilan secara merata',5,1),(67,14,'B','Memberikan keistimewaan pada kelompok tertentu',0,0),(68,14,'C','Memusatkan pembangunan di wilayah strategis saja',0,0),(69,14,'D','Mengutamakan pemodal besar dalam ekonomi',0,0),(70,14,'E','Membebaskan pasar tanpa intervensi negara',0,0),(71,15,'A','Negara Kesatuan yang berbentuk Republik',5,1),(72,15,'B','Negara Federasi yang berbentuk Republik',0,0),(73,15,'C','Negara Kesatuan yang berbentuk Kerajaan',0,0),(74,15,'D','Negara Serikat yang berbentuk Republik',0,0),(75,15,'E','Negara Uni yang berbentuk Republik',0,0),(76,16,'A','Pasal 1 ayat (2) UUD 1945',5,1),(77,16,'B','Pasal 1 ayat (3) UUD 1945',0,0),(78,16,'C','Pasal 2 ayat (1) UUD 1945',0,0),(79,16,'D','Pasal 3 UUD 1945',0,0),(80,16,'E','Pasal 4 UUD 1945',0,0),(81,17,'A','Pasal 4 ayat (1) UUD 1945',5,1),(82,17,'B','Pasal 3 UUD 1945',0,0),(83,17,'C','Pasal 5 ayat (1) UUD 1945',0,0),(84,17,'D','Pasal 6 UUD 1945',0,0),(85,17,'E','Pasal 7 UUD 1945',0,0),(86,18,'A','Pasal 27 ayat (2) UUD 1945',5,1),(87,18,'B','Pasal 28 ayat (1) UUD 1945',0,0),(88,18,'C','Pasal 28A UUD 1945',0,0),(89,18,'D','Pasal 28E ayat (1) UUD 1945',0,0),(90,18,'E','Pasal 30 UUD 1945',0,0),(91,19,'A','Sutasoma karya Mpu Tantular',5,1),(92,19,'B','Negarakertagama karya Mpu Prapanca',0,0),(93,19,'C','Arjunawiwaha karya Mpu Kanwa',0,0),(94,19,'D','Bharatayuddha karya Mpu Sedah',0,0),(95,19,'E','Kakawin Ramayana',0,0),(96,20,'A','Mengabdi dalam jabatan pemerintahan, TNI, atau swakelola',5,1),(97,20,'B','Membayar pajak lebih besar dari ketentuan',0,0),(98,20,'C','Melakukan demonstrasi menentang kebijakan pemerintah',0,0),(99,20,'D','Menjadi anggota ormas tertentu',0,0),(100,20,'E','Memilih pemimpin daerah setiap periode',0,0),(101,21,'A','Tetap',5,1),(102,21,'B','Berubah-ubah',0,0),(103,21,'C','Ragu-ragu',0,0),(104,21,'D','Bimbang',0,0),(105,21,'E','Fluktuatif',0,0),(106,22,'A','Intensif',5,1),(107,22,'B','Ekspansif',0,0),(108,22,'C','Luas',0,0),(109,22,'D','Merata',0,0),(110,22,'E','Menyeluruh',0,0),(111,23,'A','Rumah Sakit',5,1),(112,23,'B','Pasien',0,0),(113,23,'C','Obat',0,0),(114,23,'D','Periksa',0,0),(115,23,'E','Stetoskop',0,0),(116,24,'A','37',5,1),(117,24,'B','35',0,0),(118,24,'C','39',0,0),(119,24,'D','41',0,0),(120,24,'E','43',0,0),(121,25,'A','12 hari',5,1),(122,25,'B','14 hari',0,0),(123,25,'C','15 hari',0,0),(124,25,'D','16 hari',0,0),(125,25,'E','18 hari',0,0),(126,26,'A','4 hari',5,1),(127,26,'B','5 hari',0,0),(128,26,'C','6 hari',0,0),(129,26,'D','7 hari',0,0),(130,26,'E','8 hari',0,0),(131,27,'A','Budi wajib mengikuti pelatihan',5,1),(132,27,'B','Budi tidak wajib mengikuti pelatihan',0,0),(133,27,'C','Semua yang mengikuti pelatihan adalah PNS',0,0),(134,27,'D','Budi bukan PNS',0,0),(135,27,'E','Tidak dapat disimpulkan',0,0),(136,28,'A','Andi lebih tinggi dari Dedi',5,1),(137,28,'B','Dedi lebih tinggi dari Budi',0,0),(138,28,'C','Cici lebih tinggi dari Andi',0,0),(139,28,'D','Budi lebih pendek dari Dedi',0,0),(140,28,'E','Tidak ada kesimpulan yang pasti',0,0),(141,29,'A','Mendengarkan keluhan dengan tenang dan menjelaskan alasan sambil menawarkan solusi alternatif',5,1),(142,29,'B','Menjadi marah karena warga tidak menghormati petugas',1,0),(143,29,'C','Mengabaikan warga dan melayani warga lain',2,0),(144,29,'D','Menyuruh warga untuk datang lain hari',3,0),(145,29,'E','Menegaskan bahwa keputusan sudah final',4,0),(146,30,'A','Menolak hadiah dan melaporkan ke atasan/penyelenggara negara',5,1),(147,30,'B','Menerima hadiah karena sudah menjadi tradisi',1,0),(148,30,'C','Menerima tapi tidak memberikan keuntungan khusus',2,0),(149,30,'D','Menolak secara halus tanpa melaporkan',4,0),(150,30,'E','Meminta hadiah yang lebih kecil agar tidak mencurigakan',3,0),(151,31,'A','Menghubungi atasan untuk diskusi penyelesaian tugas dan konfirmasi ke keluarga',5,1),(152,31,'B','Menolak tugas karena sudah ada janji keluarga',1,0),(153,31,'C','Meninggalkan tugas tanpa izin untuk hadir acara keluarga',2,0),(154,31,'D','Menyelesaikan tugas tanpa memberi tahu keluarga',3,0),(155,31,'E','Meminta rekan menyelesaikan tugas tanpa sepengetahuan atasan',4,0),(156,32,'A','Mengingatkan secara pribadi dan profesional serta memberikan solusi',5,1),(157,32,'B','Melaporkan langsung ke atasan tanpa peringatan',3,0),(158,32,'C','Mengikuti perilakunya karena tidak ada yang peduli',1,0),(159,32,'D','Menegurnya di depan umum agar malu',2,0),(160,32,'E','Mengabaikan karena bukan tanggung jawab Anda',4,0),(161,33,'A','Menghargai perbedaan dan beradaptasi selama tidak melanggar aturan',5,1),(162,33,'B','Memintanya menyesuaikan dengan kebanyakan rekan',2,0),(163,33,'C','Mengabaikan perbedaan dan fokus pada pekerjaan',3,0),(164,33,'D','Melaporkan ke HRD karena mengganggu dinamika tim',1,0),(165,33,'E','Menyarankan dipindahkan ke divisi lain',4,0),(166,34,'A','├é┬á 14 menit',5,1),(167,34,'B','├é┬á 21 menit',0,0),(168,34,'C','├é┬á 28 menit',0,0),(169,34,'D','├é┬á 35 menit',0,0),(170,34,'E','├é┬á 42 menit',0,0),(171,35,'A','Kanada : Canberra.',0,0),(172,35,'B','Ekuador : Quito.',5,1),(173,35,'C','Kamerun: Astana.',0,0),(174,35,'D','Maroko : Cetinje.',0,0),(175,35,'E','Nigeria : Wellington.',0,0),(176,36,'A','Meminta orang lain mengerjakan asalkan bisa selesai tepat waktu.',0,0),(177,36,'B','Segera berusaha memulai dan menyelesaikan sebisanya saja yang penting selesai.',0,0),(178,36,'C','Tidak perlu buru-buru menyelesaikannya karena pekerjaan tersebut bukan merupakan tugas pokoknya.',0,0),(179,36,'D','Segera berusaha memulai untuk menyelesaikan tugas itu dan berusaha menyelesaikannya sesempurna mungkin.',5,1),(180,36,'E','Mempertanyakan dan menegosiasi manajernya karena merasa takut hasilnya tidak maksimal.',0,0),(181,37,'A','Bekerja keras membentuk panitia persiapan pentas seni ulang tahun perusahaan',0,0),(182,37,'B','Menunjuk beberapa anggota untuk tampil pada pentas seni ulang tahun perusahaan',0,0),(183,37,'C','Mengumpulkan seluruh anggota untuk membahas bersama-sama persiapan pentas seni ulang tahun perusahaan',5,1),(184,37,'D','Melakukan voting untuk mengambil keputusan persiapan pentas seni ulang tahun perusahaan',0,0),(185,37,'E','Menunjuk beberapa anggota untuk menampilkan pentas seni yang mengangkat kebudayaan bangsa',0,0),(186,38,'A','Kebangsaan Indonesia; Internasionalisme atau perikemanusiaan; Mufakat atau demokrasi; Perdamaian abadi',0,0),(187,38,'B','Peri Kebangsaan, Peri Kemanusiaan, Peri keTuhanan, Peri Kerakyatan, dan Mufakat',0,0),(188,38,'C','Kebangsaan Indonesia; Internasionalisme atau perikemanusiaan; Mufakat atau demokrasi; Kesejahteraan sosial; Ketuhanan yang berkebudayaan',5,1),(189,38,'D','Peri Kebangsaan, Peri Kemanusiaan, Peri keTuhanan, Peri Kerakyatan, dan Kesejahteraan Rakyat',0,0),(190,38,'E','Ketuhanan YME, Peri Kemanusiaan, Kebangsaan, Kerakyatan, Keadilan Sosial',0,0),(191,39,'A','Mahkamah Agung dan badan peradilan di bawahnya',5,1),(192,39,'B','Presiden dan Wakil Presiden',0,0),(193,39,'C','DPR dan DPD',0,0),(194,39,'D','MPR sebagai lembaga tertinggi negara',0,0),(195,39,'E','Komisi Yudisial semata',0,0),(196,40,'A','Pasal 28A UUD 1945',5,1),(197,40,'B','Pasal 27 ayat (2) UUD 1945',0,0),(198,40,'C','Pasal 28E UUD 1945',0,0),(199,40,'D','Pasal 28G UUD 1945',0,0),(200,40,'E','Pasal 29 UUD 1945',0,0),(201,41,'A','Pasal 30 UUD 1945',5,1),(202,41,'B','Pasal 27 ayat (3) UUD 1945',0,0),(203,41,'C','Pasal 31 UUD 1945',0,0),(204,41,'D','Pasal 33 UUD 1945',0,0),(205,41,'E','Pasal 34 UUD 1945',0,0),(206,42,'A','Ketuhanan Yang Maha Esa',5,1),(207,42,'B','Kemanusiaan yang Adil dan Beradab',0,0),(208,42,'C','Persatuan Indonesia',0,0),(209,42,'D','Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan',0,0),(210,42,'E','Keadilan Sosial bagi Seluruh Rakyat Indonesia',0,0),(211,43,'A','Tanah Air, Bangsa, dan Bahasa Indonesia',5,1),(212,43,'B','Merdeka atau Mati',0,0),(213,43,'C','Persatuan Indonesia dan Islam',0,0),(214,43,'D','Kemerdekaan Republik Indonesia',0,0),(215,43,'E','Penghapusan feudalisme',0,0),(216,44,'A','17 Agustus 1945',5,1),(217,44,'B','10 November 1945',0,0),(218,44,'C','1 Juni 1945',0,0),(219,44,'D','18 Agustus 1945',0,0),(220,44,'E','20 Mei 1908',0,0),(221,45,'A','Rp 300.000',5,1),(222,45,'B','Rp 288.000',0,0),(223,45,'C','Rp 320.000',0,0),(224,45,'D','Rp 250.000',0,0),(225,45,'E','Rp 280.000',0,0),(226,46,'A','240 liter',5,1),(227,46,'B','200 liter',0,0),(228,46,'C','270 liter',0,0),(229,46,'D','220 liter',0,0),(230,46,'E','210 liter',0,0),(231,47,'A','60 km/jam',5,1),(232,47,'B','48 km/jam',0,0),(233,47,'C','72 km/jam',0,0),(234,47,'D','56 km/jam',0,0),(235,47,'E','64 km/jam',0,0),(236,48,'A','21',5,1),(237,48,'B','20',0,0),(238,48,'C','22',0,0),(239,48,'D','18',0,0),(240,48,'E','19',0,0),(241,49,'A','Pengaruh perkembangan teknologi terhadap kehidupan manusia',5,1),(242,49,'B','Sejarah teknologi informasi',0,0),(243,49,'C','Masalah dalam bidang pendidikan',0,0),(244,49,'D','Perkembangan teknologi di masa depan',0,0),(245,49,'E','Manfaat pendidikan bagi manusia',0,0),(246,50,'A','Melaporkan ke inspektorat atau penyelenggara negara',5,1),(247,50,'B','Menganggap itu urusan pribadi atasan',1,0),(248,50,'C','Menyebarkan ke rekan kerja agar semua tahu',2,0),(249,50,'D','Meminta bagian dari fasilitas tersebut',3,0),(250,50,'E','Mengabaikan karena takut kehilangan pekerjaan',4,0),(251,51,'A','Menyediakan kursi dan memberikan prioritas pelayanan sesuai ketentuan',5,1),(252,51,'B','Mengabaikan karena semua orang sama di muka hukum',1,0),(253,51,'C','Menyuruh lansia datang lagi besok saat tidak ramai',2,0),(254,51,'D','Menyarankan lansia meminta bantuan keluarga',3,0),(255,51,'E','Melanjutkan pelayanan antrean tanpa memperhatikan lansia',4,0),(256,52,'A','Melaporkan kendala ke atasan dan berusaha menyelesaikan dengan data tersedia',5,1),(257,52,'B','Menunggu data lengkap tanpa melapor ke atasan',1,0),(258,52,'C','Mengklaim tugas selesai meski data belum lengkap',2,0),(259,52,'D','Menolak tugas karena deadline tidak realistis',3,0),(260,52,'E','Mengalihkan tanggung jawab ke rekan kerja',4,0),(261,53,'A','Mendengarkan kritik, mencatat, dan meminta saran perbaikan setelah rapat',5,1),(262,53,'B','Membela diri dan menjelaskan alasannya di depan umum',1,0),(263,53,'C','Menolak kritik karena merasa sudah bekerja keras',2,0),(264,53,'D','Menyalahkan rekan kerja yang tidak mendukung',3,0),(265,53,'E','Meninggalkan rapat karena merasa malu',4,0),(266,54,'A','Mempelajari dan menghormati budaya setempat sambil tetap profesional',5,1),(267,54,'B','Menolak tugas karena tidak nyaman dengan budaya tersebut',1,0),(268,54,'C','Memaksakan budaya asal Anda ke lingkungan baru',2,0),(269,54,'D','Mengisolasi diri dan tidak berinteraksi dengan masyarakat',3,0),(270,54,'E','Menganggap budaya daerah tersebut inferior',4,0),(271,55,'A','Menghormati kebebasan beragama setiap orang',5,1),(272,55,'B','Menganut agama mayoritas',0,0),(273,55,'C','Mewajibkan semua beragama',0,0),(274,55,'D','Membatasi ibadah minoritas',0,0),(275,55,'E','Menutup tempat ibadah tak umum',0,0),(276,56,'A','Menghargai HAM tanpa memandang latar belakang',5,1),(277,56,'B','Bantu hanya kelompok sendiri',0,0),(278,56,'C','Utamakan keluarga di atas masyarakat',0,0),(279,56,'D','Batasi hak demi ketertiban',0,0),(280,56,'E','Abaikan perbedaan status',0,0),(281,57,'A','Persatuan Indonesia',5,1),(282,57,'B','Ketuhanan',0,0),(283,57,'C','Kemanusiaan',0,0),(284,57,'D','Keadilan Sosial',0,0),(285,57,'E','Kerakyatan',0,0),(286,58,'A','Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan',5,1),(287,58,'B','Persatuan Indonesia',0,0),(288,58,'C','Keadilan Sosial',0,0),(289,58,'D','Ketuhanan',0,0),(290,58,'E','Kemanusiaan',0,0),(291,59,'A','Keadilan Sosial',5,1),(292,59,'B','Persatuan Indonesia',0,0),(293,59,'C','Kerakyatan',0,0),(294,59,'D','Ketuhanan',0,0),(295,59,'E','Kemanusiaan',0,0),(296,60,'A','Ketuhanan Yang Maha Esa',5,1),(297,60,'B','Kemanusiaan',0,0),(298,60,'C','Persatuan Indonesia',0,0),(299,60,'D','Kerakyatan',0,0),(300,60,'E','Keadilan Sosial',0,0),(301,61,'A','Kemanusiaan yang Adil dan Beradab',5,1),(302,61,'B','Ketuhanan',0,0),(303,61,'C','Persatuan Indonesia',0,0),(304,61,'D','Kerakyatan',0,0),(305,61,'E','Keadilan Sosial',0,0),(306,62,'A','Persatuan Indonesia',5,1),(307,62,'B','Ketuhanan',0,0),(308,62,'C','Kemanusiaan',0,0),(309,62,'D','Kerakyatan',0,0),(310,62,'E','Keadilan Sosial',0,0),(311,63,'A','Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan',5,1),(312,63,'B','Persatuan Indonesia',0,0),(313,63,'C','Keadilan Sosial',0,0),(314,63,'D','Ketuhanan',0,0),(315,63,'E','Kemanusiaan',0,0),(316,64,'A','Keadilan Sosial',5,1),(317,64,'B','Persatuan Indonesia',0,0),(318,64,'C','Kerakyatan',0,0),(319,64,'D','Ketuhanan',0,0),(320,64,'E','Kemanusiaan',0,0),(321,65,'A','Kemanusiaan yang Adil dan Beradab',5,1),(322,65,'B','Ketuhanan Yang Maha Esa',0,0),(323,65,'C','Persatuan Indonesia',0,0),(324,65,'D','Kerakyatan',0,0),(325,65,'E','Keadilan Sosial',0,0),(326,66,'A','Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan',5,1),(327,66,'B','Persatuan Indonesia',0,0),(328,66,'C','Keadilan Sosial',0,0),(329,66,'D','Ketuhanan',0,0),(330,66,'E','Kemanusiaan',0,0),(331,67,'A','Keadilan Sosial',5,1),(332,67,'B','Persatuan Indonesia',0,0),(333,67,'C','Kerakyatan',0,0),(334,67,'D','Ketuhanan',0,0),(335,67,'E','Kemanusiaan',0,0),(336,68,'A','Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan',5,1),(337,68,'B','Ketuhanan Yang Maha Esa',0,0),(338,68,'C','Persatuan Indonesia',0,0),(339,68,'D','Kemanusiaan',0,0),(340,68,'E','Keadilan Sosial',0,0),(341,69,'A','Persatuan Indonesia',5,1),(342,69,'B','Ketuhanan',0,0),(343,69,'C','Kemanusiaan',0,0),(344,69,'D','Kerakyatan',0,0),(345,69,'E','Keadilan Sosial',0,0),(346,70,'A','Negara Kesatuan yang berbentuk Republik',5,1),(347,70,'B','Negara Federasi',0,0),(348,70,'C','Negara Kerajaan',0,0),(349,70,'D','Negara Uni',0,0),(350,70,'E','Negara Serikat',0,0),(351,71,'A','Pasal 1 ayat (2)',5,1),(352,71,'B','Pasal 1 ayat (3)',0,0),(353,71,'C','Pasal 2 ayat (1)',0,0),(354,71,'D','Pasal 3',0,0),(355,71,'E','Pasal 4',0,0),(356,72,'A','Pasal 4 ayat (1)',5,1),(357,72,'B','Pasal 3',0,0),(358,72,'C','Pasal 5 ayat (1)',0,0),(359,72,'D','Pasal 6',0,0),(360,72,'E','Pasal 7',0,0),(361,73,'A','Pasal 27 ayat (2)',5,1),(362,73,'B','Pasal 28 ayat (1)',0,0),(363,73,'C','Pasal 28A',0,0),(364,73,'D','Pasal 28E ayat (1)',0,0),(365,73,'E','Pasal 30',0,0),(366,74,'A','Pasal 28H ayat (4)',5,1),(367,74,'B','Pasal 28A ayat (1)',0,0),(368,74,'C','Pasal 28E ayat (2)',0,0),(369,74,'D','Pasal 27 ayat (1)',0,0),(370,74,'E','Pasal 28G ayat (2)',0,0),(371,75,'A','Mahkamah Agung dan badan peradilan di bawahnya',5,1),(372,75,'B','Presiden dan Wakil Presiden',0,0),(373,75,'C','DPR dan DPD',0,0),(374,75,'D','MPR sebagai lembaga tertinggi',0,0),(375,75,'E','Komisi Yudisial semata',0,0),(376,76,'A','Pasal 31 ayat (2)',5,1),(377,76,'B','Pasal 27 ayat (2)',0,0),(378,76,'C','Pasal 28A',0,0),(379,76,'D','Pasal 30',0,0),(380,76,'E','Pasal 33',0,0),(381,77,'A','Pasal 27 ayat (3)',5,1),(382,77,'B','Pasal 30 ayat (1)',0,0),(383,77,'C','Pasal 28E ayat (3)',0,0),(384,77,'D','Pasal 31',0,0),(385,77,'E','Pasal 33',0,0),(386,78,'A','Pasal 28E ayat (3)',5,1),(387,78,'B','Pasal 28A',0,0),(388,78,'C','Pasal 27 ayat (1)',0,0),(389,78,'D','Pasal 28G ayat (1)',0,0),(390,78,'E','Pasal 30',0,0),(391,79,'A','Pasal 28A UUD 1945',5,1),(392,79,'B','Pasal 27 ayat (2)',0,0),(393,79,'C','Pasal 28E UUD 1945',0,0),(394,79,'D','Pasal 28G UUD 1945',0,0),(395,79,'E','Pasal 29 UUD 1945',0,0),(396,80,'A','Pasal 2 ayat (1)',5,1),(397,80,'B','Pasal 1 ayat (2)',0,0),(398,80,'C','Pasal 3 ayat (1)',0,0),(399,80,'D','Pasal 4 ayat (1)',0,0),(400,80,'E','Pasal 5 ayat (1)',0,0),(401,81,'A','Pasal 3',5,1),(402,81,'B','Pasal 2',0,0),(403,81,'C','Pasal 4',0,0),(404,81,'D','Pasal 5',0,0),(405,81,'E','Pasal 6',0,0),(406,82,'A','Berusia sekurang-kurangnya 40 tahun',5,1),(407,82,'B','Memiliki gelar akademik',0,0),(408,82,'C','Pengalaman 10 tahun di pemerintahan',0,0),(409,82,'D','Keturunan bangsawan',0,0),(410,82,'E','Berusia sekurang-kurangnya 35 tahun',0,0),(411,83,'A','MPR',5,1),(412,83,'B','DPR',0,0),(413,83,'C','MA',0,0),(414,83,'D','MK',0,0),(415,83,'E','Rakyat',0,0),(416,84,'A','28 Oktober 1928',5,1),(417,84,'B','20 Mei 1908',0,0),(418,84,'C','17 Agustus 1945',0,0),(419,84,'D','1 Juni 1945',0,0),(420,84,'E','23 Agustus 1949',0,0),(421,85,'A','Tanah Air, Bangsa, dan Bahasa Indonesia',5,1),(422,85,'B','Merdeka atau Mati',0,0),(423,85,'C','Persatuan Indonesia dan Islam',0,0),(424,85,'D','Kemerdekaan Republik Indonesia',0,0),(425,85,'E','Penghapusan feudalisme',0,0),(426,86,'A','17 Agustus 1945',5,1),(427,86,'B','10 November 1945',0,0),(428,86,'C','1 Juni 1945',0,0),(429,86,'D','18 Agustus 1945',0,0),(430,86,'E','20 Mei 1908',0,0),(431,87,'A','Soekarno dan Mohammad Hatta',5,1),(432,87,'B','Sutan Sjahrir dan Amir Sjarifuddin',0,0),(433,87,'C','Agus Salim dan Haji Agus',0,0),(434,87,'D','Ki Hajar Dewantara dan Tjokroaminoto',0,0),(435,87,'E','Sukemi dan Cipto Mangunkusumo',0,0),(436,88,'A','Budi Utomo',5,1),(437,88,'B','Indische Partij',0,0),(438,88,'C','Sarekat Islam',0,0),(439,88,'D','PNI',0,0),(440,88,'E','Partai Komunis Indonesia',0,0),(441,89,'A','E.F.E. Douwes Dekker',5,1),(442,89,'B','Soekarno',0,0),(443,89,'C','H.O.S. Tjokroaminoto',0,0),(444,89,'D','Ki Hajar Dewantara',0,0),(445,89,'E','Ahmad Dahlan',0,0),(446,90,'A','23 Agustus 1949',5,1),(447,90,'B','17 Agustus 1945',0,0),(448,90,'C','27 Desember 1949',0,0),(449,90,'D','28 Oktober 1928',0,0),(450,90,'E','10 November 1945',0,0),(451,91,'A','Mohammad Yamin',5,1),(452,91,'B','Agus Salim',0,0),(453,91,'C','Ki Hajar Dewantara',0,0),(454,91,'D','Hatta',0,0),(455,91,'E','Sjahrir',0,0),(456,92,'A','Dasar Negara yang disempurnakan menjadi Pancasila',5,1),(457,92,'B','Proklamasi Kemerdekaan',0,0),(458,92,'C','Konstitusi RIS',0,0),(459,92,'D','Pembukaan UUD 1945',0,0),(460,92,'E','Traktat Linggarjati',0,0),(461,93,'A','Jepang',5,1),(462,93,'B','Belanda',0,0),(463,93,'C','Inggris',0,0),(464,93,'D','Amerika Serikat',0,0),(465,93,'E','Australia',0,0),(466,94,'A','Berbeda-beda tetapi tetap satu jua',5,1),(467,94,'B','Bersatu dalam keberagaman',0,0),(468,94,'C','Satu nusa satu bangsa',0,0),(469,94,'D','Persatuan dalam perbedaan',0,0),(470,94,'E','Satu untuk semua',0,0),(471,95,'A','1.300 suku bangsa',5,1),(472,95,'B','500 suku bangsa',0,0),(473,95,'C','2.000 suku bangsa',0,0),(474,95,'D','100 suku bangsa',0,0),(475,95,'E','3.000 suku bangsa',0,0),(476,96,'A','6 agama',5,1),(477,96,'B','5 agama',0,0),(478,96,'C','4 agama',0,0),(479,96,'D','7 agama',0,0),(480,96,'E','3 agama',0,0),(481,97,'A','Pasal 27 ayat (3) UUD 1945',5,1),(482,97,'B','Pasal 30 UUD 1945',0,0),(483,97,'C','Pasal 28A UUD 1945',0,0),(484,97,'D','Pasal 31 UUD 1945',0,0),(485,97,'E','Pasal 33 UUD 1945',0,0),(486,98,'A','Semesta melibatkan seluruh komponen bangsa',5,1),(487,98,'B','Hanya oleh TNI/Polri',0,0),(488,98,'C','Hanya oleh pemerintah',0,0),(489,98,'D','Hanya saat perang',0,0),(490,98,'E','Hanya oleh pemuda',0,0),(491,99,'A','Sistem Pertahanan dan Keamanan Rakyat Semesta',5,1),(492,99,'B','Sistem Pertahanan Militer Semata',0,0),(493,99,'C','Sistem Keamanan Internasional',0,0),(494,99,'D','Sistem Pertahanan Teritorial',0,0),(495,99,'E','Sistem Keamanan Sipil',0,0),(496,100,'A','Negarakertagama',5,1),(497,100,'B','Sutasoma',0,0),(498,100,'C','Arjunawiwaha',0,0),(499,100,'D','Bharatayuddha',0,0),(500,100,'E','Kakawin Ramayana',0,0),(501,101,'A','Militer dan non-militer',5,1),(502,101,'B','Militer semata',0,0),(503,101,'C','Non-militer semata',0,0),(504,101,'D','Hanya pertahanan laut',0,0),(505,101,'E','Hanya pertahanan udara',0,0),(506,102,'A','Hukum (rule of law)',5,1),(507,102,'B','Kekuasaan absolut Presiden',0,0),(508,102,'C','Kedaulatan rakyat tanpa batas',0,0),(509,102,'D','Agama tertentu',0,0),(510,102,'E','Partai politik',0,0),(511,103,'A','Tetap',5,1),(512,103,'B','Berubah-ubah',0,0),(513,103,'C','Ragu-ragu',0,0),(514,103,'D','Bimbang',0,0),(515,103,'E','Fluktuatif',0,0),(516,104,'A','Intensif',5,1),(517,104,'B','Ekspansif',0,0),(518,104,'C','Luas',0,0),(519,104,'D','Merata',0,0),(520,104,'E','Menyeluruh',0,0),(521,105,'A','Hidup',5,1),(522,105,'B','Bayi',0,0),(523,105,'C','Tumbuh',0,0),(524,105,'D','Dunia',0,0),(525,105,'E','Akhirat',0,0),(526,106,'A','Asli',5,1),(527,106,'B','Palsu',0,0),(528,106,'C','Tiruan',0,0),(529,106,'D','Duplikat',0,0),(530,106,'E','Rekayasa',0,0),(531,107,'A','Progresif',5,1),(532,107,'B','Statis',0,0),(533,107,'C','Mandeg',0,0),(534,107,'D','Diam',0,0),(535,107,'E','Mati',0,0),(536,108,'A','Topi',5,1),(537,108,'B','Rambut',0,0),(538,108,'C','Wajah',0,0),(539,108,'D','Telinga',0,0),(540,108,'E','Leher',0,0),(541,109,'A','Jarum',5,1),(542,109,'B','Kain',0,0),(543,109,'C','Benang',0,0),(544,109,'D','Mesin',0,0),(545,109,'E','Gunting',0,0),(546,110,'A','Teguh',5,1),(547,110,'B','Labil',0,0),(548,110,'C','Ragu',0,0),(549,110,'D','Bimbang',0,0),(550,110,'E','Berubah',0,0),(551,111,'A','Mendengar',5,1),(552,111,'B','Bau',0,0),(553,111,'C','Merasa',0,0),(554,111,'D','Mencicipi',0,0),(555,111,'E','Berbicara',0,0),(556,112,'A','37',5,1),(557,112,'B','35',0,0),(558,112,'C','39',0,0),(559,112,'D','41',0,0),(560,112,'E','43',0,0),(561,113,'A','12 hari',5,1),(562,113,'B','14 hari',0,0),(563,113,'C','15 hari',0,0),(564,113,'D','16 hari',0,0),(565,113,'E','18 hari',0,0),(566,114,'A','4 hari',5,1),(567,114,'B','5 hari',0,0),(568,114,'C','6 hari',0,0),(569,114,'D','7 hari',0,0),(570,114,'E','8 hari',0,0),(571,115,'A','Rp 300.000',5,1),(572,115,'B','Rp 288.000',0,0),(573,115,'C','Rp 320.000',0,0),(574,115,'D','Rp 250.000',0,0),(575,115,'E','Rp 280.000',0,0),(576,116,'A','240 liter',5,1),(577,116,'B','200 liter',0,0),(578,116,'C','270 liter',0,0),(579,116,'D','220 liter',0,0),(580,116,'E','210 liter',0,0),(581,117,'A','60 km/jam',5,1),(582,117,'B','48 km/jam',0,0),(583,117,'C','72 km/jam',0,0),(584,117,'D','56 km/jam',0,0),(585,117,'E','64 km/jam',0,0),(586,118,'A','21',5,1),(587,118,'B','20',0,0),(588,118,'C','22',0,0),(589,118,'D','18',0,0),(590,118,'E','19',0,0),(591,119,'A','96',5,1),(592,119,'B','72',0,0),(593,119,'C','108',0,0),(594,119,'D','84',0,0),(595,119,'E','120',0,0),(596,120,'A','40',5,1),(597,120,'B','38',0,0),(598,120,'C','42',0,0),(599,120,'D','36',0,0),(600,120,'E','44',0,0),(601,121,'A','5 hari',5,1),(602,121,'B','6 hari',0,0),(603,121,'C','4 hari',0,0),(604,121,'D','7 hari',0,0),(605,121,'E','8 hari',0,0),(606,122,'A','Budi wajib pelatihan',5,1),(607,122,'B','Budi tidak wajib pelatihan',0,0),(608,122,'C','Semua pelatihan adalah PNS',0,0),(609,122,'D','Budi bukan PNS',0,0),(610,122,'E','Tidak dapat disimpulkan',0,0),(611,123,'A','Andi lebih tinggi dari Dedi',5,1),(612,123,'B','Dedi lebih tinggi dari Budi',0,0),(613,123,'C','Cici lebih tinggi dari Andi',0,0),(614,123,'D','Budi lebih pendek dari Dedi',0,0),(615,123,'E','Tidak ada kesimpulan pasti',0,0),(616,124,'A','Dengarkan keluhan tenang & jelaskan alasan + solusi alternatif',5,1),(617,124,'B','Marah balik karena warga tidak hormat',1,0),(618,124,'C','Abaikan warga, layani yang lain',2,0),(619,124,'D','Suruh datang lain hari',3,0),(620,124,'E','Tegaskan keputusan final tidak bisa diganggu gugat',4,0),(621,125,'A','Ayam bisa terbang',5,1),(622,125,'B','Ayam tidak bisa terbang',0,0),(623,125,'C','Semua yang terbang adalah burung',0,0),(624,125,'D','Ayam bukan burung',0,0),(625,125,'E','Tidak dapat disimpulkan',0,0),(626,126,'A','Hubungi atasan diskusi tugas + konfirmasi keluarga',5,1),(627,126,'B','Tolak tugas karena janji keluarga',1,0),(628,126,'C','Tinggalkan tugas tanpa izin',2,0),(629,126,'D','Selesaikan tugas tanpa kabar keluarga',3,0),(630,126,'E','Minta rekan kerjakan tanpa izin atasan',4,0),(631,127,'A','Mungkin hujan, tetapi tidak pasti',5,1),(632,127,'B','Pasti hujan',0,0),(633,127,'C','Tidak hujan',0,0),(634,127,'D','Jalan selalu licin',0,0),(635,127,'E','Tidak ada kesimpulan',0,0),(636,128,'A','Bicara pribadi & beri saran, eskalasi jika tidak berubah',5,1),(637,128,'B','Biarkan karena urusan pribadi',1,0),(638,128,'C','Lapor langsung ke atasan tanpa bicara dulu',2,0),(639,129,'A','Santi mungkin mahasiswa, tidak pasti',5,1),(640,128,'D','Ikut-ikutan pulang cepat',3,0),(641,129,'B','Santi pasti mahasiswa',0,0),(642,128,'E','Sebarkan ke rekan lain',4,0),(643,129,'C','Santi bukan mahasiswa',0,0),(644,129,'D','Semua yang rajin adalah mahasiswa',0,0),(645,129,'E','Tidak ada kesimpulan',0,0),(646,130,'A','Belajar & hormati budaya setempat, tetap profesional',5,1),(647,130,'B','Tolak tugas karena tidak nyaman',1,0),(648,130,'C','Paksa budaya asal ke lingkungan baru',2,0),(649,130,'D','Isolasi diri, tidak berinteraksi',3,0),(650,130,'E','Anggap budaya daerah inferior',4,0),(651,131,'A','Pengaruh teknologi terhadap pendidikan',5,1),(652,131,'B','Sejarah teknologi informasi',0,0),(653,131,'C','Masalah pendidikan',0,0),(654,131,'D','Teknologi di masa depan',0,0),(655,131,'E','Manfaat pendidikan',0,0),(656,132,'A','Sediakan kursi & prioritas pelayanan sesuai ketentuan',5,1),(657,132,'B','Abaikan karena semua sama di muka hukum',1,0),(658,132,'C','Suruh lansia datang besok',2,0),(659,132,'D','Sarankan minta bantuan keluarga',3,0),(660,132,'E','Lanjutkan antrean tanpa perhatikan lansia',4,0),(661,133,'A','Sangkar',5,1),(662,133,'B','Langit',0,0),(663,133,'C','Sayap',0,0),(664,133,'D','Pohon',0,0),(665,133,'E','Awan',0,0),(666,134,'A','Laporkan ke inspektorat/penyelenggara negara',5,1),(667,134,'B','Anggap urusan pribadi atasan',1,0),(668,134,'C','Sebarkan ke rekan agar semua tahu',2,0),(669,134,'D','Minta bagian fasilitas tersebut',3,0),(670,134,'E','Abaikan karena takut kehilangan pekerjaan',4,0),(671,135,'A','Dingin',5,1),(672,135,'B','Cair',0,0),(673,135,'C','Padat',0,0),(674,135,'D','Basah',0,0),(675,135,'E','Kering',0,0),(676,136,'A','Lapor kendala ke atasan & usaha dengan data tersedia',5,1),(677,136,'B','Tunggu data lengkap tanpa lapor',1,0),(678,136,'C','Klaim selesai meski data belum lengkap',2,0),(679,136,'D','Tolak tugas karena deadline tidak realistis',3,0),(680,136,'E','Alihkan tanggung jawab ke rekan',4,0),(681,137,'A','36',5,1),(682,137,'B','30',0,0),(683,137,'C','40',0,0),(684,137,'D','32',0,0),(685,137,'E','42',0,0),(686,138,'A','Dengarkan, catat, minta saran perbaikan setelah rapat',5,1),(687,138,'B','Beladiri & jelaskan alasannya di depan umum',1,0),(688,138,'C','Tolak kritik karena sudah kerja keras',2,0),(689,138,'D','Salahkan rekan yang tidak mendukung',3,0),(690,138,'E','Tinggalkan rapat karena malu',4,0),(691,139,'A','Rp 75.000',5,1),(692,139,'B','Rp 60.000',0,0),(693,139,'C','Rp 90.000',0,0),(694,139,'D','Rp 50.000',0,0),(695,139,'E','Rp 100.000',0,0),(696,140,'A','Mint maaf, percepat sesuai SOP, beri penjelasan',5,1),(697,140,'B','Bilang itu prosedur standar, sabar',1,0),(698,140,'C','Suruh warga protes ke atasan',2,0),(699,140,'D','Abaikan karena banyak antrean lain',3,0),(700,140,'E','Tolak berkas karena warga tidak sabar',4,0),(701,141,'A','10',5,1),(702,141,'B','9',0,0),(703,141,'C','11',0,0),(704,141,'D','8',0,0),(705,141,'E','12',0,0),(706,142,'A','Terima dan kerjakan sebaik mungkin, komunikasikan jika overload',5,1),(707,142,'B','Tolak karena bukan tugas pokok',1,0),(708,142,'C','Kerjakan asal selesai tanpa maksimal',2,0),(709,142,'D','Minta ganti tugas dengan yang lebih mudah',3,0),(710,143,'A','5',5,1),(711,142,'E','Biarkan menumpuk',4,0),(712,143,'B','10',0,0),(713,143,'C','7,5',0,0),(714,143,'D','4',0,0),(715,143,'E','6',0,0),(716,144,'A','Segera hubungi warga untuk mengembalikan uang',5,1),(717,144,'B','Simpan uang untuk keperluan kantor',1,0),(718,144,'C','Bagikan dengan rekan kerja',2,0),(719,144,'D','Masukkan ke kotak amal',3,0),(720,144,'E','Tunggu warga menghubungi sendiri',4,0),(721,145,'A','5/6',5,1),(722,145,'B','3/4',0,0),(723,145,'C','2/3',0,0),(724,145,'D','1/2',0,0),(725,145,'E','Sama besar',0,0),(726,146,'A','Bagi tugas ke anggota lain & tetap komunikasi',5,1),(727,146,'B','Tunda proyek sampai rekan sembuh',1,0),(728,146,'C','Kerjakan sendiri tanpa bantuan',2,0),(729,146,'D','Laporkan atasan tanpa solusi',3,0),(730,146,'E','Biarkan proyek terbengkalai',4,0),(731,147,'A','Hewan A mungkin kucing',5,1),(732,147,'B','Hewan A pasti kucing',0,0),(733,147,'C','Hewan A bukan kucing',0,0),(734,147,'D','Semua mamalia adalah kucing',0,0),(735,147,'E','Tidak ada kesimpulan',0,0),(736,148,'A','Bantu dengan data tersedia & arahkan dokumen kurang',5,1),(737,148,'B','Tolak karena dokumen tidak lengkap',1,0),(738,148,'C','Suruh pulang & datang lagi lengkap',2,0),(739,148,'D','Proses asal-asalan agar cepat',3,0),(740,148,'E','Marahi warga karena tidak persiapan',4,0),(741,149,'A','Rina tidak belajar',5,1),(742,149,'B','Rina belajar tapi tidak lulus',0,0),(743,149,'C','Rina lulus tanpa belajar',0,0),(744,149,'D','Semua yang belajar pasti lulus',0,0),(745,149,'E','Tidak ada kesimpulan',0,0),(746,150,'A','Mint tolong penerjemah/anggota yang menguasai bahasa tersebut',5,1),(747,150,'B','Paksa warga menggunakan bahasa Indonesia',1,0),(748,150,'C','Abaikan keluhan karena tidak mengerti',2,0),(749,150,'D','Tebak-tebak arti keluhan warga',3,0),(750,150,'E','Suruh warga datang dengan penerjemah sendiri',4,0),(751,151,'A','Lentur',5,1),(752,151,'B','Kaku',0,0),(753,151,'C','Tegar',0,0),(754,151,'D','Keras',0,0),(755,151,'E','Padat',0,0),(756,152,'A','Segera lapor & perbaiki kesalahan',5,1),(757,152,'B','Biarkan karena mungkin tidak ada yang sadar',1,0),(758,153,'A','Sederhana',5,1),(759,152,'C','Salahkan sistem yang error',2,0),(760,153,'B','Rumit',0,0),(761,152,'D','Minta rekan memperbaiki tanpa sepengetahuan atasan',3,0),(762,152,'E','Hapus jejak kesalahan',4,0),(763,153,'C','Sulit',0,0),(764,153,'D','Banyak',0,0),(765,153,'E','Detail',0,0),(766,154,'A','Tolak & jelaskan prosedur sama untuk semua',5,1),(767,154,'B','Terima karena kenalan dekat',1,0),(768,154,'C','Terima tapi tidak janji pasti',2,0),(769,154,'D','Arahkan ke atasan untuk keputusan',4,0),(770,154,'E','Bantu dengan syarat imbalan lain',3,0),(771,155,'A','19',5,1),(772,155,'B','17',0,0),(773,155,'C','21',0,0),(774,155,'D','18',0,0),(775,155,'E','20',0,0),(776,156,'A','Komunikasikan ke atasan untuk efisiensi atau tambah SDM',5,1),(777,156,'B','Kerjakan lembur terus tanpa protes',1,0),(778,156,'C','Meninggalkan tugas karena kelelahan',2,0),(779,156,'D','Minta ganti rugi lembur lebih dulu',3,0),(780,156,'E','Biarkan proyek terlambat',4,0),(781,157,'A','Rp 240.000',5,1),(782,157,'B','Rp 225.000',0,0),(783,157,'C','Rp 200.000',0,0),(784,157,'D','Rp 250.000',0,0),(785,157,'E','Rp 210.000',0,0),(786,158,'A','Jelaskan dengan sabar & arahkan ke prosedur banding',5,1),(787,158,'B','Abaikan karena keputusan sudah final',1,0),(788,158,'C','Marahi warga karena tidak menghargai keputusan',2,0),(789,158,'D','Ubah keputusan demi kepuasan warga',3,0),(790,158,'E','Suruh warga protes ke instansi lain',4,0),(791,159,'A','Hormati ritual adat tanpa meninggalkan keyakinan pribadi',5,1),(792,159,'B','Tolak dengan keras karena bertentangan keyakinan',1,0),(793,159,'C','Ikuti ritual meski bertentangan keyakinan',2,0),(794,159,'D','Abaikan undangan ritual',3,0),(795,159,'E','Kritik ritual di depan umum',4,0),(796,160,'A','Lapor atasan & tim keamanan, bantu identifikasi sumber',5,1),(797,160,'B','Abaikan karena bukan tanggung jawab Anda',1,0),(798,160,'C','Sebarkan ke publik agar semua waspada',2,0),(799,160,'D','Hapus jejak tanpa melapor',3,0),(800,160,'E','Salahkan sistem IT',4,0),(801,161,'A','Kumpulkan bukti & lapor ke atasan/auditor internal',5,1),(802,161,'B','Biarkan karena bukan urusan Anda',1,0),(803,161,'C','Konfrontasi rekan di depan umum',2,0),(804,161,'D','Ikut-ikutan curang agar tidak dianggap iri',3,0),(805,161,'E','Ancam rekan agar berhenti curang',4,0),(806,162,'A','Motivasi tim, koordinasi tugas, fokus tujuan',5,1),(807,162,'B','Tunggu atasan menenangkan tim',1,0),(808,162,'C','Bekerja sendiri tanpa tim',2,0),(809,162,'D','Minta perpanjangan deadline',3,0),(810,162,'E','Biarkan tim berantem sendiri',4,0),(811,163,'A','Mint maaf, arahkan ke jalur offline/manual, lapor IT',5,1),(812,163,'B','Biarkan warga menunggu sistem hidup',1,0),(813,163,'C','Marahi warga karena tidak sabar',2,0),(814,163,'D','Tutup pelayanan sampai sistem normal',3,0),(815,163,'E','Sebarkan kesalahan sistem ke publik',4,0),(816,164,'A','Hormati acara, pilih menu halal, jadikan ajang silaturahmi',5,1),(817,164,'B','Tolak ikut acara karena ada menu non-halal',1,0),(818,164,'C','Ikut acara tapi komplain keras',2,0),(819,164,'D','Diam saja & tidak makan apapun',3,0),(820,164,'E','Tuntut panitia ganti menu semua halal',4,0),(821,165,'A','Segera minta maaf, tarik email, lapor atasan',5,1),(822,165,'B','Abaikan karena mungkin tidak dibaca',1,0),(823,165,'C','Kirim email baru membantah isi sebelumnya',2,0),(824,165,'D','Salahkan IT email error',3,0),(825,165,'E','Tutupi dengan email palsu',4,0),(826,166,'A','Tolak tegas & jelaskan risiko hukum pemalsuan',5,1),(827,166,'B','Lakukan karena perintah atasan',1,0),(828,166,'C','Lakukan tapi minta jaminan aman',2,0),(829,166,'D','Alihkan ke rekan lain',3,0),(830,166,'E','Buat tanda tangan palsu dengan berbeda',4,0),(831,167,'A','Evaluasi bersama tim & susun rencana perbaikan',5,1),(832,167,'B','Menyerah dan biarkan program ditutup',1,0),(833,167,'C','Salahkan rekan yang tidak kompak',2,0),(834,167,'D','Tutupi kegagalan di laporan',3,0),(835,167,'E','Tuntut reward meski gagal',4,0),(836,168,'A','Bantu isi formulir dengan sabar & jelaskan isinya',5,1),(837,168,'B','Tolak karena warga harus isi sendiri',1,0),(838,168,'C','Suruh warga minta bantuan orang lain',2,0),(839,168,'D','Isi asal-asalan agar cepat',3,0),(840,168,'E','Marahi warga karena tidak bisa baca tulis',4,0),(841,169,'A','Ikuti tradisi makan dengan tangan, jadikan pengalaman budaya',5,1),(842,169,'B','Tolak makan karena tidak nyaman pakai tangan',1,0),(843,169,'C','Minta sendok tanpa menjelaskan',2,0),(844,169,'D','Kritik tradisi tidak higienis',3,0),(845,169,'E','Makan sendiri di sudut dengan sendok',4,0),(846,170,'A','Komunikasikan ke kedua atasan & negosiasikan prioritas',5,1),(847,170,'B','Pilih atasan yang lebih senior',1,0),(848,170,'C','Kerjakan keduanya setengah-setengah',2,0),(849,170,'D','Tolak salah satu tanpa alasan',3,0),(850,170,'E','Abaikan kedua tugas',4,0),(851,171,'A','Kumpulkan bukti & lapor ke auditor internal/inspektorat',5,1),(852,171,'B','Abaikan karena semua kantor juga begitu',1,0),(853,171,'C','Perbaiki data sendiri tanpa melapor',2,0),(854,171,'D','Sebarkan ke media sosial',3,0),(855,171,'E','Gunakan data palsu demi kelancaran laporan',4,0),(856,172,'A','Ucapkan selamat, evaluasi diri, motivasi tim',5,1),(857,172,'B','Salahkan juri tidak adil',1,0),(858,172,'C','Putus asa dan tidak ikut kompetisi lagi',2,0),(859,172,'D','Tuduh pemenang curang',3,0),(860,172,'E','Biarkan tim kecewa tanpa tindakan lanjut',4,0),(861,173,'A','Terima dengan ramah & selesaikan urusan',5,1),(862,173,'B','Tolak karena sudah mau tutup',1,0),(863,173,'C','Suruh datang pagi-pagi besok',2,0),(864,173,'D','Kerjakan asal-asalan agar cepat selesai',3,0),(865,173,'E','Marahi warga karena datang telat',4,0),(866,174,'A','Ingatkan rekan bahwa dialek adalah kekayaan budaya',5,1),(867,174,'B','Ikut mengejek karena memang lucu',1,0),(868,174,'C','Diam saja karena bukan urusan Anda',2,0),(869,174,'D','Lapor atasan tanpa bicara ke rekan dulu',3,0),(870,174,'E','Ejek balik dialek rekan',4,0),(871,175,'A','Lingkaran',5,1),(872,175,'B','Segitiga',0,0),(873,175,'C','Persegi',0,0),(874,175,'D','Bintang',0,0),(875,175,'E','Jajaran Genjang',0,0),(876,176,'A','Persegi penuh',5,1),(877,176,'B','1/2 persegi',0,0),(878,176,'C','Lingkaran',0,0),(879,176,'D','Segitiga',0,0),(880,176,'E','Garis lurus',0,0),(881,177,'A','Garis lebih panjang atau bidang',5,1),(882,177,'B','Titik kembali',0,0),(883,177,'C','Lingkaran',0,0),(884,177,'D','Segitiga',0,0),(885,177,'E','Tidak ada lanjutan',0,0),(886,178,'A','Titik diperbesar menjadi lingkaran atau pola titik',5,1),(887,178,'B','Biarkan titik saja',0,0),(888,178,'C','Hapus titik',0,0),(889,178,'D','Ganti dengan garis melintang',0,0),(890,178,'E','Warnai kotak tanpa titik',0,0),(891,179,'A','Segitiga lebih besar / pembentukan objek baru',5,1),(892,179,'B','Segitiga kecil kembali',0,0),(893,179,'C','Lingkaran',0,0),(894,179,'D','Garis',0,0),(895,179,'E','Kosong',0,0),(896,180,'A','Garis diperpanjang atau diberi elemen penghubung',5,1),(897,180,'B','Garis diputus',0,0),(898,180,'C','Garis dihapus',0,0),(899,180,'D','Tambah garis acak',0,0),(900,180,'E','Biarkan kosong',0,0),(901,181,'A','Melengkapi lingkaran penuh',5,1),(902,181,'B','Ganti jadi segitiga',0,0),(903,181,'C','Biarkan setengah',0,0),(904,181,'D','Hapus kurva',0,0),(905,181,'E','Tambah titik acak',0,0),(906,182,'A','5 titik',5,1),(907,182,'B','4 titik',0,0),(908,182,'C','6 titik',0,0),(909,182,'D','0 titik',0,0),(910,182,'E','Tidak ada pola',0,0),(911,183,'A','Lanjutkan zig-zag menjadi gelombang / pola berulang',5,1),(912,183,'B','Ganti jadi garis lurus',0,0),(913,183,'C','Hapus zig-zag',0,0),(914,183,'D','Tambah lingkaran',0,0),(915,183,'E','Warnai saja',0,0),(916,184,'A','Lanjutkan diagonal / bentuk segitiga dari titik',5,1),(917,184,'B','Titik kembali ke kiri atas',0,0),(918,184,'C','Hapus titik',0,0),(919,184,'D','Tambah lingkaran besar',0,0),(920,184,'E','Biarkan kosong',0,0),(921,185,'A','Garis vertikal',5,1),(922,185,'B','Garis horizontal',0,0),(923,185,'C','Lingkaran',0,0),(924,185,'D','Tidak ada pola',0,0),(925,185,'E','Garis miring',0,0),(926,186,'A','Lengkapi jadi persegi / persegi panjang',5,1),(927,186,'B','Hapus L',0,0),(928,186,'C','Tambah lingkaran',0,0),(929,186,'D','Ganti jadi T',0,0),(930,186,'E','Warnai L saja',0,0),(931,187,'A','4 lingkaran',5,1),(932,187,'B','3 lingkaran',0,0),(933,187,'C','5 lingkaran',0,0),(934,187,'D','1 lingkaran',0,0),(935,187,'E','0 lingkaran',0,0),(936,188,'A','Lengkapi jadi lingkaran / bulan / bentuk organik',5,1),(937,188,'B','Biarkan busur saja',0,0),(938,188,'C','Ganti jadi garis',0,0),(939,188,'D','Tambah persegi',0,0),(940,188,'E','Hapus busur',0,0),(941,189,'A','Kembangkan X menjadi bintang / kupu-kupu / pola simetris',5,1),(942,189,'B','Hapus X',0,0),(943,189,'C','Ganti jadi lingkaran',0,0),(944,189,'D','Biarkan X saja',0,0),(945,189,'E','Warnai X tanpa tambahan',0,0),(946,190,'A','Saya suka menjadi pemimpin dalam kelompok',5,1),(947,190,'B','Saya lebih nyaman mengikuti daripada memimpin',4,0),(948,190,'C','Keduanya sama',3,0),(949,190,'D','Tidak yakin',2,0),(950,190,'E','Tidak ada yang sesuai',1,0),(951,191,'A','Saya merasa puas ketika dapat menyelesaikan tugas yang sulit',5,1),(952,191,'B','Saya merasa lebih bahagia saat bersama teman-teman dekat',4,0),(953,191,'C','Keduanya sama',3,0),(954,191,'D','Tidak yakin',2,0),(955,191,'E','Tidak ada yang sesuai',1,0),(956,192,'A','Saya suka bekerja secara mandiri tanpa banyak campur tangan',5,1),(957,192,'B','Saya suka bekerja dalam tim dengan arahan yang jelas',4,0),(958,192,'C','Keduanya sama',3,0),(959,192,'D','Tidak yakin',2,0),(960,192,'E','Tidak ada yang sesuai',1,0),(961,193,'A','Saya suka membantu orang lain meskipun tidak diminta',5,1),(962,193,'B','Saya lebih fokus pada tugas saya sendiri',4,0),(963,193,'C','Keduanya sama',3,0),(964,193,'D','Tidak yakin',2,0),(965,193,'E','Tidak ada yang sesuai',1,0),(966,194,'A','Saya suka mencoba hal-hal baru dan berbeda',5,1),(967,194,'B','Saya lebih nyaman dengan rutinitas yang sudah familiar',4,0),(968,194,'C','Keduanya sama',3,0),(969,194,'D','Tidak yakin',2,0),(970,194,'E','Tidak ada yang sesuai',1,0),(971,195,'A','Saya mudah merasa kasihan pada orang yang sedang kesulitan',5,1),(972,195,'B','Saya cenderung melihat masalah secara objektif tanpa emosi',4,0),(973,195,'C','Keduanya sama',3,0),(974,195,'D','Tidak yakin',2,0),(975,195,'E','Tidak ada yang sesuai',1,0),(976,196,'A','Saya suka berdebat untuk membuktikan pendapat saya benar',5,1),(977,196,'B','Saya suka menghindari konflik dan mencari jalan damai',4,0),(978,196,'C','Keduanya sama',3,0),(979,196,'D','Tidak yakin',2,0),(980,196,'E','Tidak ada yang sesuai',1,0),(981,197,'A','Saya suka memperoleh pengakuan dan penghargaan atas prestasi saya',5,1),(982,197,'B','Saya merasa cukup puas tanpa perlu pengakuan orang lain',4,0),(983,197,'C','Keduanya sama',3,0),(984,197,'D','Tidak yakin',2,0),(985,197,'E','Tidak ada yang sesuai',1,0),(986,198,'A','Saya suka mengatur dan mengorganisir pekerjaan orang lain',5,1),(987,198,'B','Saya lebih suka diberi tugas yang jelas',4,0),(988,198,'C','Keduanya sama',3,0),(989,198,'D','Tidak yakin',2,0),(990,198,'E','Tidak ada yang sesuai',1,0),(991,199,'A','Saya merasa lebih bersemangat saat ada tantangan baru',5,1),(992,199,'B','Saya merasa lebih tenang saat semuanya terencana dengan baik',4,0),(993,199,'C','Keduanya sama',3,0),(994,199,'D','Tidak yakin',2,0),(995,199,'E','Tidak ada yang sesuai',1,0),(996,200,'A','Saya sering memikirkan arti hidup dan perasaan orang lain',5,1),(997,200,'B','Saya lebih fokus pada fakta dan hasil yang konkret',4,0),(998,200,'C','Keduanya sama',3,0),(999,200,'D','Tidak yakin',2,0),(1000,200,'E','Tidak ada yang sesuai',1,0),(1001,201,'A','Saya suka berada di tempat ramai dengan banyak orang',5,1),(1002,201,'B','Saya lebih nyaman di tempat sepi dengan sedikit teman',4,0),(1003,201,'C','Keduanya sama',3,0),(1004,201,'D','Tidak yakin',2,0),(1005,201,'E','Tidak ada yang sesuai',1,0),(1006,202,'A','Saya merasa bersalah jika tidak dapat memenuhi harapan orang lain',5,1),(1007,202,'B','Saya tidak terlalu memikirkan apa kata orang lain',4,0),(1008,202,'C','Keduanya sama',3,0),(1009,202,'D','Tidak yakin',2,0),(1010,202,'E','Tidak ada yang sesuai',1,0),(1011,203,'A','Saya suka memperbaiki atau membangun sesuatu dengan tangan saya',5,1),(1012,203,'B','Saya lebih suka menggunakan otak daripada tangan',4,0),(1013,203,'C','Keduanya sama',3,0),(1014,203,'D','Tidak yakin',2,0),(1015,203,'E','Tidak ada yang sesuai',1,0),(1016,204,'A','Saya suka menjadi pusat perhatian dalam pesta atau acara',5,1),(1017,204,'B','Saya lebih suka diam dan mengamati dari pinggir',4,0),(1018,204,'C','Keduanya sama',3,0),(1019,204,'D','Tidak yakin',2,0),(1020,204,'E','Tidak ada yang sesuai',1,0),(1021,205,'A','Saya mudah marah ketika ada yang meremehkan kemampuan saya',5,1),(1022,205,'B','Saya cenderung mengabaikan penilaian negatif orang lain',4,0),(1023,205,'C','Keduanya sama',3,0),(1024,205,'D','Tidak yakin',2,0),(1025,205,'E','Tidak ada yang sesuai',1,0),(1026,206,'A','Saya suka mempelajari hal-hal yang kompleks dan memerlukan analisis mendalam',5,1),(1027,206,'B','Saya suka belajar hal-hal praktis yang langsung bisa diterapkan',4,0),(1028,206,'C','Keduanya sama',3,0),(1029,206,'D','Tidak yakin',2,0),(1030,206,'E','Tidak ada yang sesuai',1,0),(1031,207,'A','Saya suka menjaga lingkungan tetap rapi dan teratur',5,1),(1032,207,'B','Saya tidak keberatan dengan sedikit kekacauan',4,0),(1033,207,'C','Keduanya sama',3,0),(1034,207,'D','Tidak yakin',2,0),(1035,207,'E','Tidak ada yang sesuai',1,0),(1036,208,'A','Saya suka mengambil risiko dalam pengambilan keputusan',5,1),(1037,208,'B','Saya suka mempertimbangkan semua kemungkinan sebelum memutuskan',4,0),(1038,208,'C','Keduanya sama',3,0),(1039,208,'D','Tidak yakin',2,0),(1040,208,'E','Tidak ada yang sesuai',1,0),(1041,209,'A','Saya merasa nyaman menjadi pengikut yang setia dalam tim',5,1),(1042,209,'B','Saya selalu ingin membuktikan bahwa saya lebih baik dari orang lain',4,0),(1043,209,'C','Keduanya sama',3,0),(1044,209,'D','Tidak yakin',2,0),(1045,209,'E','Tidak ada yang sesuai',1,0);
+/*!40000 ALTER TABLE `opsi_jawaban` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
--- Struktur dari tabel `paket_soal`
+-- Table structure for table `paket_soal`
 --
 
+DROP TABLE IF EXISTS `paket_soal`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `paket_soal` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `paket_ujian_id` int(11) NOT NULL,
-  `soal_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `soal_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `paket_soal_unique` (`paket_ujian_id`,`soal_id`),
+  KEY `soal_id` (`soal_id`),
+  CONSTRAINT `ps_paket` FOREIGN KEY (`paket_ujian_id`) REFERENCES `paket_ujian` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `ps_soal` FOREIGN KEY (`soal_id`) REFERENCES `soal` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data untuk tabel `paket_soal`
+-- Dumping data for table `paket_soal`
 --
 
-INSERT INTO `paket_soal` (`id`, `paket_ujian_id`, `soal_id`) VALUES
-(1, 1, 1),
-(2, 1, 2),
-(3, 1, 3),
-(4, 1, 4),
-(6, 1, 5),
-(7, 1, 6),
-(8, 1, 7),
-(11, 1, 8),
-(12, 1, 9),
-(5, 1, 10),
-(9, 1, 21),
-(10, 1, 22),
-(13, 1, 29),
-(14, 1, 30),
-(15, 1, 31);
-
--- --------------------------------------------------------
+LOCK TABLES `paket_soal` WRITE;
+/*!40000 ALTER TABLE `paket_soal` DISABLE KEYS */;
+INSERT INTO `paket_soal` VALUES (1,1,1),(2,1,2),(3,1,3),(4,1,4),(6,1,5),(7,1,6),(8,1,7),(11,1,8),(12,1,9),(5,1,10),(9,1,21),(10,1,22),(13,1,29),(14,1,30),(15,1,31);
+/*!40000 ALTER TABLE `paket_soal` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
--- Struktur dari tabel `paket_ujian`
+-- Table structure for table `paket_ujian`
 --
 
+DROP TABLE IF EXISTS `paket_ujian`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `paket_ujian` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `kategori_ujian_id` int(11) NOT NULL,
   `nama_paket` varchar(100) NOT NULL,
   `deskripsi` text DEFAULT NULL,
@@ -620,92 +268,104 @@ CREATE TABLE `paket_ujian` (
   `jumlah_soal_tkp` int(5) NOT NULL DEFAULT 0,
   `waktu_menit` int(5) NOT NULL DEFAULT 90,
   `status` enum('aktif','nonaktif') DEFAULT 'aktif',
-  `created_at` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `created_at` datetime DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `kategori_ujian_id` (`kategori_ujian_id`),
+  CONSTRAINT `paket_kategori` FOREIGN KEY (`kategori_ujian_id`) REFERENCES `kategori_ujian` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data untuk tabel `paket_ujian`
+-- Dumping data for table `paket_ujian`
 --
 
-INSERT INTO `paket_ujian` (`id`, `kategori_ujian_id`, `nama_paket`, `deskripsi`, `jumlah_soal_twk`, `jumlah_soal_tiu`, `jumlah_soal_tkp`, `waktu_menit`, `status`, `created_at`) VALUES
-(1, 1, 'Paket CPNS Simulasi', NULL, 5, 5, 5, 30, 'aktif', '2026-05-31 20:16:48');
-
--- --------------------------------------------------------
+LOCK TABLES `paket_ujian` WRITE;
+/*!40000 ALTER TABLE `paket_ujian` DISABLE KEYS */;
+INSERT INTO `paket_ujian` VALUES (1,1,'Paket CPNS Simulasi',NULL,5,5,5,30,'aktif','2026-05-31 20:16:48');
+/*!40000 ALTER TABLE `paket_ujian` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
--- Struktur dari tabel `rekomendasi_belajar`
+-- Table structure for table `rekomendasi_belajar`
 --
 
+DROP TABLE IF EXISTS `rekomendasi_belajar`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `rekomendasi_belajar` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `hasil_ujian_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `topik` varchar(100) NOT NULL,
-  `jenis_tes` enum('twk','tiu','tkp') NOT NULL,
+  `jenis_tes` enum('twk','tiu','tkp','psikologi') NOT NULL,
   `skor_persentase` decimal(5,2) DEFAULT 0.00,
   `saran_materi_id` int(11) DEFAULT NULL,
   `tingkat_kesulitan_rekomendasi` enum('mudah','sedang','sulit') DEFAULT 'mudah',
   `status` enum('belum_dikerjakan','selesai') DEFAULT 'belum_dikerjakan',
-  `created_at` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `created_at` datetime DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `hasil_ujian_id` (`hasil_ujian_id`),
+  KEY `rb_materi` (`saran_materi_id`),
+  CONSTRAINT `rb_hu` FOREIGN KEY (`hasil_ujian_id`) REFERENCES `hasil_ujian` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `rb_materi` FOREIGN KEY (`saran_materi_id`) REFERENCES `materi` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `rb_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data untuk tabel `rekomendasi_belajar`
+-- Dumping data for table `rekomendasi_belajar`
 --
 
-INSERT INTO `rekomendasi_belajar` (`id`, `hasil_ujian_id`, `user_id`, `topik`, `jenis_tes`, `skor_persentase`, `saran_materi_id`, `tingkat_kesulitan_rekomendasi`, `status`, `created_at`) VALUES
-(1, 3, 10, 'Verbal - Analogi', 'tiu', 40.00, NULL, 'sedang', 'belum_dikerjakan', '2026-05-31 20:19:33'),
-(2, 4, 11, 'UUD 1945 - Pasal 1-5', 'twk', 60.00, NULL, 'sedang', 'belum_dikerjakan', '2026-05-31 20:19:33'),
-(3, 5, 10, 'NKRI', 'twk', 0.00, NULL, 'mudah', 'belum_dikerjakan', '2026-05-31 20:24:05'),
-(4, 5, 10, 'Pancasila - Sila ke-1', 'twk', 0.00, NULL, 'mudah', 'belum_dikerjakan', '2026-05-31 20:24:05'),
-(5, 5, 10, 'Pancasila - Sila ke-3', 'twk', 0.00, NULL, 'mudah', 'belum_dikerjakan', '2026-05-31 20:24:05'),
-(6, 5, 10, 'UUD 1945', 'twk', 0.00, NULL, 'mudah', 'belum_dikerjakan', '2026-05-31 20:24:05'),
-(7, 5, 10, 'Logika - Silogisme', 'tiu', 0.00, NULL, 'mudah', 'belum_dikerjakan', '2026-05-31 20:24:05'),
-(8, 5, 10, 'Numerik - Deret', 'tiu', 0.00, NULL, 'mudah', 'belum_dikerjakan', '2026-05-31 20:24:05'),
-(9, 5, 10, 'Verbal - Antonim', 'tiu', 0.00, NULL, 'mudah', 'belum_dikerjakan', '2026-05-31 20:24:05'),
-(10, 5, 10, 'Verbal - Sinonim', 'tiu', 0.00, NULL, 'mudah', 'belum_dikerjakan', '2026-05-31 20:24:05'),
-(11, 5, 10, 'Hubungan Kerja', 'tkp', 0.00, NULL, 'mudah', 'belum_dikerjakan', '2026-05-31 20:24:05'),
-(12, 5, 10, 'Integritas', 'tkp', 0.00, NULL, 'mudah', 'belum_dikerjakan', '2026-05-31 20:24:05'),
-(13, 5, 10, 'Pelayanan Publik', 'tkp', 0.00, 3, 'mudah', 'belum_dikerjakan', '2026-05-31 20:24:05'),
-(14, 5, 10, 'Profesionalisme', 'tkp', 0.00, NULL, 'mudah', 'belum_dikerjakan', '2026-05-31 20:24:05'),
-(15, 6, 11, 'NKRI', 'twk', 0.00, NULL, 'mudah', 'belum_dikerjakan', '2026-05-31 20:24:34'),
-(16, 6, 11, 'Pancasila - Sila ke-1', 'twk', 0.00, NULL, 'mudah', 'belum_dikerjakan', '2026-05-31 20:24:34'),
-(17, 6, 11, 'Pancasila - Sila ke-3', 'twk', 0.00, NULL, 'mudah', 'belum_dikerjakan', '2026-05-31 20:24:34'),
-(18, 6, 11, 'UUD 1945', 'twk', 0.00, NULL, 'mudah', 'belum_dikerjakan', '2026-05-31 20:24:34'),
-(19, 6, 11, 'Logika - Silogisme', 'tiu', 0.00, NULL, 'mudah', 'belum_dikerjakan', '2026-05-31 20:24:34'),
-(20, 6, 11, 'Numerik - Deret', 'tiu', 0.00, NULL, 'mudah', 'belum_dikerjakan', '2026-05-31 20:24:34'),
-(21, 6, 11, 'Verbal - Antonim', 'tiu', 0.00, NULL, 'mudah', 'belum_dikerjakan', '2026-05-31 20:24:34'),
-(22, 6, 11, 'Verbal - Sinonim', 'tiu', 0.00, NULL, 'mudah', 'belum_dikerjakan', '2026-05-31 20:24:34'),
-(23, 6, 11, 'Hubungan Kerja', 'tkp', 0.00, NULL, 'mudah', 'belum_dikerjakan', '2026-05-31 20:24:34'),
-(24, 6, 11, 'Integritas', 'tkp', 0.00, NULL, 'mudah', 'belum_dikerjakan', '2026-05-31 20:24:34'),
-(25, 6, 11, 'Pelayanan Publik', 'tkp', 0.00, 3, 'mudah', 'belum_dikerjakan', '2026-05-31 20:24:34'),
-(26, 6, 11, 'Profesionalisme', 'tkp', 0.00, NULL, 'mudah', 'belum_dikerjakan', '2026-05-31 20:24:34');
-
--- --------------------------------------------------------
+LOCK TABLES `rekomendasi_belajar` WRITE;
+/*!40000 ALTER TABLE `rekomendasi_belajar` DISABLE KEYS */;
+INSERT INTO `rekomendasi_belajar` VALUES (1,3,10,'Verbal - Analogi','tiu',40.00,NULL,'sedang','belum_dikerjakan','2026-05-31 20:19:33'),(2,4,11,'UUD 1945 - Pasal 1-5','twk',60.00,NULL,'sedang','belum_dikerjakan','2026-05-31 20:19:33'),(3,5,10,'NKRI','twk',0.00,NULL,'mudah','belum_dikerjakan','2026-05-31 20:24:05'),(4,5,10,'Pancasila - Sila ke-1','twk',0.00,NULL,'mudah','belum_dikerjakan','2026-05-31 20:24:05'),(5,5,10,'Pancasila - Sila ke-3','twk',0.00,NULL,'mudah','belum_dikerjakan','2026-05-31 20:24:05'),(6,5,10,'UUD 1945','twk',0.00,NULL,'mudah','belum_dikerjakan','2026-05-31 20:24:05'),(7,5,10,'Logika - Silogisme','tiu',0.00,NULL,'mudah','belum_dikerjakan','2026-05-31 20:24:05'),(8,5,10,'Numerik - Deret','tiu',0.00,NULL,'mudah','belum_dikerjakan','2026-05-31 20:24:05'),(9,5,10,'Verbal - Antonim','tiu',0.00,NULL,'mudah','belum_dikerjakan','2026-05-31 20:24:05'),(10,5,10,'Verbal - Sinonim','tiu',0.00,NULL,'mudah','belum_dikerjakan','2026-05-31 20:24:05'),(11,5,10,'Hubungan Kerja','tkp',0.00,NULL,'mudah','belum_dikerjakan','2026-05-31 20:24:05'),(12,5,10,'Integritas','tkp',0.00,NULL,'mudah','belum_dikerjakan','2026-05-31 20:24:05'),(13,5,10,'Pelayanan Publik','tkp',0.00,NULL,'mudah','belum_dikerjakan','2026-05-31 20:24:05'),(14,5,10,'Profesionalisme','tkp',0.00,NULL,'mudah','belum_dikerjakan','2026-05-31 20:24:05'),(15,6,11,'NKRI','twk',0.00,NULL,'mudah','belum_dikerjakan','2026-05-31 20:24:34'),(16,6,11,'Pancasila - Sila ke-1','twk',0.00,NULL,'mudah','belum_dikerjakan','2026-05-31 20:24:34'),(17,6,11,'Pancasila - Sila ke-3','twk',0.00,NULL,'mudah','belum_dikerjakan','2026-05-31 20:24:34'),(18,6,11,'UUD 1945','twk',0.00,NULL,'mudah','belum_dikerjakan','2026-05-31 20:24:34'),(19,6,11,'Logika - Silogisme','tiu',0.00,NULL,'mudah','belum_dikerjakan','2026-05-31 20:24:34'),(20,6,11,'Numerik - Deret','tiu',0.00,NULL,'mudah','belum_dikerjakan','2026-05-31 20:24:34'),(21,6,11,'Verbal - Antonim','tiu',0.00,NULL,'mudah','belum_dikerjakan','2026-05-31 20:24:34'),(22,6,11,'Verbal - Sinonim','tiu',0.00,NULL,'mudah','belum_dikerjakan','2026-05-31 20:24:34'),(23,6,11,'Hubungan Kerja','tkp',0.00,NULL,'mudah','belum_dikerjakan','2026-05-31 20:24:34'),(24,6,11,'Integritas','tkp',0.00,NULL,'mudah','belum_dikerjakan','2026-05-31 20:24:34'),(25,6,11,'Pelayanan Publik','tkp',0.00,NULL,'mudah','belum_dikerjakan','2026-05-31 20:24:34'),(26,6,11,'Profesionalisme','tkp',0.00,NULL,'mudah','belum_dikerjakan','2026-05-31 20:24:34'),(27,8,2,'NKRI','twk',0.00,47,'mudah','selesai','2026-06-01 01:45:24'),(28,8,2,'Pancasila - Sila ke-1','twk',0.00,70,'mudah','selesai','2026-06-01 01:45:24'),(29,8,2,'Pancasila - Sila ke-3','twk',0.00,72,'mudah','belum_dikerjakan','2026-06-01 01:45:24'),(30,8,2,'UUD 1945','twk',0.00,45,'mudah','belum_dikerjakan','2026-06-01 01:45:24'),(31,8,2,'Logika - Silogisme','tiu',0.00,60,'mudah','belum_dikerjakan','2026-06-01 01:45:24'),(32,8,2,'Numerik - Deret','tiu',0.00,64,'mudah','belum_dikerjakan','2026-06-01 01:45:24'),(33,8,2,'Verbal - Antonim','tiu',0.00,87,'mudah','belum_dikerjakan','2026-06-01 01:45:24'),(34,8,2,'Verbal - Sinonim','tiu',0.00,89,'mudah','belum_dikerjakan','2026-06-01 01:45:24'),(35,8,2,'Hubungan Kerja','tkp',0.00,54,'mudah','belum_dikerjakan','2026-06-01 01:45:24'),(36,8,2,'Integritas','tkp',0.00,52,'mudah','belum_dikerjakan','2026-06-01 01:45:24'),(37,8,2,'Pelayanan Publik','tkp',0.00,53,'mudah','belum_dikerjakan','2026-06-01 01:45:24'),(38,8,2,'Profesionalisme','tkp',0.00,51,'mudah','belum_dikerjakan','2026-06-01 01:45:24'),(39,9,2,'NKRI','twk',0.00,47,'mudah','selesai','2026-06-01 01:51:26'),(40,9,2,'Pancasila - Sila ke-1','twk',0.00,70,'mudah','selesai','2026-06-01 01:51:26'),(41,9,2,'Pancasila - Sila ke-3','twk',0.00,72,'mudah','belum_dikerjakan','2026-06-01 01:51:26'),(42,9,2,'UUD 1945','twk',0.00,45,'mudah','belum_dikerjakan','2026-06-01 01:51:26'),(43,9,2,'Logika - Silogisme','tiu',0.00,60,'mudah','belum_dikerjakan','2026-06-01 01:51:26'),(44,9,2,'Numerik - Deret','tiu',0.00,64,'mudah','belum_dikerjakan','2026-06-01 01:51:26'),(45,9,2,'Verbal - Antonim','tiu',0.00,87,'mudah','belum_dikerjakan','2026-06-01 01:51:26'),(46,9,2,'Verbal - Sinonim','tiu',0.00,89,'mudah','belum_dikerjakan','2026-06-01 01:51:26'),(47,9,2,'Hubungan Kerja','tkp',0.00,54,'mudah','belum_dikerjakan','2026-06-01 01:51:26'),(48,9,2,'Integritas','tkp',0.00,52,'mudah','belum_dikerjakan','2026-06-01 01:51:26'),(49,9,2,'Pelayanan Publik','tkp',0.00,53,'mudah','belum_dikerjakan','2026-06-01 01:51:26'),(50,9,2,'Profesionalisme','tkp',0.00,51,'mudah','belum_dikerjakan','2026-06-01 01:51:26');
+/*!40000 ALTER TABLE `rekomendasi_belajar` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
--- Struktur dari tabel `riwayat_materi`
+-- Table structure for table `riwayat_materi`
 --
 
+DROP TABLE IF EXISTS `riwayat_materi`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `riwayat_materi` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `materi_id` int(11) NOT NULL,
   `progress_persen` int(3) DEFAULT 0,
   `waktu_baca_menit` int(5) DEFAULT 0,
-  `created_at` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
+  `created_at` datetime DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `materi_id` (`materi_id`),
+  CONSTRAINT `rm_materi` FOREIGN KEY (`materi_id`) REFERENCES `materi` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `rm_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Struktur dari tabel `soal`
+-- Dumping data for table `riwayat_materi`
 --
 
+LOCK TABLES `riwayat_materi` WRITE;
+/*!40000 ALTER TABLE `riwayat_materi` DISABLE KEYS */;
+INSERT INTO `riwayat_materi` VALUES (1,2,70,100,1,'2026-06-01 01:52:49'),(2,2,47,100,1,'2026-06-01 02:43:02'),(3,2,47,100,1,'2026-06-01 02:43:02');
+/*!40000 ALTER TABLE `riwayat_materi` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `soal`
+--
+
+DROP TABLE IF EXISTS `soal`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `soal` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `kategori_ujian_id` int(11) DEFAULT NULL,
-  `jenis_tes` enum('twk','tiu','tkp') NOT NULL,
+  `jenis_tes` enum('twk','tiu','tkp','psikologi') NOT NULL,
   `topik` varchar(100) NOT NULL,
   `pertanyaan` text NOT NULL,
   `gambar_url` varchar(255) DEFAULT NULL,
@@ -713,367 +373,99 @@ CREATE TABLE `soal` (
   `pembahasan` longtext DEFAULT NULL,
   `tips_triks` text DEFAULT NULL,
   `sumber` varchar(255) DEFAULT NULL,
-  `created_at` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `created_at` datetime DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `kategori_ujian_id` (`kategori_ujian_id`),
+  KEY `jenis_tes` (`jenis_tes`),
+  KEY `topik` (`topik`),
+  CONSTRAINT `soal_kategori` FOREIGN KEY (`kategori_ujian_id`) REFERENCES `kategori_ujian` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=210 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data untuk tabel `soal`
+-- Dumping data for table `soal`
 --
 
-INSERT INTO `soal` (`id`, `kategori_ujian_id`, `jenis_tes`, `topik`, `pertanyaan`, `gambar_url`, `tingkat_kesulitan`, `pembahasan`, `tips_triks`, `sumber`, `created_at`) VALUES
-(1, 1, 'twk', 'Pancasila - Sila ke-1', 'Pancasila sebagai ideologi terbuka memiliki batas-batas berikut, kecuali...', NULL, 'sedang', 'Pancasila sebagai ideologi terbuka memungkinkan perkembangan norma dengan konsensus, namun tetap melarang ideologi radikal seperti Marxisme-Leninisme dan mempertahankan stabilitas nasional. Penciptaan norma baru tetap memerlukan konsensus.', 'Tips: Ingat, ideologi terbuka bukan berarti tanpa batas. Konsensus tetap diperlukan untuk setiap perubahan norma.', NULL, '2026-05-31 20:12:22'),
-(2, 1, 'twk', 'Pancasila - Sila ke-3', 'Mengembangkan sikap bahwa bangsa Indonesia merupakan bagian dari seluruh umat manusia merupakan perwujudan sila ke...', NULL, 'mudah', 'Sila ke-2 Pancasila: Kemanusiaan yang Adil dan Beradab. Mengakui persamaan derajat dan martabat setiap manusia secara universal.', 'Tips: Sila ke-2 berhubungan dengan kemanusiaan universal. Jika soal tentang hubungan antar-manusia global, jawabannya Sila 2.', NULL, '2026-05-31 20:12:22'),
-(3, 1, 'twk', 'UUD 1945', 'Pancasila digunakan sebagai dasar untuk mengatur penyelenggaraan ketatanegaraan negara, hal ini sesuai dengan kedudukan Pancasila sebagai...', NULL, 'mudah', 'Pancasila sebagai Dasar Negara (opening UUD 1945). Menjadi fondasi bagi seluruh sistem ketatanegaraan Indonesia.', 'Tips: Kalimat \"mengatur penyelenggaraan ketatanegaraan\" selalu merujuk pada kedudukan Pancasila sebagai DASAR NEGARA.', NULL, '2026-05-31 20:12:22'),
-(4, 1, 'twk', 'NKRI', 'Warna merah dalam bendera Republik Indonesia melambangkan...', NULL, 'sangat_mudah', 'Merah melambangkan keberanian (berani mengorbankan jiwa dan raga). Putih melambangkan kesucian (kesucian hati dan niat).', 'Tips: Merah = Keberanian, Putih = Kesucian. Ingat dengan mnemonik: \"Merah Berani, Putih Suci\".', NULL, '2026-05-31 20:12:22'),
-(5, 1, 'tiu', 'Verbal - Sinonim', 'Mortasitas = ...', NULL, 'sedang', 'Mortasitas berasal dari kata \"mortal\" yang berarti kematian. Jadi mortalitas = angka kematian.', 'Tips: Ingat kata Latin \"mort\" = mati. Mortalitas = mortal = kematian.', NULL, '2026-05-31 20:12:22'),
-(6, 1, 'tiu', 'Numerik - Deret', '1, 5, 11, 19, 29, ..., 55', NULL, 'sedang', 'Pola: +4, +6, +8, +10, +12, +14. Jadi 29 + 12 = 41, dan 41 + 14 = 55.', 'Tips: Cek selisih antar angka. Jika selisih bertambah konstan (2), berarti pola kuadratik.', NULL, '2026-05-31 20:12:22'),
-(7, 1, 'tiu', 'Logika - Silogisme', 'Premis 1: Semua karyawan berdasi. Premis 2: Semua karyawan berjas. Simpulan: ...', NULL, 'mudah', 'Jika semua karyawan berdasi DAN berjas, maka sebagian karyawan berdasi dan berjas. Tidak bisa simpulkan semua berdasi saja karena semua juga berjas.', 'Tips: Perhatikan kata \"semua\" pada kedua premis. Simpulan yang valid harus mencakup kedua sifat.', NULL, '2026-05-31 20:12:22'),
-(8, 1, 'tkp', 'Pelayanan Publik', 'Apabila Anda tidak sengaja merusak fasilitas perusahaan dan atasan mengetahuinya, sikap Anda adalah...', NULL, 'sedang', 'Jawaban terbaik menunjukkan integritas, tanggung jawab, dan inisiatif perbaikan langsung.', 'Tips: TKP = pilih jawaban yang PALING PROAKTIF, jujur, dan bertanggung jawab. Langsung minta maaf + jelaskan + ganti = skor tertinggi.', NULL, '2026-05-31 20:12:22'),
-(9, 1, 'tkp', 'Hubungan Kerja', 'Rekan kerja Anda egois dan sombong. Sikap Anda...', NULL, 'sedang', 'Memahami perbedaan karakter wajar, namun tetap memberitahu secara sopan untuk menghindari konflik.', 'Tips: Pilih jawaban yang menunjukkan empati tapi tetap korektif. Hindari balas dendam atau pasif menerima.', NULL, '2026-05-31 20:12:22'),
-(10, 1, 'twk', 'Pancasila - Sila ke-1', 'Ketuhanan Yang Maha Esa sebagai sila pertama diwujudkan melalui...', NULL, 'mudah', 'Sila 1: pengamalan keyakinan dalam kehidupan bermasyarakat, berbangsa, bernegara. Contoh: menghormati kebebasan beragama.', 'Fokus pada implementasi nilai ketuhanan dalam kehidupan sosial dan politik.', NULL, '2026-05-31 20:12:52'),
-(11, 1, 'twk', 'Pancasila - Sila ke-2', 'Berikut yang merupakan perwujudan sila kedua Pancasila adalah...', NULL, 'mudah', 'Sila ke-2: Kemanusiaan yang Adil dan Beradab. Contoh: menghargai HAM, tidak diskriminasi.', 'Ingat: Sila 2 = Kemanusiaan. Jika soal tentang HAM â†’ jawaban Sila 2.', NULL, '2026-05-31 20:12:52'),
-(12, 1, 'twk', 'Pancasila - Sila ke-3', 'Persatuan Indonesia menuntut setiap warga negara untuk...', NULL, 'mudah', 'Sila ke-3: persatuan dan kesatuan bangsa. Warga harus rela berkorban untuk kepentingan bangsa.', 'Kata kunci: persatuan, kesatuan, NKRI, korban untuk bangsa.', NULL, '2026-05-31 20:12:52'),
-(13, 1, 'twk', 'Pancasila - Sila ke-4', 'Kerakyatan yang dipimpin oleh hikmat kebijaksanaan dalam permusyawaratan/perwakilan berarti...', NULL, 'sedang', 'Sila ke-4: kekuasaan di tangan rakyat, dijalankan melalui permusyawaratan. Dasar demokrasi Pancasila.', 'Demokrasi Pancasila â‰  liberal. Ciri: musyawarah, kekeluargaan, kepentingan bersama.', NULL, '2026-05-31 20:12:52'),
-(14, 1, 'twk', 'Pancasila - Sila ke-5', 'Keadilan sosial bagi seluruh rakyat Indonesia diwujudkan dengan cara...', NULL, 'mudah', 'Sila ke-5: distribusi keadilan merata di bidang sosial, ekonomi, hukum.', 'Kata kunci: keadilan, merata, seluruh rakyat, tidak memihak, pembangunan merata.', NULL, '2026-05-31 20:12:52'),
-(15, 1, 'twk', 'UUD 1945 - Pasal 1-5', 'Menurut UUD 1945 Pasal 1 ayat (1), Negara Indonesia adalah...', NULL, 'mudah', 'Pasal 1 ayat (1): Negara Indonesia ialah Negara Kesatuan, yang berbentuk Republik.', 'Hafalkan: Pasal 1 = Bentuk & Kedaulatan. (1) Negara Kesatuan Republik. (2) Kedaulatan rakyat. (3) Negara hukum.', NULL, '2026-05-31 20:12:52'),
-(16, 1, 'twk', 'UUD 1945 - Pasal 1-5', 'Kedaulatan berada di tangan rakyat dan dilaksanakan menurut UUD merupakan bunyi dari...', NULL, 'sangat_mudah', 'Pasal 1 ayat (2): Kedaulatan berada di tangan rakyat dan dilaksanakan menurut Undang-Undang Dasar.', 'Pasal 1 ayat (2) = Kedaulatan rakyat. Jangan tertukar dengan ayat (3) tentang negara hukum.', NULL, '2026-05-31 20:12:52'),
-(17, 1, 'twk', 'UUD 1945 - Pasal 1-5', 'Presiden memegang kekuasaan pemerintahan menurut UUD diatur dalam...', NULL, 'mudah', 'Pasal 4 ayat (1): Presiden Republik Indonesia memegang kekuasaan pemerintahan menurut UUD.', 'Pasal 4 = Presiden. (1) Pemerintahan. (2) Kepala negara. Lengkapi dengan Pasal 5.', NULL, '2026-05-31 20:12:52'),
-(18, 1, 'twk', 'UUD 1945 - Pasal 27-34', 'Setiap warga negara berhak atas pekerjaan dan penghidupan yang layak untuk kemanusiaan diatur dalam...', NULL, 'sedang', 'Pasal 27 ayat (2): Tiap-tiap warga negara berhak atas pekerjaan dan penghidupan yang layak untuk kemanusiaan.', 'Pasal 27 = Warga negara & penduduk. ayat (1) sama di muka hukum. ayat (2) pekerjaan layak. ayat (3) ikut pembelaan negara.', NULL, '2026-05-31 20:12:52'),
-(19, 1, 'twk', 'NKRI - Bhinneka Tunggal Ika', 'Semboyan Bhinneka Tunggal Ika berasal dari kitab...', NULL, 'mudah', 'Bhinneka Tunggal Ika berasal dari kitab Sutasoma karangan Mpu Tantular (abad XIV). Artinya: Berbeda-beda tetapi tetap satu jua.', 'Hafal: Mpu Tantular, kitab Sutasoma, abad XIV. Jangan tertukar dengan Negarakertagama (Mpu Prapanca).', NULL, '2026-05-31 20:12:52'),
-(20, 1, 'twk', 'NKRI - Bela Negara', 'Pembelaan negara dilakukan dengan cara...', NULL, 'mudah', 'Pasal 27 ayat (3): Pembelaan negara adalah hak dan kewajiban setiap warga negara. Cara: jabatan pemerintahan, tentara, atau swakelola.', 'Pasal 27 ayat (3) = hak dan kewajiban. Cara: jabatan pemerintahan, tentara, atau swakelola.', NULL, '2026-05-31 20:12:52'),
-(21, 1, 'tiu', 'Verbal - Sinonim', 'Sinonim dari kata KONSISTEN adalah...', NULL, 'mudah', 'Konsisten = tetap, tidak berubah-ubah, teguh, konsekuen.', 'Gunakan konteks kalimat. Konsisten sering dipasangkan dengan sikap, perilaku, atau komitmen.', NULL, '2026-05-31 20:12:52'),
-(22, 1, 'tiu', 'Verbal - Antonim', 'Antonim dari kata EKSTENSIF adalah...', NULL, 'sedang', 'Ekstensif = luas, merata, menyeluruh. Antonimnya intensif = mendalam, terpusat.', 'Ekstensif vs Intensif sering muncul di soal CPNS. Ekstensif = luas. Intensif = mendalam.', NULL, '2026-05-31 20:12:52'),
-(23, 1, 'tiu', 'Verbal - Analogi', 'GURU : SEKOLAH = DOKTER : ...', NULL, 'mudah', 'Analogi hubungan tempat bekerja. Guru bekerja di sekolah. Dokter bekerja di rumah sakit.', 'Cari pola hubungan: tempat bekerja, alat kerja, fungsi, atau lawan.', NULL, '2026-05-31 20:12:52'),
-(24, 1, 'tiu', 'Numerik - Deret', 'Deret: 2, 5, 10, 17, 26, ... Berikutnya adalah?', NULL, 'sedang', 'Pola: nÂ² + 1. 1Â²+1=2, 2Â²+1=5, 3Â²+1=10, 4Â²+1=17, 5Â²+1=26, maka 6Â²+1=37.', 'Rumus cepat: perhatikan selisih antar angka. Selisih: 3,5,7,9 â†’ selanjutnya 11 â†’ 26+11=37.', NULL, '2026-05-31 20:12:52'),
-(25, 1, 'tiu', 'Numerik - Aritmatika', '12 pekerja dapat menyelesaikan proyek dalam 20 hari. Jika ditambah 8 pekerja, berapa hari selesai?', NULL, 'sedang', 'Orang Ã— Hari = konstan. 12Ã—20=240. Pekerja baru=20. Hari=240/20=12.', 'Rumus cepat: Orang1 Ã— Hari1 = Orang2 Ã— Hari2. 12Ã—20 = 20Ã—x â†’ x=12.', NULL, '2026-05-31 20:12:52'),
-(26, 1, 'tiu', 'Numerik - Perbandingan', '6 orang menyelesaikan pekerjaan dalam 10 hari, maka 15 orang menyelesaikan dalam...', NULL, 'mudah', '6Ã—10=60 orang-hari. 15 orang butuh: 60/15=4 hari.', 'Perbandingan berbalik: Orang bertambah, hari berkurang. 6Ã—10 = 15Ã—x â†’ x=4.', NULL, '2026-05-31 20:12:52'),
-(27, 1, 'tiu', 'Logika - Silogisme', 'Semua PNS wajib pelatihan. Budi adalah PNS. Kesimpulan: ...', NULL, 'mudah', 'Silogisme: Semua A adalah B. C adalah A. Maka C adalah B. Budi wajib pelatihan.', 'Silogisme sederhana: perhatikan subjek dan predikat. Jika premis valid, kesimpulan mengikuti pola logis.', NULL, '2026-05-31 20:12:52'),
-(28, 1, 'tiu', 'Logika - Analitis', 'Andi > Budi > Cici. Dedi < Cici. Kesimpulan: ...', NULL, 'sedang', 'Urutan: Andi > Budi > Cici > Dedi. Andi lebih tinggi dari Dedi.', 'Buat diagram urutan. Panah ke bawah = lebih pendek. Susun dari yang tertinggi.', NULL, '2026-05-31 20:12:52'),
-(29, 1, 'tkp', 'Pelayanan Publik', 'Warga datang marah karena permohonan tertolak. Sikap Anda...', NULL, 'sedang', 'Pelayanan publik: tetap tenang, dengarkan keluhan, jelaskan sabar, berikan solusi alternatif.', 'TKP: Pilih jawaban yang menunjukkan sikap profesional, empati, dan solusi. Hindari pasif, defensif, atau arogan.', NULL, '2026-05-31 20:12:52'),
-(30, 1, 'tkp', 'Integritas', 'Ditawari hadiah besar oleh vendor proyek. Sikap Anda...', NULL, 'sedang', 'Integritas: menolak gratifikasi dalam bentuk apapun. Melaporkan ke atasan atau penyelenggara negara.', 'Integritas = kejujuran, menolak suap/gratifikasi, melaporkan pelanggaran. Pilih yang paling tegas menolak dan melaporkan.', NULL, '2026-05-31 20:12:52'),
-(31, 1, 'tkp', 'Profesionalisme', 'Tugas mendadak Jumat sore harus lembur, padahal ada janji keluarga. Anda...', NULL, 'mudah', 'Profesionalisme: memprioritaskan tugas kedinasan sambil menghargai komitmen pribadi.', 'Profesionalisme â‰  mengorbankan keluarga terus-menerus. Cari win-win: komunikasi dengan atasan + komitmen menyelesaikan.', NULL, '2026-05-31 20:12:52'),
-(32, 1, 'tkp', 'Komitmen', 'Rekan kerja sering datang terlambat. Sebagai kolega, Anda...', NULL, 'sedang', 'Komitmen: menjaga produktivitas tim. Tegur secara pribadi dan profesional, berikan solusi.', 'Komitmen: pilih pendekatan persuasif dan profesional sebelum melapor. Tegur pribadi â†’ solusi â†’ lapor jika tidak berubah.', NULL, '2026-05-31 20:12:52'),
-(33, 1, 'tkp', 'Sosial Budaya', 'Ada rekan dari suku berbeda dengan kebiasaan berbeda. Sikap Anda...', NULL, 'mudah', 'Sosial Budaya: menghargai keberagaman, tidak memaksakan kebiasaan sendiri, memperlakukan setiap orang setara.', 'Keberagaman: pilih jawaban yang menunjukkan penghargaan, adaptasi, dan tidak diskriminatif.', NULL, '2026-05-31 20:12:52'),
-(34, 1, 'tiu', 'Numerik - Aritmatika', 'Sari dan Ratih memiliki suatu pekerjaan. Waktu yang dibutuhkan oleh Sari dalam menghasilkan uang adalah 21 menit, sedangkan Ratih membutuhkan waktu 42 menit. Jika Sari dan Ratih bekerja bersama-sama untuk menghasilkan uang, waktu yang dibutuhkan adalah â¦', NULL, 'sedang', '', 'Perhatikan pola logika pada soal Numerik - Aritmatika', 'Internet - Auto Scraped', '2026-05-31 20:32:03'),
-(35, 1, 'tiu', 'Numerik - Aritmatika', 'Afrika Selatan : Pretoria = … : …', NULL, 'sedang', 'Jawaban: BACDE\n\n\njejaring kerja kerja sama dan kolaborasi dengan panitia pemungutan suara\n\n\nHak pilih adalah sesuatu hak yang bersifat personal dan tidak bisa diwakili oleh siapapun.\n\n\nPilihan E, Membiarkan hak suara nenek hangus tentu tidak bersifat solutif dalam menghadapi masalah tersebut.\n\n\nPilihan DC, juga bukan pilihan yang tepat, mengingat hak pilih tidak bisa diwakilkan.\n\n\nPilihan terbaik ada pada pilihan AB.\n\n\nDan tentu saja pilihan B adalah pilihan yang lebih baik daripada A, karena tidak hanya melaporkan kondisi tersebut kepada panitia pemungutan suara namun lebih dari itu juga mempertimbangkan langkah yang diambil untuk mengatasi masalah tersebut.\n\n\nâ', 'Perhatikan pola logika pada soal Numerik - Aritmatika', 'Internet - Auto Scraped', '2026-05-31 20:32:03'),
-(36, 1, 'tiu', 'Numerik - Aritmatika', 'Edi baru saja diterima bekerja di salah satu pabrik pengolahan kayu. Sebagai pegawai baru, tentu Edi belum terlalu mengenal jenis-jenis pekerjaan dan cara menyelesaikannya. Suatu malam, tiba-tiba Edi ditugaskan manajernya untuk menyelesaikan tugas seorang rekannya yang tiba-tiba memutuskan untuk keluar dan berhenti bekerja. Edi jelas kaget dan kesulitan dengan penugasan itu, tapi ia tidak punya pilihan lain selain menjalankan perintah atasan. Apalagi manajer tadi memang memberikan tugas tersebut', NULL, 'sedang', 'Jawaban: DEBAC\n\n\nA. Meminta orang lain mengerjakan asalkan bisa selesai tepat waktu. tdk profesional\n\n\nB. Segera berusaha memulai dan menyelesaikan sebisanya saja yang penting selesai. tdk maksimal dalam bekerja\n\n\nC. Tidak perlu buru-buru menyelesaikannya karena pekerjaan tersebut bukan merupakan tugas pokoknya. (menganggap rendah pekerjaan, tidak profesional)\n\n\nD. Segera berusaha memulai untuk menyelesaikan tugas itu dan berusaha menyelesaikannya sesempurna mungkin.\n\n\nE. Mempertanyakan dan menegosiasi manajernya karena merasa takut hasilnya tidak maksimal. (melaksanakan jejaring kerja, tetapi tdk PD)\n\n\nprofesionalisme ~> melaksanakan tupoksi sebaik mungkin secara maksimal\n\n\nprofesionalisme dan semangat berprestasi\n\n\nBerdasarkan ketentuan diatas maka seseorang dituntut untuk melaksanakan tanggung jawab kerja berdasarkan tugas dan fungsinya sekaligus berupaya untuk memberikan yang terbaik dalam setiap tugas yang diberikan.\n\n\nâ', 'Perhatikan pola logika pada soal Numerik - Aritmatika', 'Internet - Auto Scraped', '2026-05-31 20:32:04'),
-(37, 1, 'tiu', 'Numerik - Aritmatika', 'Anda ditunjuk sebagai ketua kegiatan. Atasanmu memberikan tugas untuk menyiapkan pentas seni acara ulang tahun perusahaanmu yang ke-21 dikarenakan tiap-tiap kantor cabang harus menampilkan pertunjukannya. Tindakan yang anda lakukan….', NULL, 'sedang', 'Jawaban: CDAEB\n\n\nSebagaimana telah dijelaskan sebelumnya: âDalam kaitan dengan topik kepemimpinan, maka pastikan bahwa komunikasi dan koordinasi menjadi kata kunci dari setiap kebijakan atau tindakan yang akan diambil oleh seorang pemimpinâ.\n\n\npilihan BE bukan tindakan yang tepat karena kata âmenunjukâ tidak sesuai dengan nilai komunikatif dan koordinatif seorang pemimpin.\n\n\nPilihan A juga bukan pilihan yang tepat, mengingat membentuk panitia tidak membutuhkan kerja keras.\n\n\nDisamping itu membentuk panitia saja tidak dapat menyelesaikan masalah karena tentu membutuhkan kebersamaan untuk membahas dan mendiskusikan tentang pelaksanaan pentas seni.\n\n\nPilihan D, melakukan voting bisa menjadi alternatif penyelesaian masalah untuk menuju mufakat. Namun, tentu saja voting bukan tindakan awal yang bisa ditempuh karena \nvoting\n hanya dilakukan ketika ada perbedaan pendapat yang tidak terpecahkan. Jadi, pilihan c adalah pilihan yang terbaik karena menunjukkan komunikasi dan koordinasi de', 'Perhatikan pola logika pada soal Numerik - Aritmatika', 'Internet - Auto Scraped', '2026-05-31 20:32:04'),
-(38, 1, 'tiu', 'Numerik - Aritmatika', '“Sesudah tiga hari berturut-turut anggota-anggota Dokuritsu Zyunbi Tyoosakai mengeluarkan pendapat-pendapatnya, maka sekarang saya mendapat kehormatan dari Paduka Tuan Ketua yang mulia untuk mengemukakan pendapat saya. Saya akan menepati permintaan Paduka Tuan Ketua yang mulia. Apakah permintaan Paduka Tuan Ketua yang mulia? Paduka Tuan Ketua yang mulia minta kepada sidang Dokuritsu Zyunbi Tyoosakai untuk mengemukakan dasar Indonesia Merdeka. Dasar inilah nanti akan saya kemukakan di dalam pidat', NULL, 'sedang', '', 'Perhatikan pola logika pada soal Numerik - Aritmatika', 'Internet - Auto Scraped', '2026-05-31 20:32:05'),
-(39, 1, 'twk', 'UUD 1945 - Sistem Pemerintahan', 'Dalam sistem pemerintahan Indonesia, kekuasaan kehakiman dilakukan oleh...', NULL, 'sedang', 'Pasal 24 UUD 1945: Kekuasaan kehakiman dilakukan oleh sebuah Mahkamah Agung dan badan peradilan yang berada di bawahnya dalam susunan peradilan umum, peradilan agama, peradilan militer, peradilan tata usaha negara, dan Mahkamah Konstitusi.', 'Hafalkan: Pasal 24 = Kekuasaan kehakiman. Mahkamah Agung + badan peradilan di bawahnya.', 'AI Knowledge', '2026-05-31 20:35:50'),
-(40, 1, 'twk', 'UUD 1945 - HAM', 'Setiap orang berhak untuk hidup serta berhak mempertahankan hidup dan kehidupannya diatur dalam...', NULL, 'mudah', 'Pasal 28A UUD 1945: Setiap orang berhak untuk hidup serta berhak mempertahankan hidup dan kehidupannya.', 'Pasal 28A = hak hidup. Jangan tertukar dengan Pasal 27 (warga negara) atau 28E (kebebasan).', 'AI Knowledge', '2026-05-31 20:35:50'),
-(41, 1, 'twk', 'UUD 1945 - Ketahanan Nasional', 'Upaya pertahanan dan keamanan negara dilaksanakan melalui sistem pertahanan dan keamanan rakyat semesta yang diatur dalam...', NULL, 'sedang', 'Pasal 30 ayat (1) UUD 1945: Tiap-tiap orang berhak dan wajib ikut serta dalam upaya pembelaan negara. Pasal 30 mengatur pertahanan keamanan negara.', 'Pasal 30 = pertahanan negara. Semesta = melibatkan seluruh komponen bangsa.', 'AI Knowledge', '2026-05-31 20:35:50'),
-(42, 1, 'twk', 'Pancasila - Implementasi', 'Toleransi antar umat beragama yang diterapkan di Indonesia merupakan implementasi dari sila...', NULL, 'mudah', 'Sila ke-1 Ketuhanan Yang Maha Esa mengharuskan saling menghormati dan toleransi antar pemeluk agama. Ini adalah implementasi nilai ketuhanan dalam kehidupan bermasyarakat.', 'Sila 1 = Ketuhanan. Implementasi: toleransi, kebebasan beragama, tidak memaksakan keyakinan.', 'AI Knowledge', '2026-05-31 20:35:51'),
-(43, 1, 'twk', 'Sejarah - Sumpah Pemuda', 'Sumpah Pemuda tahun 1928 berisi ikrar tentang...', NULL, 'mudah', 'Sumpah Pemuda 28 Oktober 1928 berisi tiga ikrar: Tanah Air, Bangsa, dan Bahasa Indonesia.', 'Hafalkan 3 ikrar: Tanah Air, Bangsa, Bahasa.', 'AI Knowledge', '2026-05-31 20:35:51'),
-(44, 1, 'twk', 'Sejarah - Proklamasi', 'Proklamasi Kemerdekaan Indonesia dilaksanakan pada tanggal...', NULL, 'sangat_mudah', 'Proklamasi Kemerdekaan Indonesia dibacakan oleh Soekarno dan Mohammad Hatta pada tanggal 17 Agustus 1945 di Jalan Pegangsaan Timur No. 56 Jakarta.', 'Hafal: 17 Agustus 1945. Soekarno & Hatta. Jalan Pegangsaan Timur 56.', 'AI Knowledge', '2026-05-31 20:35:51'),
-(45, 1, 'tiu', 'Numerik - Persentase', 'Sebuah barang dijual dengan harga Rp 240.000 setelah mendapat diskon 20%. Berapa harga asli barang tersebut?', NULL, 'sedang', 'Jika diskon 20%, maka harga jual = 80% dari harga asli. Harga asli = 240.000 / 0.8 = 300.000.', 'Rumus: Harga Asli = Harga Jual / (100% - Diskon%). 240.000 / 0.8 = 300.000.', 'AI Knowledge', '2026-05-31 20:35:52'),
-(46, 1, 'tiu', 'Numerik - Pecahan', 'Jika 3/4 dari sebuah tangki berisi 180 liter air, berapa liter kapasitas penuh tangki tersebut?', NULL, 'mudah', '3/4 = 180 liter. Maka 1/4 = 60 liter. Kapasitas penuh = 4/4 = 4 × 60 = 240 liter.', 'Rumus: Total = Bagian / Fraksi. 180 / (3/4) = 180 × 4/3 = 240.', 'AI Knowledge', '2026-05-31 20:35:52'),
-(47, 1, 'tiu', 'Numerik - Kecepatan', 'Sebuah mobil menempuh jarak 240 km dalam 4 jam. Berapa kecepatan rata-rata mobil tersebut?', NULL, 'sangat_mudah', 'Kecepatan = Jarak / Waktu = 240 km / 4 jam = 60 km/jam.', 'Rumus dasar: v = s/t.', 'AI Knowledge', '2026-05-31 20:35:52'),
-(48, 1, 'tiu', 'Logika - Pola Angka', 'Pola: 1, 1, 2, 3, 5, 8, 13, ... Berikutnya adalah?', NULL, 'sedang', 'Pola Fibonacci: setiap angka adalah jumlah dua angka sebelumnya. 5+8=13, maka 8+13=21.', 'Fibonacci: 1, 1, 2, 3, 5, 8, 13, 21, 34...', 'AI Knowledge', '2026-05-31 20:35:53'),
-(49, 1, 'tiu', 'Verbal - Penjelasan', 'Paragraf berikut membahas tentang...\n\n\"Perkembangan teknologi informasi dan komunikasi telah membawa perubahan besar dalam berbagai aspek kehidupan manusia, termasuk dalam bidang pendidikan.\"', NULL, 'mudah', 'Paragraf tersebut menjelaskan pengaruh perkembangan teknologi informasi dan komunikasi terhadap berbagai aspek kehidupan, khususnya pendidikan.', 'Cari kalimat utama yang menyatakan topik utama paragraf.', 'AI Knowledge', '2026-05-31 20:35:53'),
-(50, 1, 'tkp', 'Integritas - Konflik Kepentingan', 'Anda mengetahui bahwa atasan Anda menggunakan kendaraan dinas untuk keperluan pribadi secara rutin. Tindakan Anda adalah...', NULL, 'sedang', 'Integritas mengharuskan kita melaporkan pelanggaran aturan, meskipun dilakukan oleh atasan. Melaporkan ke penyelenggara negara/inspektorat adalah langkah tepat.', 'Integritas: laporkan pelanggaran, jangan tutupi meski dilakukan atasan. Pilih yang tegas dan prosedural.', 'AI Knowledge', '2026-05-31 20:35:53'),
-(51, 1, 'tkp', 'Pelayanan Publik - Prioritas', 'Di kantor Anda sedang ramai dengan antrean panjang. Seorang lansia terlihat kelelahan berdiri. Tindakan terbaik Anda adalah...', NULL, 'mudah', 'Pelayanan publik harus mengutamakan kelompok rentan. Bantu lansia dengan menyediakan tempat duduk atau prioritas pelayanan sesuai ketentuan.', 'Pelayanan: utamakan kelompok rentan (lansia, ibu hamil, difabel).', 'AI Knowledge', '2026-05-31 20:35:53'),
-(52, 1, 'tkp', 'Komitmen - Deadline', 'Anda diberi tugas dengan deadline ketat, namun data yang dibutuhkan belum lengkap. Yang Anda lakukan adalah...', NULL, 'sedang', 'Komitmen organisasi: komunikasikan kendala ke atasan, usahakan selesaikan dengan data tersedia, atau minta perpanjangan dengan alasan yang jelas.', 'Komitmen: komunikasi + usaha maksimal. Jangan menyerah tanpa mencoba.', 'AI Knowledge', '2026-05-31 20:35:54'),
-(53, 1, 'tkp', 'Profesionalisme - Kritik', 'Atasan Anda memberikan kritik keras atas hasil kerja Anda dalam rapat umum. Reaksi terbaik Anda adalah...', NULL, 'sedang', 'Profesionalisme: dengarkan kritik, evaluasi diri, minta saran perbaikan. Jangan defensif atau menyalahkan orang lain di depan umum.', 'Profesional: terima kritik dengan lapang dada, jadikan pembelajaran.', 'AI Knowledge', '2026-05-31 20:35:54'),
-(54, 1, 'tkp', 'Sosial Budaya - Adaptasi', 'Anda ditugaskan di daerah dengan budaya yang sangat berbeda dari daerah asal Anda. Sikap Anda adalah...', NULL, 'mudah', 'Sosial Budaya: menghargai perbedaan, beradaptasi dengan norma setempat, tetap profesional. Ini menunjukkan fleksibilitas dan penghargaan terhadap keberagaman.', 'Adaptasi: hormati norma lokal, pelajari budaya baru, tetap profesional.', 'AI Knowledge', '2026-05-31 20:35:54');
-
--- --------------------------------------------------------
+LOCK TABLES `soal` WRITE;
+/*!40000 ALTER TABLE `soal` DISABLE KEYS */;
+INSERT INTO `soal` VALUES (1,1,'twk','Pancasila - Sila ke-1','Pancasila sebagai ideologi terbuka memiliki batas-batas berikut, kecuali...',NULL,'sedang','Pancasila sebagai ideologi terbuka memungkinkan perkembangan norma dengan konsensus, namun tetap melarang ideologi radikal seperti Marxisme-Leninisme dan mempertahankan stabilitas nasional. Penciptaan norma baru tetap memerlukan konsensus.','Tips: Ingat, ideologi terbuka bukan berarti tanpa batas. Konsensus tetap diperlukan untuk setiap perubahan norma.',NULL,'2026-05-31 20:12:22'),(2,1,'twk','Pancasila - Sila ke-3','Mengembangkan sikap bahwa bangsa Indonesia merupakan bagian dari seluruh umat manusia merupakan perwujudan sila ke...',NULL,'mudah','Sila ke-2 Pancasila: Kemanusiaan yang Adil dan Beradab. Mengakui persamaan derajat dan martabat setiap manusia secara universal.','Tips: Sila ke-2 berhubungan dengan kemanusiaan universal. Jika soal tentang hubungan antar-manusia global, jawabannya Sila 2.',NULL,'2026-05-31 20:12:22'),(3,1,'twk','UUD 1945','Pancasila digunakan sebagai dasar untuk mengatur penyelenggaraan ketatanegaraan negara, hal ini sesuai dengan kedudukan Pancasila sebagai...',NULL,'mudah','Pancasila sebagai Dasar Negara (opening UUD 1945). Menjadi fondasi bagi seluruh sistem ketatanegaraan Indonesia.','Tips: Kalimat \"mengatur penyelenggaraan ketatanegaraan\" selalu merujuk pada kedudukan Pancasila sebagai DASAR NEGARA.',NULL,'2026-05-31 20:12:22'),(4,1,'twk','NKRI','Warna merah dalam bendera Republik Indonesia melambangkan...',NULL,'sangat_mudah','Merah melambangkan keberanian (berani mengorbankan jiwa dan raga). Putih melambangkan kesucian (kesucian hati dan niat).','Tips: Merah = Keberanian, Putih = Kesucian. Ingat dengan mnemonik: \"Merah Berani, Putih Suci\".',NULL,'2026-05-31 20:12:22'),(5,1,'tiu','Verbal - Sinonim','Mortasitas = ...',NULL,'sedang','Mortasitas berasal dari kata \"mortal\" yang berarti kematian. Jadi mortalitas = angka kematian.','Tips: Ingat kata Latin \"mort\" = mati. Mortalitas = mortal = kematian.',NULL,'2026-05-31 20:12:22'),(6,1,'tiu','Numerik - Deret','1, 5, 11, 19, 29, ..., 55',NULL,'sedang','Pola: +4, +6, +8, +10, +12, +14. Jadi 29 + 12 = 41, dan 41 + 14 = 55.','Tips: Cek selisih antar angka. Jika selisih bertambah konstan (2), berarti pola kuadratik.',NULL,'2026-05-31 20:12:22'),(7,1,'tiu','Logika - Silogisme','Premis 1: Semua karyawan berdasi. Premis 2: Semua karyawan berjas. Simpulan: ...',NULL,'mudah','Jika semua karyawan berdasi DAN berjas, maka sebagian karyawan berdasi dan berjas. Tidak bisa simpulkan semua berdasi saja karena semua juga berjas.','Tips: Perhatikan kata \"semua\" pada kedua premis. Simpulan yang valid harus mencakup kedua sifat.',NULL,'2026-05-31 20:12:22'),(8,1,'tkp','Pelayanan Publik','Apabila Anda tidak sengaja merusak fasilitas perusahaan dan atasan mengetahuinya, sikap Anda adalah...',NULL,'sedang','Jawaban terbaik menunjukkan integritas, tanggung jawab, dan inisiatif perbaikan langsung.','Tips: TKP = pilih jawaban yang PALING PROAKTIF, jujur, dan bertanggung jawab. Langsung minta maaf + jelaskan + ganti = skor tertinggi.',NULL,'2026-05-31 20:12:22'),(9,1,'tkp','Hubungan Kerja','Rekan kerja Anda egois dan sombong. Sikap Anda...',NULL,'sedang','Memahami perbedaan karakter wajar, namun tetap memberitahu secara sopan untuk menghindari konflik.','Tips: Pilih jawaban yang menunjukkan empati tapi tetap korektif. Hindari balas dendam atau pasif menerima.',NULL,'2026-05-31 20:12:22'),(10,1,'twk','Pancasila - Sila ke-1','Ketuhanan Yang Maha Esa sebagai sila pertama diwujudkan melalui...',NULL,'mudah','Sila 1: pengamalan keyakinan dalam kehidupan bermasyarakat, berbangsa, bernegara. Contoh: menghormati kebebasan beragama.','Fokus pada implementasi nilai ketuhanan dalam kehidupan sosial dan politik.',NULL,'2026-05-31 20:12:52'),(11,1,'twk','Pancasila - Sila ke-2','Berikut yang merupakan perwujudan sila kedua Pancasila adalah...',NULL,'mudah','Sila ke-2: Kemanusiaan yang Adil dan Beradab. Contoh: menghargai HAM, tidak diskriminasi.','Ingat: Sila 2 = Kemanusiaan. Jika soal tentang HAM ├óΓÇáΓÇÖ jawaban Sila 2.',NULL,'2026-05-31 20:12:52'),(12,1,'twk','Pancasila - Sila ke-3','Persatuan Indonesia menuntut setiap warga negara untuk...',NULL,'mudah','Sila ke-3: persatuan dan kesatuan bangsa. Warga harus rela berkorban untuk kepentingan bangsa.','Kata kunci: persatuan, kesatuan, NKRI, korban untuk bangsa.',NULL,'2026-05-31 20:12:52'),(13,1,'twk','Pancasila - Sila ke-4','Kerakyatan yang dipimpin oleh hikmat kebijaksanaan dalam permusyawaratan/perwakilan berarti...',NULL,'sedang','Sila ke-4: kekuasaan di tangan rakyat, dijalankan melalui permusyawaratan. Dasar demokrasi Pancasila.','Demokrasi Pancasila ├óΓÇ░┬á liberal. Ciri: musyawarah, kekeluargaan, kepentingan bersama.',NULL,'2026-05-31 20:12:52'),(14,1,'twk','Pancasila - Sila ke-5','Keadilan sosial bagi seluruh rakyat Indonesia diwujudkan dengan cara...',NULL,'mudah','Sila ke-5: distribusi keadilan merata di bidang sosial, ekonomi, hukum.','Kata kunci: keadilan, merata, seluruh rakyat, tidak memihak, pembangunan merata.',NULL,'2026-05-31 20:12:52'),(15,1,'twk','UUD 1945 - Pasal 1-5','Menurut UUD 1945 Pasal 1 ayat (1), Negara Indonesia adalah...',NULL,'mudah','Pasal 1 ayat (1): Negara Indonesia ialah Negara Kesatuan, yang berbentuk Republik.','Hafalkan: Pasal 1 = Bentuk & Kedaulatan. (1) Negara Kesatuan Republik. (2) Kedaulatan rakyat. (3) Negara hukum.',NULL,'2026-05-31 20:12:52'),(16,1,'twk','UUD 1945 - Pasal 1-5','Kedaulatan berada di tangan rakyat dan dilaksanakan menurut UUD merupakan bunyi dari...',NULL,'sangat_mudah','Pasal 1 ayat (2): Kedaulatan berada di tangan rakyat dan dilaksanakan menurut Undang-Undang Dasar.','Pasal 1 ayat (2) = Kedaulatan rakyat. Jangan tertukar dengan ayat (3) tentang negara hukum.',NULL,'2026-05-31 20:12:52'),(17,1,'twk','UUD 1945 - Pasal 1-5','Presiden memegang kekuasaan pemerintahan menurut UUD diatur dalam...',NULL,'mudah','Pasal 4 ayat (1): Presiden Republik Indonesia memegang kekuasaan pemerintahan menurut UUD.','Pasal 4 = Presiden. (1) Pemerintahan. (2) Kepala negara. Lengkapi dengan Pasal 5.',NULL,'2026-05-31 20:12:52'),(18,1,'twk','UUD 1945 - Pasal 27-34','Setiap warga negara berhak atas pekerjaan dan penghidupan yang layak untuk kemanusiaan diatur dalam...',NULL,'sedang','Pasal 27 ayat (2): Tiap-tiap warga negara berhak atas pekerjaan dan penghidupan yang layak untuk kemanusiaan.','Pasal 27 = Warga negara & penduduk. ayat (1) sama di muka hukum. ayat (2) pekerjaan layak. ayat (3) ikut pembelaan negara.',NULL,'2026-05-31 20:12:52'),(19,1,'twk','NKRI - Bhinneka Tunggal Ika','Semboyan Bhinneka Tunggal Ika berasal dari kitab...',NULL,'mudah','Bhinneka Tunggal Ika berasal dari kitab Sutasoma karangan Mpu Tantular (abad XIV). Artinya: Berbeda-beda tetapi tetap satu jua.','Hafal: Mpu Tantular, kitab Sutasoma, abad XIV. Jangan tertukar dengan Negarakertagama (Mpu Prapanca).',NULL,'2026-05-31 20:12:52'),(20,1,'twk','NKRI - Bela Negara','Pembelaan negara dilakukan dengan cara...',NULL,'mudah','Pasal 27 ayat (3): Pembelaan negara adalah hak dan kewajiban setiap warga negara. Cara: jabatan pemerintahan, tentara, atau swakelola.','Pasal 27 ayat (3) = hak dan kewajiban. Cara: jabatan pemerintahan, tentara, atau swakelola.',NULL,'2026-05-31 20:12:52'),(21,1,'tiu','Verbal - Sinonim','Sinonim dari kata KONSISTEN adalah...',NULL,'mudah','Konsisten = tetap, tidak berubah-ubah, teguh, konsekuen.','Gunakan konteks kalimat. Konsisten sering dipasangkan dengan sikap, perilaku, atau komitmen.',NULL,'2026-05-31 20:12:52'),(22,1,'tiu','Verbal - Antonim','Antonim dari kata EKSTENSIF adalah...',NULL,'sedang','Ekstensif = luas, merata, menyeluruh. Antonimnya intensif = mendalam, terpusat.','Ekstensif vs Intensif sering muncul di soal CPNS. Ekstensif = luas. Intensif = mendalam.',NULL,'2026-05-31 20:12:52'),(23,1,'tiu','Verbal - Analogi','GURU : SEKOLAH = DOKTER : ...',NULL,'mudah','Analogi hubungan tempat bekerja. Guru bekerja di sekolah. Dokter bekerja di rumah sakit.','Cari pola hubungan: tempat bekerja, alat kerja, fungsi, atau lawan.',NULL,'2026-05-31 20:12:52'),(24,1,'tiu','Numerik - Deret','Deret: 2, 5, 10, 17, 26, ... Berikutnya adalah?',NULL,'sedang','Pola: n├é┬▓ + 1. 1├é┬▓+1=2, 2├é┬▓+1=5, 3├é┬▓+1=10, 4├é┬▓+1=17, 5├é┬▓+1=26, maka 6├é┬▓+1=37.','Rumus cepat: perhatikan selisih antar angka. Selisih: 3,5,7,9 ├óΓÇáΓÇÖ selanjutnya 11 ├óΓÇáΓÇÖ 26+11=37.',NULL,'2026-05-31 20:12:52'),(25,1,'tiu','Numerik - Aritmatika','12 pekerja dapat menyelesaikan proyek dalam 20 hari. Jika ditambah 8 pekerja, berapa hari selesai?',NULL,'sedang','Orang ├âΓÇö Hari = konstan. 12├âΓÇö20=240. Pekerja baru=20. Hari=240/20=12.','Rumus cepat: Orang1 ├âΓÇö Hari1 = Orang2 ├âΓÇö Hari2. 12├âΓÇö20 = 20├âΓÇöx ├óΓÇáΓÇÖ x=12.',NULL,'2026-05-31 20:12:52'),(26,1,'tiu','Numerik - Perbandingan','6 orang menyelesaikan pekerjaan dalam 10 hari, maka 15 orang menyelesaikan dalam...',NULL,'mudah','6├âΓÇö10=60 orang-hari. 15 orang butuh: 60/15=4 hari.','Perbandingan berbalik: Orang bertambah, hari berkurang. 6├âΓÇö10 = 15├âΓÇöx ├óΓÇáΓÇÖ x=4.',NULL,'2026-05-31 20:12:52'),(27,1,'tiu','Logika - Silogisme','Semua PNS wajib pelatihan. Budi adalah PNS. Kesimpulan: ...',NULL,'mudah','Silogisme: Semua A adalah B. C adalah A. Maka C adalah B. Budi wajib pelatihan.','Silogisme sederhana: perhatikan subjek dan predikat. Jika premis valid, kesimpulan mengikuti pola logis.',NULL,'2026-05-31 20:12:52'),(28,1,'tiu','Logika - Analitis','Andi > Budi > Cici. Dedi < Cici. Kesimpulan: ...',NULL,'sedang','Urutan: Andi > Budi > Cici > Dedi. Andi lebih tinggi dari Dedi.','Buat diagram urutan. Panah ke bawah = lebih pendek. Susun dari yang tertinggi.',NULL,'2026-05-31 20:12:52'),(29,1,'tkp','Pelayanan Publik','Warga datang marah karena permohonan tertolak. Sikap Anda...',NULL,'sedang','Pelayanan publik: tetap tenang, dengarkan keluhan, jelaskan sabar, berikan solusi alternatif.','TKP: Pilih jawaban yang menunjukkan sikap profesional, empati, dan solusi. Hindari pasif, defensif, atau arogan.',NULL,'2026-05-31 20:12:52'),(30,1,'tkp','Integritas','Ditawari hadiah besar oleh vendor proyek. Sikap Anda...',NULL,'sedang','Integritas: menolak gratifikasi dalam bentuk apapun. Melaporkan ke atasan atau penyelenggara negara.','Integritas = kejujuran, menolak suap/gratifikasi, melaporkan pelanggaran. Pilih yang paling tegas menolak dan melaporkan.',NULL,'2026-05-31 20:12:52'),(31,1,'tkp','Profesionalisme','Tugas mendadak Jumat sore harus lembur, padahal ada janji keluarga. Anda...',NULL,'mudah','Profesionalisme: memprioritaskan tugas kedinasan sambil menghargai komitmen pribadi.','Profesionalisme ├óΓÇ░┬á mengorbankan keluarga terus-menerus. Cari win-win: komunikasi dengan atasan + komitmen menyelesaikan.',NULL,'2026-05-31 20:12:52'),(32,1,'tkp','Komitmen','Rekan kerja sering datang terlambat. Sebagai kolega, Anda...',NULL,'sedang','Komitmen: menjaga produktivitas tim. Tegur secara pribadi dan profesional, berikan solusi.','Komitmen: pilih pendekatan persuasif dan profesional sebelum melapor. Tegur pribadi ├óΓÇáΓÇÖ solusi ├óΓÇáΓÇÖ lapor jika tidak berubah.',NULL,'2026-05-31 20:12:52'),(33,1,'tkp','Sosial Budaya','Ada rekan dari suku berbeda dengan kebiasaan berbeda. Sikap Anda...',NULL,'mudah','Sosial Budaya: menghargai keberagaman, tidak memaksakan kebiasaan sendiri, memperlakukan setiap orang setara.','Keberagaman: pilih jawaban yang menunjukkan penghargaan, adaptasi, dan tidak diskriminatif.',NULL,'2026-05-31 20:12:52'),(34,1,'tiu','Numerik - Aritmatika','Sari dan Ratih memiliki suatu pekerjaan. Waktu yang dibutuhkan oleh Sari dalam menghasilkan uang adalah 21 menit, sedangkan Ratih membutuhkan waktu 42 menit. Jika Sari dan Ratih bekerja bersama-sama untuk menghasilkan uang, waktu yang dibutuhkan adalah ├ó┬Ç┬ª',NULL,'sedang','','Perhatikan pola logika pada soal Numerik - Aritmatika','Internet - Auto Scraped','2026-05-31 20:32:03'),(35,1,'tiu','Numerik - Aritmatika','Afrika Selatan : Pretoria = ΓÇª : ΓÇª',NULL,'sedang','Jawaban: BACDE\n\n\njejaring kerja kerja sama dan kolaborasi dengan panitia pemungutan suara\n\n\nHak pilih adalah sesuatu hak yang bersifat personal dan tidak bisa diwakili oleh siapapun.\n\n\nPilihan E, Membiarkan hak suara nenek hangus tentu tidak bersifat solutif dalam menghadapi masalah tersebut.\n\n\nPilihan DC, juga bukan pilihan yang tepat, mengingat hak pilih tidak bisa diwakilkan.\n\n\nPilihan terbaik ada pada pilihan AB.\n\n\nDan tentu saja pilihan B adalah pilihan yang lebih baik daripada A, karena tidak hanya melaporkan kondisi tersebut kepada panitia pemungutan suara namun lebih dari itu juga mempertimbangkan langkah yang diambil untuk mengatasi masalah tersebut.\n\n\n├ó┬Ç┬ì','Perhatikan pola logika pada soal Numerik - Aritmatika','Internet - Auto Scraped','2026-05-31 20:32:03'),(36,1,'tiu','Numerik - Aritmatika','Edi baru saja diterima bekerja di salah satu pabrik pengolahan kayu. Sebagai pegawai baru, tentu Edi belum terlalu mengenal jenis-jenis pekerjaan dan cara menyelesaikannya. Suatu malam, tiba-tiba Edi ditugaskan manajernya untuk menyelesaikan tugas seorang rekannya yang tiba-tiba memutuskan untuk keluar dan berhenti bekerja. Edi jelas kaget dan kesulitan dengan penugasan itu, tapi ia tidak punya pilihan lain selain menjalankan perintah atasan. Apalagi manajer tadi memang memberikan tugas tersebut',NULL,'sedang','Jawaban: DEBAC\n\n\nA. Meminta orang lain mengerjakan asalkan bisa selesai tepat waktu. tdk profesional\n\n\nB. Segera berusaha memulai dan menyelesaikan sebisanya saja yang penting selesai. tdk maksimal dalam bekerja\n\n\nC. Tidak perlu buru-buru menyelesaikannya karena pekerjaan tersebut bukan merupakan tugas pokoknya. (menganggap rendah pekerjaan, tidak profesional)\n\n\nD. Segera berusaha memulai untuk menyelesaikan tugas itu dan berusaha menyelesaikannya sesempurna mungkin.\n\n\nE. Mempertanyakan dan menegosiasi manajernya karena merasa takut hasilnya tidak maksimal. (melaksanakan jejaring kerja, tetapi tdk PD)\n\n\nprofesionalisme ~> melaksanakan tupoksi sebaik mungkin secara maksimal\n\n\nprofesionalisme dan semangat berprestasi\n\n\nBerdasarkan ketentuan diatas maka seseorang dituntut untuk melaksanakan tanggung jawab kerja berdasarkan tugas dan fungsinya sekaligus berupaya untuk memberikan yang terbaik dalam setiap tugas yang diberikan.\n\n\n├ó┬Ç┬ì','Perhatikan pola logika pada soal Numerik - Aritmatika','Internet - Auto Scraped','2026-05-31 20:32:04'),(37,1,'tiu','Numerik - Aritmatika','Anda ditunjuk sebagai ketua kegiatan. Atasanmu memberikan tugas untuk menyiapkan pentas seni acara ulang tahun perusahaanmu yang ke-21 dikarenakan tiap-tiap kantor cabang harus menampilkan pertunjukannya. Tindakan yang anda lakukanΓÇª.',NULL,'sedang','Jawaban: CDAEB\n\n\nSebagaimana telah dijelaskan sebelumnya: ├ó┬Ç┬£Dalam kaitan dengan topik kepemimpinan, maka pastikan bahwa komunikasi dan koordinasi menjadi kata kunci dari setiap kebijakan atau tindakan yang akan diambil oleh seorang pemimpin├ó┬Ç┬¥.\n\n\npilihan BE bukan tindakan yang tepat karena kata ├ó┬Ç┬£menunjuk├ó┬Ç┬¥ tidak sesuai dengan nilai komunikatif dan koordinatif seorang pemimpin.\n\n\nPilihan A juga bukan pilihan yang tepat, mengingat membentuk panitia tidak membutuhkan kerja keras.\n\n\nDisamping itu membentuk panitia saja tidak dapat menyelesaikan masalah karena tentu membutuhkan kebersamaan untuk membahas dan mendiskusikan tentang pelaksanaan pentas seni.\n\n\nPilihan D, melakukan voting bisa menjadi alternatif penyelesaian masalah untuk menuju mufakat. Namun, tentu saja voting bukan tindakan awal yang bisa ditempuh karena \nvoting\n hanya dilakukan ketika ada perbedaan pendapat yang tidak terpecahkan. Jadi, pilihan c adalah pilihan yang terbaik karena menunjukkan komunikasi dan koordinasi de','Perhatikan pola logika pada soal Numerik - Aritmatika','Internet - Auto Scraped','2026-05-31 20:32:04'),(38,1,'tiu','Numerik - Aritmatika','ΓÇ£Sesudah tiga hari berturut-turut anggota-anggota Dokuritsu Zyunbi Tyoosakai mengeluarkan pendapat-pendapatnya, maka sekarang saya mendapat kehormatan dari Paduka Tuan Ketua yang mulia untuk mengemukakan pendapat saya. Saya akan menepati permintaan Paduka Tuan Ketua yang mulia. Apakah permintaan Paduka Tuan Ketua yang mulia? Paduka Tuan Ketua yang mulia minta kepada sidang Dokuritsu Zyunbi Tyoosakai untuk mengemukakan dasar Indonesia Merdeka. Dasar inilah nanti akan saya kemukakan di dalam pidat',NULL,'sedang','','Perhatikan pola logika pada soal Numerik - Aritmatika','Internet - Auto Scraped','2026-05-31 20:32:05'),(39,1,'twk','UUD 1945 - Sistem Pemerintahan','Dalam sistem pemerintahan Indonesia, kekuasaan kehakiman dilakukan oleh...',NULL,'sedang','Pasal 24 UUD 1945: Kekuasaan kehakiman dilakukan oleh sebuah Mahkamah Agung dan badan peradilan yang berada di bawahnya dalam susunan peradilan umum, peradilan agama, peradilan militer, peradilan tata usaha negara, dan Mahkamah Konstitusi.','Hafalkan: Pasal 24 = Kekuasaan kehakiman. Mahkamah Agung + badan peradilan di bawahnya.','AI Knowledge','2026-05-31 20:35:50'),(40,1,'twk','UUD 1945 - HAM','Setiap orang berhak untuk hidup serta berhak mempertahankan hidup dan kehidupannya diatur dalam...',NULL,'mudah','Pasal 28A UUD 1945: Setiap orang berhak untuk hidup serta berhak mempertahankan hidup dan kehidupannya.','Pasal 28A = hak hidup. Jangan tertukar dengan Pasal 27 (warga negara) atau 28E (kebebasan).','AI Knowledge','2026-05-31 20:35:50'),(41,1,'twk','UUD 1945 - Ketahanan Nasional','Upaya pertahanan dan keamanan negara dilaksanakan melalui sistem pertahanan dan keamanan rakyat semesta yang diatur dalam...',NULL,'sedang','Pasal 30 ayat (1) UUD 1945: Tiap-tiap orang berhak dan wajib ikut serta dalam upaya pembelaan negara. Pasal 30 mengatur pertahanan keamanan negara.','Pasal 30 = pertahanan negara. Semesta = melibatkan seluruh komponen bangsa.','AI Knowledge','2026-05-31 20:35:50'),(42,1,'twk','Pancasila - Implementasi','Toleransi antar umat beragama yang diterapkan di Indonesia merupakan implementasi dari sila...',NULL,'mudah','Sila ke-1 Ketuhanan Yang Maha Esa mengharuskan saling menghormati dan toleransi antar pemeluk agama. Ini adalah implementasi nilai ketuhanan dalam kehidupan bermasyarakat.','Sila 1 = Ketuhanan. Implementasi: toleransi, kebebasan beragama, tidak memaksakan keyakinan.','AI Knowledge','2026-05-31 20:35:51'),(43,1,'twk','Sejarah - Sumpah Pemuda','Sumpah Pemuda tahun 1928 berisi ikrar tentang...',NULL,'mudah','Sumpah Pemuda 28 Oktober 1928 berisi tiga ikrar: Tanah Air, Bangsa, dan Bahasa Indonesia.','Hafalkan 3 ikrar: Tanah Air, Bangsa, Bahasa.','AI Knowledge','2026-05-31 20:35:51'),(44,1,'twk','Sejarah - Proklamasi','Proklamasi Kemerdekaan Indonesia dilaksanakan pada tanggal...',NULL,'sangat_mudah','Proklamasi Kemerdekaan Indonesia dibacakan oleh Soekarno dan Mohammad Hatta pada tanggal 17 Agustus 1945 di Jalan Pegangsaan Timur No. 56 Jakarta.','Hafal: 17 Agustus 1945. Soekarno & Hatta. Jalan Pegangsaan Timur 56.','AI Knowledge','2026-05-31 20:35:51'),(45,1,'tiu','Numerik - Persentase','Sebuah barang dijual dengan harga Rp 240.000 setelah mendapat diskon 20%. Berapa harga asli barang tersebut?',NULL,'sedang','Jika diskon 20%, maka harga jual = 80% dari harga asli. Harga asli = 240.000 / 0.8 = 300.000.','Rumus: Harga Asli = Harga Jual / (100% - Diskon%). 240.000 / 0.8 = 300.000.','AI Knowledge','2026-05-31 20:35:52'),(46,1,'tiu','Numerik - Pecahan','Jika 3/4 dari sebuah tangki berisi 180 liter air, berapa liter kapasitas penuh tangki tersebut?',NULL,'mudah','3/4 = 180 liter. Maka 1/4 = 60 liter. Kapasitas penuh = 4/4 = 4 ├ù 60 = 240 liter.','Rumus: Total = Bagian / Fraksi. 180 / (3/4) = 180 ├ù 4/3 = 240.','AI Knowledge','2026-05-31 20:35:52'),(47,1,'tiu','Numerik - Kecepatan','Sebuah mobil menempuh jarak 240 km dalam 4 jam. Berapa kecepatan rata-rata mobil tersebut?',NULL,'sangat_mudah','Kecepatan = Jarak / Waktu = 240 km / 4 jam = 60 km/jam.','Rumus dasar: v = s/t.','AI Knowledge','2026-05-31 20:35:52'),(48,1,'tiu','Logika - Pola Angka','Pola: 1, 1, 2, 3, 5, 8, 13, ... Berikutnya adalah?',NULL,'sedang','Pola Fibonacci: setiap angka adalah jumlah dua angka sebelumnya. 5+8=13, maka 8+13=21.','Fibonacci: 1, 1, 2, 3, 5, 8, 13, 21, 34...','AI Knowledge','2026-05-31 20:35:53'),(49,1,'tiu','Verbal - Penjelasan','Paragraf berikut membahas tentang...\n\n\"Perkembangan teknologi informasi dan komunikasi telah membawa perubahan besar dalam berbagai aspek kehidupan manusia, termasuk dalam bidang pendidikan.\"',NULL,'mudah','Paragraf tersebut menjelaskan pengaruh perkembangan teknologi informasi dan komunikasi terhadap berbagai aspek kehidupan, khususnya pendidikan.','Cari kalimat utama yang menyatakan topik utama paragraf.','AI Knowledge','2026-05-31 20:35:53'),(50,1,'tkp','Integritas - Konflik Kepentingan','Anda mengetahui bahwa atasan Anda menggunakan kendaraan dinas untuk keperluan pribadi secara rutin. Tindakan Anda adalah...',NULL,'sedang','Integritas mengharuskan kita melaporkan pelanggaran aturan, meskipun dilakukan oleh atasan. Melaporkan ke penyelenggara negara/inspektorat adalah langkah tepat.','Integritas: laporkan pelanggaran, jangan tutupi meski dilakukan atasan. Pilih yang tegas dan prosedural.','AI Knowledge','2026-05-31 20:35:53'),(51,1,'tkp','Pelayanan Publik - Prioritas','Di kantor Anda sedang ramai dengan antrean panjang. Seorang lansia terlihat kelelahan berdiri. Tindakan terbaik Anda adalah...',NULL,'mudah','Pelayanan publik harus mengutamakan kelompok rentan. Bantu lansia dengan menyediakan tempat duduk atau prioritas pelayanan sesuai ketentuan.','Pelayanan: utamakan kelompok rentan (lansia, ibu hamil, difabel).','AI Knowledge','2026-05-31 20:35:53'),(52,1,'tkp','Komitmen - Deadline','Anda diberi tugas dengan deadline ketat, namun data yang dibutuhkan belum lengkap. Yang Anda lakukan adalah...',NULL,'sedang','Komitmen organisasi: komunikasikan kendala ke atasan, usahakan selesaikan dengan data tersedia, atau minta perpanjangan dengan alasan yang jelas.','Komitmen: komunikasi + usaha maksimal. Jangan menyerah tanpa mencoba.','AI Knowledge','2026-05-31 20:35:54'),(53,1,'tkp','Profesionalisme - Kritik','Atasan Anda memberikan kritik keras atas hasil kerja Anda dalam rapat umum. Reaksi terbaik Anda adalah...',NULL,'sedang','Profesionalisme: dengarkan kritik, evaluasi diri, minta saran perbaikan. Jangan defensif atau menyalahkan orang lain di depan umum.','Profesional: terima kritik dengan lapang dada, jadikan pembelajaran.','AI Knowledge','2026-05-31 20:35:54'),(54,1,'tkp','Sosial Budaya - Adaptasi','Anda ditugaskan di daerah dengan budaya yang sangat berbeda dari daerah asal Anda. Sikap Anda adalah...',NULL,'mudah','Sosial Budaya: menghargai perbedaan, beradaptasi dengan norma setempat, tetap profesional. Ini menunjukkan fleksibilitas dan penghargaan terhadap keberagaman.','Adaptasi: hormati norma lokal, pelajari budaya baru, tetap profesional.','AI Knowledge','2026-05-31 20:35:54'),(55,1,'twk','Pancasila','Sila pertama menuntut setiap warga untuk...',NULL,'mudah','Menghormati kebebasan beragama dan toleransi','Sila 1 = toleransi beragama','AI Knowledge','2026-06-01 01:27:09'),(56,1,'twk','Pancasila','Nilai kemanusiaan terwujud ketika seseorang...',NULL,'mudah','Menghargai HAM tanpa diskriminasi','Sila 2 = HAM, tidak diskriminasi','AI Knowledge','2026-06-01 01:27:10'),(57,1,'twk','Pancasila','Sikap saling menghormati antar suku adalah implementasi sila...',NULL,'sangat_mudah','Sila ke-3: Persatuan Indonesia','Sila 3 = persatuan, suku bangsa','AI Knowledge','2026-06-01 01:27:10'),(58,1,'twk','Pancasila','Musyawarah untuk mufakat adalah implementasi sila...',NULL,'sangat_mudah','Sila ke-4: Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan','Sila 4 = musyawarah, demokrasi','AI Knowledge','2026-06-01 01:27:10'),(59,1,'twk','Pancasila','Pembangunan infrastruktur di daerah terpencil agar setara kota besar = sila...',NULL,'mudah','Sila ke-5: Keadilan Sosial bagi Seluruh Rakyat Indonesia','Sila 5 = merata, keadilan sosial','AI Knowledge','2026-06-01 01:27:10'),(60,1,'twk','Pancasila','Menghormati ibadah umat lain di lingkungan mayoritas berbeda = sila...',NULL,'sedang','Sila pertama: Ketuhanan Yang Maha Esa','Sila 1 = toleransi. Hindari memaksakan.','AI Knowledge','2026-06-01 01:27:10'),(61,1,'twk','Pancasila','Tidak diskriminasi disabilitas dalam penerimaan kerja = sila...',NULL,'mudah','Sila kedua: Kemanusiaan yang Adil dan Beradab','Sila 2 = HAM. Diskriminasi = melanggar.','AI Knowledge','2026-06-01 01:27:10'),(62,1,'twk','Pancasila','Rela berkorban harta bantu korban bencana di daerah lain = sila...',NULL,'mudah','Sila ketiga: Persatuan Indonesia','Sila 3 = korban untuk bangsa. Bersama > pribadi.','AI Knowledge','2026-06-01 01:27:11'),(63,1,'twk','Pancasila','Pemilihan kepala desa dengan musyawarah dan voting = sila...',NULL,'sangat_mudah','Sila keempat: Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan','Sila 4 = demokrasi Pancasila. Musyawahan = ciri khas.','AI Knowledge','2026-06-01 01:27:11'),(64,1,'twk','Pancasila','Pemerintah beri bantuan pangan gratis bagi miskin = sila...',NULL,'mudah','Sila kelima: Keadilan Sosial bagi Seluruh Rakyat Indonesia','Sila 5 = keadilan sosial. Distribusi merata.','AI Knowledge','2026-06-01 01:27:11'),(65,1,'twk','Pancasila','Penghapusan diskriminasi ras di tempat umum merupakan implementasi...',NULL,'mudah','Sila kedua: Kemanusiaan yang Adil dan Beradab','Sila 2 = tidak diskriminasi.','AI Knowledge','2026-06-01 01:27:11'),(66,1,'twk','Pancasila','Gotong royong membersihkan lingkungan kampung = implementasi sila...',NULL,'sangat_mudah','Sila ke-4 Kerakyatan','Gotong royong = kerakyatan/kekeluargaan.','AI Knowledge','2026-06-01 01:27:11'),(67,1,'twk','Pancasila','Pemerintah membangun sekolah di pedalaman agar anak bisa sekolah = sila...',NULL,'mudah','Sila ke-5: Keadilan Sosial bagi Seluruh Rakyat Indonesia','Sila 5 = pendidikan merata, keadilan sosial.','AI Knowledge','2026-06-01 01:27:11'),(68,1,'twk','Pancasila','Setiap warga berhak memilih pemimpin sesuai keyakinan = sila...',NULL,'mudah','Sila ke-4: Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan','Sila 4 = demokrasi, hak memilih.','AI Knowledge','2026-06-01 01:27:12'),(69,1,'twk','Pancasila','Menjaga nama baik bangsa di kancah internasional = sila...',NULL,'sedang','Sila ke-3: Persatuan Indonesia','Sila 3 = menjaga martabat bangsa.','AI Knowledge','2026-06-01 01:27:12'),(70,1,'twk','UUD 1945','Negara Indonesia berbentuk...',NULL,'sangat_mudah','Pasal 1 ayat (1): Negara Kesatuan yang berbentuk Republik','Hafal: Pasal 1 = Bentuk & Kedaulatan.','AI Knowledge','2026-06-01 01:27:12'),(71,1,'twk','UUD 1945','Kedaulatan berada di tangan rakyat diatur dalam...',NULL,'sangat_mudah','Pasal 1 ayat (2): Kedaulatan berada di tangan rakyat','Pasal 1 ayat (2) = kedaulatan rakyat.','AI Knowledge','2026-06-01 01:27:12'),(72,1,'twk','UUD 1945','Presiden memegang kekuasaan pemerintahan menurut UUD 1945 diatur dalam...',NULL,'mudah','Pasal 4 ayat (1): Presiden memegang kekuasaan pemerintahan','Pasal 4 = Presiden. Pasal 5 = UU.','AI Knowledge','2026-06-01 01:27:12'),(73,1,'twk','UUD 1945','Setiap warga negara berhak atas pekerjaan dan penghidupan layak diatur dalam...',NULL,'sedang','Pasal 27 ayat (2): Tiap warga negara berhak atas pekerjaan dan penghidupan layak','Pasal 27 = warga negara. (1) sama di muka hukum. (2) pekerjaan. (3) pembelaan.','AI Knowledge','2026-06-01 01:27:12'),(74,1,'twk','UUD 1945','Hak memiliki tanah dan benda produktif diatur dalam...',NULL,'sulit','Pasal 28H ayat (4): Setiap orang berhak memiliki hak milik pribadi','Pasal 28H = kesejahteraan. ayat (4) = hak milik.','AI Knowledge','2026-06-01 01:27:12'),(75,1,'twk','UUD 1945','Kekuasaan kehakiman dilakukan oleh...',NULL,'mudah','Pasal 24: Mahkamah Agung dan badan peradilan di bawahnya','Pasal 24 = kehakiman. Bukan hanya MA, tapi semua badan peradilan.','AI Knowledge','2026-06-01 01:27:13'),(76,1,'twk','UUD 1945','Pendidikan dasar wajib dan biayanya ditanggung pemerintah diatur dalam...',NULL,'mudah','Pasal 31 ayat (2): Pemerintah wajib membiayai pendidikan dasar','Pasal 31 = pendidikan. Wajib & gratis.','AI Knowledge','2026-06-01 01:27:13'),(77,1,'twk','UUD 1945','Pembelaan negara merupakan hak dan kewajiban setiap warga negara diatur dalam...',NULL,'mudah','Pasal 27 ayat (3): Pembelaan negara adalah hak dan kewajiban setiap warga negara','Pasal 27 ayat (3) = hak & kewajiban bela negara.','AI Knowledge','2026-06-01 01:27:13'),(78,1,'twk','UUD 1945','Kebebasan berserikat, berkumpul, dan mengeluarkan pendapat diatur dalam...',NULL,'sedang','Pasal 28E ayat (3): Setiap orang berhak atas kebebasan berserikat, berkumpul, dan mengeluarkan pendapat','Pasal 28E = kebebasan. ayat (3) = berserikat, berkumpul, berpendapat.','AI Knowledge','2026-06-01 01:27:13'),(79,1,'twk','UUD 1945','Setiap orang berhak untuk hidup dan mempertahankan hidupnya diatur dalam...',NULL,'mudah','Pasal 28A UUD 1945: Setiap orang berhak untuk hidup','Pasal 28A = hak hidup. Jangan tertukar dengan 28E (kebebasan).','AI Knowledge','2026-06-01 01:27:13'),(80,1,'twk','UUD 1945','MPR terdiri dari anggota-anggota DPR dan DPD diatur dalam...',NULL,'sangat_mudah','Pasal 2 ayat (1): MPR terdiri atas anggota-anggota DPR dan DPD','Pasal 2 = MPR = DPR + DPD.','AI Knowledge','2026-06-01 01:27:13'),(81,1,'twk','UUD 1945','MPR berwenang mengubah UUD dan melantik Presiden diatur dalam...',NULL,'mudah','Pasal 3: MPR berwenang mengubah dan menetapkan UUD, melantik Presiden/Wapres','Pasal 3 = wewenang MPR.','AI Knowledge','2026-06-01 01:27:14'),(82,1,'twk','UUD 1945','Syarat menjadi Presiden adalah WNI, percaya Tuhan, dan...',NULL,'mudah','Pasal 6 ayat (1): WNI, percaya Tuhan, dan berusia sekurang-kurangnya 40 tahun','Pasal 6 = syarat Presiden. 40 tahun + percaya Tuhan + WNI.','AI Knowledge','2026-06-01 01:27:14'),(83,1,'twk','UUD 1945','Presiden dan Wapres dilantik oleh...',NULL,'sangat_mudah','Pasal 9: Presiden dan Wapres dilantik oleh MPR','Pasal 9 = pelantikan oleh MPR.','AI Knowledge','2026-06-01 01:27:14'),(84,1,'twk','Sejarah Indonesia','Sumpah Pemuda dilaksanakan pada tanggal...',NULL,'sangat_mudah','28 Oktober 1928','Hafal: 28 Oktober 1928. Tiga ikrar.','AI Knowledge','2026-06-01 01:27:14'),(85,1,'twk','Sejarah Indonesia','Sumpah Pemuda memuat ikrar tentang...',NULL,'mudah','Tanah Air, Bangsa, dan Bahasa Indonesia','Tiga ikrar: Tanah Air, Bangsa, Bahasa.','AI Knowledge','2026-06-01 01:27:14'),(86,1,'twk','Sejarah Indonesia','Proklamasi Kemerdekaan Indonesia dilaksanakan pada...',NULL,'sangat_mudah','17 Agustus 1945','Hafal: 17 Agustus 1945.','AI Knowledge','2026-06-01 01:27:14'),(87,1,'twk','Sejarah Indonesia','Proklamasi dibacakan oleh...',NULL,'sangat_mudah','Soekarno dan Mohammad Hatta','Soekarno & Hatta. Jalan Pegangsaan Timur 56.','AI Knowledge','2026-06-01 01:27:15'),(88,1,'twk','Sejarah Indonesia','Organisasi pertama pergerakan nasional Indonesia adalah...',NULL,'mudah','Budi Utomo (20 Mei 1908)','Budi Utomo = Kebangkitan Nasional.','AI Knowledge','2026-06-01 01:27:15'),(89,1,'twk','Sejarah Indonesia','Indische Partij didirikan oleh...',NULL,'sedang','E.F.E. Douwes Dekker','Douwes Dekker = Indische Partij (1912).','AI Knowledge','2026-06-01 01:27:15'),(90,1,'twk','Sejarah Indonesia','KMB yang mengakui kedaulatan RI dilaksanakan...',NULL,'mudah','23 Agustus 1949','KMB = Konferensi Meja Bundar. Den Haag.','AI Knowledge','2026-06-01 01:27:15'),(91,1,'twk','Sejarah Indonesia','Panitia Sembilan dipimpin oleh...',NULL,'sedang','Mohammad Yamin atau Soekarno (ketua rapat)','Panitia Sembilan merumuskan Piagam Jakarta.','AI Knowledge','2026-06-01 01:27:15'),(92,1,'twk','Sejarah Indonesia','Piagam Jakarta merupakan rancangan...',NULL,'mudah','Dasar Negara yang kemudian disempurnakan menjadi Pancasila','Piagam Jakarta = rancangan Pancasila (tujuh kata).','AI Knowledge','2026-06-01 01:27:15'),(93,1,'twk','Sejarah Indonesia','BPUPKI dibentuk pada masa pendudukan...',NULL,'sangat_mudah','Jepang','BPUPKI dibentuk 29 Maret 1945 saat pendudukan Jepang.','AI Knowledge','2026-06-01 01:27:15'),(94,1,'twk','NKRI','Bhinneka Tunggal Ika berarti...',NULL,'sangat_mudah','Berbeda-beda tetapi tetap satu jua','Arti literal Bhinneka Tunggal Ika.','AI Knowledge','2026-06-01 01:27:16'),(95,1,'twk','NKRI','Jumlah suku bangsa di Indonesia kurang lebih...',NULL,'mudah','1.300 suku bangsa','1.300+ suku, 700+ bahasa daerah.','AI Knowledge','2026-06-01 01:27:16'),(96,1,'twk','NKRI','Agama yang diakui oleh negara di Indonesia berjumlah...',NULL,'sangat_mudah','6 agama','6: Islam, Kristen, Katolik, Hindu, Buddha, Konghucu.','AI Knowledge','2026-06-01 01:27:16'),(97,1,'twk','NKRI','Pembelaan negara merupakan hak dan kewajiban warga negara diatur dalam...',NULL,'mudah','Pasal 27 ayat (3) UUD 1945','Pasal 27 ayat (3) = hak & kewajiban bela negara.','AI Knowledge','2026-06-01 01:27:16'),(98,1,'twk','NKRI','Bela negara dilaksanakan secara...',NULL,'mudah','Semesta (melibatkan seluruh komponen bangsa)','Semesta = total defence.','AI Knowledge','2026-06-01 01:27:16'),(99,1,'twk','NKRI','Upaya pertahanan dan keamanan negara dilaksanakan melalui...',NULL,'sedang','Sistem pertahanan dan keamanan rakyat semesta','Sishanta = sistem pertahanan semesta.','AI Knowledge','2026-06-01 01:27:16'),(100,1,'twk','NKRI','Mpu Prapanca adalah pengarang kitab...',NULL,'mudah','Negarakertagama','Mpu Prapanca = Negarakertagama. Mpu Tantular = Sutasoma.','AI Knowledge','2026-06-01 01:27:17'),(101,1,'twk','NKRI','Total Defence meliputi aspek...',NULL,'sedang','Militer dan non-militer','Total Defence = pertahanan semesta.','AI Knowledge','2026-06-01 01:27:17'),(102,1,'twk','NKRI','Sistem pemerintahan Indonesia berdasar atas...',NULL,'sangat_mudah','Hukum (rule of law)','Pasal 1 ayat (3): Negara berdasar atas hukum.','AI Knowledge','2026-06-01 01:27:17'),(103,1,'tiu','Verbal','Sinonim KONSISTEN adalah...',NULL,'mudah','Tetap, teguh, konsekuen','Konsisten = tetap. Antonim: berubah-ubah.','AI Knowledge','2026-06-01 01:27:20'),(104,1,'tiu','Verbal','Antonim EKSTENSIF adalah...',NULL,'sedang','Intensif','Ekstensif = luas. Intensif = mendalam/terpusat.','AI Knowledge','2026-06-01 01:27:21'),(105,1,'tiu','Verbal','MAUT : MATI = LAHIR : ...',NULL,'sedang','Hidup','Maut = kematian. Lawan: hidup.','AI Knowledge','2026-06-01 01:27:21'),(106,1,'tiu','Verbal','Sinonim AUTENTIK adalah...',NULL,'mudah','Asli, genuine','Autentik = asli.','AI Knowledge','2026-06-01 01:27:21'),(107,1,'tiu','Verbal','Antonim STAGNAN adalah...',NULL,'sedang','Progresif, dinamis','Stagnan = tidak bergerak. Lawan: progresif.','AI Knowledge','2026-06-01 01:27:21'),(108,1,'tiu','Verbal','KAKI : SEPATU = KEPALA : ...',NULL,'mudah','Topi','Alat pelindung.','AI Knowledge','2026-06-01 01:27:21'),(109,1,'tiu','Verbal','PETANI : CANGKUL = PENJAHIT : ...',NULL,'sedang','Jarum','Alat kerja.','AI Knowledge','2026-06-01 01:27:21'),(110,1,'tiu','Verbal','Sinonim KONSEKUEN adalah...',NULL,'mudah','Teguh, konsisten','Konsekuen = tetap pada prinsip.','AI Knowledge','2026-06-01 01:27:22'),(111,1,'tiu','Verbal','MATA : MELIHAT = TELINGA : ...',NULL,'sangat_mudah','Mendengar','Fungsi organ.','AI Knowledge','2026-06-01 01:27:22'),(112,1,'tiu','Numerik','Deret: 2, 5, 10, 17, 26, ... Berikutnya?',NULL,'sedang','37 (n┬▓+1)','Pola: 1┬▓+1=2, 2┬▓+1=5, 3┬▓+1=10, 6┬▓+1=37.','AI Knowledge','2026-06-01 01:27:22'),(113,1,'tiu','Numerik','12 pekerja selesai dalam 20 hari. Jika ditambah 8 orang, selesai dalam...',NULL,'sedang','12 hari. 12├ù20=240. 20 orang butuh 240/20=12.','Orang├ùHari = konstan.','AI Knowledge','2026-06-01 01:27:22'),(114,1,'tiu','Numerik','6 orang selesai dalam 10 hari. 15 orang selesai dalam...',NULL,'mudah','4 hari. 6├ù10=60. 60/15=4.','Perbandingan berbalik nilai.','AI Knowledge','2026-06-01 01:27:22'),(115,1,'tiu','Numerik','Barang dijual Rp 240.000 setelah diskon 20%. Harga asli?',NULL,'sedang','Rp 300.000. 240.000/0.8=300.000.','Harga Asli = Harga Jual / (1-Diskon%).','AI Knowledge','2026-06-01 01:27:22'),(116,1,'tiu','Numerik','3/4 tangki = 180 liter. Kapasitas penuh?',NULL,'mudah','240 liter. 180/(3/4)=240.','Total = Bagian / Fraksi.','AI Knowledge','2026-06-01 01:27:23'),(117,1,'tiu','Numerik','Mobil menempuh 240 km dalam 4 jam. Kecepatan rata-rata?',NULL,'sangat_mudah','60 km/jam. 240/4=60.','v = s/t.','AI Knowledge','2026-06-01 01:27:23'),(118,1,'tiu','Numerik','Pola: 1, 1, 2, 3, 5, 8, 13, ... Berikutnya?',NULL,'sedang','21. Fibonacci: 8+13=21.','Fibonacci: n=(n-1)+(n-2).','AI Knowledge','2026-06-01 01:27:23'),(119,1,'tiu','Numerik','Pola: 3, 6, 12, 24, 48, ... Berikutnya?',NULL,'mudah','96. Geometri ├ù2.','Geometri: rasio tetap.','AI Knowledge','2026-06-01 01:27:23'),(120,1,'tiu','Numerik','Pola: 5, 8, 13, 20, 29, ... Berikutnya?',NULL,'sedang','40. Selisih: +3,+5,+7,+9,+11.','Selisih ganjil bertambah 2.','AI Knowledge','2026-06-01 01:27:23'),(121,1,'tiu','Numerik','Sebuah proyek dikerjakan 15 orang selama 8 hari. Jika dikerjakan 24 orang, selesai dalam...',NULL,'sedang','5 hari. 15├ù8=120. 120/24=5.','Orang├ùHari = konstan.','AI Knowledge','2026-06-01 01:27:23'),(122,1,'tiu','Logika','Premis 1: Semua PNS wajib pelatihan. Premis 2: Budi adalah PNS. Kesimpulan...',NULL,'mudah','Budi wajib pelatihan.','Silogisme: Semua A=B, C=A ΓåÆ C=B.','AI Knowledge','2026-06-01 01:27:23'),(123,1,'tiu','Logika','Andi>Budi, Budi>Cici, Dedi<Cici. Kesimpulan...',NULL,'sedang','Andi>Dedi. Urutan: Andi>Budi>Cici>Dedi.','Buat diagram urutan.','AI Knowledge','2026-06-01 01:27:24'),(124,1,'tkp','Profesionalisme','Petugas pelayanan menghadapi warga marah karena permohonan tertolak. Sikap terbaik...',NULL,'sedang','Dengarkan, tenang, jelaskan dengan sabar, beri solusi alternatif.','TKP: Pilih profesional, empati, solusi.','AI Knowledge','2026-06-01 01:27:24'),(125,1,'tiu','Logika','Semua burung bisa terbang. Ayam adalah burung. Maka...',NULL,'mudah','Ayam bisa terbang.','Silogisme sederhana.','AI Knowledge','2026-06-01 01:27:24'),(126,1,'tkp','Komitmen','Tugas mendadak Jumat sore harus lembur, tapi sudah janji keluarga. Yang dilakukan...',NULL,'mudah','Komunikasi dengan atasan + konfirmasi ke keluarga.','Profesionalisme Γëá mengorbankan keluarga. Cari win-win.','AI Knowledge','2026-06-01 01:27:24'),(127,1,'tiu','Logika','Jika hujan, jalan licin. Hari ini jalan licin. Maka...',NULL,'sedang','Mungkin hujan (tidak pasti).','Affirming the consequent = tidak valid secara logis.','AI Knowledge','2026-06-01 01:27:24'),(128,1,'tkp','Profesionalisme','Rekan sering datang terlambat dan pulang cepat. Sebagai kolega...',NULL,'sedang','Bicara pribadi, beri saran perbaikan, jika perlu lapor atasan.','Komitmen organisasi: jaga produktivitas tim.','AI Knowledge','2026-06-01 01:27:24'),(129,1,'tiu','Logika','Semua mahasiswa rajin. Santi rajin. Maka...',NULL,'mudah','Santi mungkin mahasiswa (tidak pasti).','Rajin Γëá pasti mahasiswa. Bisa profesi lain juga rajin.','AI Knowledge','2026-06-01 01:27:24'),(130,1,'tkp','Sosial Budaya','Ditugaskan di daerah budaya sangat berbeda. Sikap Anda...',NULL,'mudah','Belajar dan hormati budaya setempat, tetap profesional.','Adaptasi: hormati norma lokal.','AI Knowledge','2026-06-01 01:27:24'),(131,1,'tiu','Verbal','Paragraf: Perkembangan teknologi informasi membawa perubahan besar dalam pendidikan. Paragraf membahas tentang...',NULL,'mudah','Pengaruh teknologi terhadap pendidikan.','Cari kalimat utama.','AI Knowledge','2026-06-01 01:27:24'),(132,1,'tkp','Pelayanan Publik','Antrean panjang, lansia terlihat kelelahan. Tindakan terbaik...',NULL,'mudah','Sediakan kursi dan prioritas pelayanan sesuai ketentuan.','Pelayanan: utamakan kelompok rentan.','AI Knowledge','2026-06-01 01:27:24'),(133,1,'tiu','Verbal','Buku : Perpustakaan = Burung : ...',NULL,'sedang','Sangkar','Tempat tinggal.','AI Knowledge','2026-06-01 01:27:24'),(134,1,'tkp','Integritas','Atasan gunakan kendaraan dinas untuk pribadi. Tindakan Anda...',NULL,'sedang','Laporkan ke inspektorat/penyelenggara negara.','Integritas: laporkan pelanggaran, jangan tutupi.','AI Knowledge','2026-06-01 01:27:25'),(135,1,'tiu','Verbal','Api : Panas = Es : ...',NULL,'sedang','Dingin','Sifat.','AI Knowledge','2026-06-01 01:27:25'),(136,1,'tkp','Komitmen','Tugas deadline ketat tapi data belum lengkap. Yang dilakukan...',NULL,'sedang','Lapor kendala ke atasan & berusaha dengan data tersedia.','Komitmen: komunikasi + usaha maksimal.','AI Knowledge','2026-06-01 01:27:25'),(137,1,'tiu','Numerik','Pola: 1, 4, 9, 16, 25, ... Berikutnya?',NULL,'mudah','36. Kuadrat: 1┬▓,2┬▓,3┬▓,4┬▓,5┬▓,6┬▓=36.','Kuadrat sempurna.','AI Knowledge','2026-06-01 01:27:25'),(138,1,'tkp','Profesionalisme','Atasan kritik keras hasil kerja Anda di rapat umum. Reaksi terbaik...',NULL,'sedang','Dengarkan, catat, minta saran perbaikan setelah rapat.','Profesional: terima kritik dengan lapang dada.','AI Knowledge','2026-06-01 01:27:25'),(139,1,'tiu','Numerik','Seorang pedagang membeli 50 kg beras Rp 6.000/kg. Dijual Rp 7.500/kg. Keuntungan...',NULL,'mudah','Rp 75.000. (7.500-6.000)├ù50 = 1.500├ù50 = 75.000.','Untung = (Hj-Hb) ├ù jumlah.','AI Knowledge','2026-06-01 01:27:25'),(140,1,'tkp','Pelayanan Publik','Warga mengeluh proses berkas terlalu lama. Tindakan Anda...',NULL,'sedang','Mint maaf, percepat proses sesuai SOP, beri penjelasan.','Pelayanan: solusi-oriented, jangan alasan.','AI Knowledge','2026-06-01 01:27:25'),(141,1,'tiu','Numerik','Nilai rata-rata dari 8, 12, 15, 5, 10 adalah...',NULL,'sangat_mudah','10. (8+12+15+5+10)/5 = 50/5 = 10.','Rata-rata = jumlah data / banyak data.','AI Knowledge','2026-06-01 01:27:25'),(142,1,'tkp','Profesionalisme','Anda diminta mengerjakan tugas di luar tupoksi. Sikap terbaik...',NULL,'sedang','Terima dan kerjakan sebaik mungkin, komunikasikan jika overload.','Profesionalisme: fleksibel tapi komunikatif.','AI Knowledge','2026-06-01 01:27:25'),(143,1,'tiu','Numerik','Jika 2x + 5 = 15, maka x = ...',NULL,'sangat_mudah','5. 2x = 10 ΓåÆ x = 5.','Persamaan linear sederhana.','AI Knowledge','2026-06-01 01:27:25'),(144,1,'tkp','Integritas','Menemukan uang di dalam dokumen warga yang dikembalikan. Tindakan...',NULL,'sedang','Segera hubungi warga untuk mengembalikan uang tersebut.','Integritas = kejujuran dalam hal kecil sekalipun.','AI Knowledge','2026-06-01 01:27:25'),(145,1,'tiu','Numerik','Pecahan terbesar dari 3/4, 2/3, 5/6, 1/2 adalah...',NULL,'sedang','5/6. Samakan penyebut: 9/12, 8/12, 10/12, 6/12.','Samakan penyebut lalu bandingkan pembilang.','AI Knowledge','2026-06-01 01:27:25'),(146,1,'tkp','Komitmen','Proyek tim terganggu karena 1 rekan sakit. Yang Anda lakukan...',NULL,'sedang','Bagi tugas rekan yang sakit ke anggota lain & tetap komunikasi.','Komitmen tim: gotong royong, jangan biarkan proyek gagal.','AI Knowledge','2026-06-01 01:27:26'),(147,1,'tiu','Logika','Semua kucing adalah mamalia. Hewan A adalah mamalia. Maka...',NULL,'sedang','Hewan A mungkin kucing (tidak pasti).','Affirming the consequent.','AI Knowledge','2026-06-01 01:27:26'),(148,1,'tkp','Pelayanan Publik','Warga datang tanpa dokumen lengkap tapi urgensitas tinggi. Sikap...',NULL,'sedang','Bantu dengan data tersedia, arahkan dokumen kurang, prioritaskan.','Pelayanan: bantu sebisa mungkin tanpa melanggar aturan.','AI Knowledge','2026-06-01 01:27:26'),(149,1,'tiu','Logika','Jika belajar, lulus ujian. Rina tidak lulus ujian. Maka...',NULL,'sedang','Rina tidak belajar (modus tollens).','Modus tollens valid.','AI Knowledge','2026-06-01 01:27:26'),(150,1,'tkp','Sosial Budaya','Menerima keluhan warga dengan bahasa daerah yang tidak Anda kuasai. Tindakan...',NULL,'mudah','Mint tolong penerjemah/anggota yang menguasai bahasa daerah tersebut.','Sosial budaya: hormati bahasa daerah, cari solusi komunikasi.','AI Knowledge','2026-06-01 01:27:26'),(151,1,'tiu','Verbal','Sinonim ELASTIS adalah...',NULL,'mudah','Lentur, fleksibel','Elastis = lentur.','AI Knowledge','2026-06-01 01:27:26'),(152,1,'tkp','Profesionalisme','Anda salah input data di sistem. Yang dilakukan...',NULL,'mudah','Segera lapor dan perbaiki kesalahan, jangan tutupi.','Integritas: akui kesalahan, perbaiki.','AI Knowledge','2026-06-01 01:27:26'),(153,1,'tiu','Verbal','Antonim KOMPLEKS adalah...',NULL,'mudah','Sederhana, simple','Kompleks = rumit. Lawan: sederhana.','AI Knowledge','2026-06-01 01:27:26'),(154,1,'tkp','Integritas','Diminta mempercepat proses oleh kenalan dengan imbalan. Tindakan...',NULL,'sedang','Tolak dan jelaskan prosedur harus diikuti semua orang.','Integritas: prosedur sama untuk semua, tanpa pengecualian.','AI Knowledge','2026-06-01 01:27:26'),(155,1,'tiu','Numerik','Pola: 10, 8, 13, 11, 16, 14, ... Berikutnya?',NULL,'sedang','19. Dua pola berselang: -2, +5. 10ΓåÆ13ΓåÆ16ΓåÆ19 (+3) dan 8ΓåÆ11ΓåÆ14 (+3).','Dua pola berselang.','AI Knowledge','2026-06-01 01:27:26'),(156,1,'tkp','Komitmen','Tugas proyek memerlukan kerja lembur berkelanjutan. Sikap...',NULL,'sedang','Komunikasikan ke atasan untuk efisiensi atau penambahan SDM.','Komitmen Γëá self-exploitation. Cari solusi berkelanjutan.','AI Knowledge','2026-06-01 01:27:26'),(157,1,'tiu','Numerik','Sebuah toko memberi diskon 25%. Harga setelah diskon Rp 180.000. Harga asli?',NULL,'sedang','Rp 240.000. 180.000/0.75=240.000.','Harga Asli = Harga Jual / (1-Diskon%).','AI Knowledge','2026-06-01 01:27:26'),(158,1,'tkp','Pelayanan Publik','Warga tidak puas dengan keputusan yang sudah final. Tindakan...',NULL,'sedang','Jelaskan dengan sabar, arahkan ke prosedur banding jika ada.','Pelayanan: tetap profesional meski keputusan tidak populer.','AI Knowledge','2026-06-01 01:27:26'),(159,1,'tkp','Sosial Budaya','Anda diminta mengikuti ritual adat yang bertentangan dengan keyakinan Anda. Sikap...',NULL,'sedang','Hormati ritual adat dengan tetap menjaga keyakinan pribadi.','Sila 1: toleransi. Hormati adat tanpa meninggalkan keyakinan.','AI Knowledge','2026-06-01 01:27:27'),(160,1,'tkp','Profesionalisme','Anda menemukan data pribadi warga bocor di media sosial. Tindakan...',NULL,'sedang','Lapor ke atasan & tim keamanan informasi, bantu identifikasi sumber kebocoran.','Profesionalisme: tanggap keamanan data.','AI Knowledge','2026-06-01 01:27:27'),(161,1,'tkp','Integritas','Rekan kerja Anda curang dalam laporan keuangan. Tindakan...',NULL,'sedang','Kumpulkan bukti, laporkan ke atasan/auditor internal.','Integritas: melaporkan kecurangan wajib dilakukan.','AI Knowledge','2026-06-01 01:27:27'),(162,1,'tkp','Komitmen','Proyek penting deadline mepet, tim rewel. Yang Anda lakukan...',NULL,'sedang','Motivasi tim, koordinasi tugas, dan tetap fokus tujuan.','Komitmen: leadership di saat sulit.','AI Knowledge','2026-06-01 01:27:27'),(163,1,'tkp','Pelayanan Publik','Sistem online down saat jam sibuk. Warga marah-marah. Tindakan...',NULL,'sedang','Mint maaf, arahkan ke jalur offline/manual, laporkan ke IT.','Pelayanan: solusi alternatif saat sistem bermasalah.','AI Knowledge','2026-06-01 01:27:27'),(164,1,'tkp','Sosial Budaya','Acara kantor memerlukan menu non-halal, tapi Anda Muslim. Sikap...',NULL,'sedang','Hormati acara, pilih menu halal yang tersedia, jadikan ajang silaturahmi.','Sosial budaya: adaptasi tanpa meninggalkan keyakinan.','AI Knowledge','2026-06-01 01:27:27'),(165,1,'tkp','Profesionalisme','Anda salah kirim email internal ke pihak eksternal. Tindakan...',NULL,'sedang','Segera minta maaf, tarik email, dan lapor ke atasan.','Profesionalisme: akui & perbaiki kesalahan komunikasi.','AI Knowledge','2026-06-01 01:27:28'),(166,1,'tkp','Integritas','Atasan minta Anda memalsukan tanda tangan untuk percepatan proses. Tindakan...',NULL,'sedang','Tolak tegas dan jelaskan risiko hukum pemalsuan dokumen.','Integritas: pemalsuan dokumen = pidana.','AI Knowledge','2026-06-01 01:27:28'),(167,1,'tkp','Komitmen','Program baru gagal total meski Anda sudah kerja keras. Sikap...',NULL,'sedang','Evaluasi bersama tim, identifikasi penyebab, susun rencana perbaikan.','Komitmen: kegagalan adalah pembelajaran, bukan akhir.','AI Knowledge','2026-06-01 01:27:28'),(168,1,'tkp','Pelayanan Publik','Warga tidak bisa membaca dan menulis, butuh bantuan formulir. Tindakan...',NULL,'mudah','Bantu isi formulir dengan sabar sambil jelaskan isinya.','Pelayanan: inklusi bagi yang buta huruf.','AI Knowledge','2026-06-01 01:27:28'),(169,1,'tkp','Sosial Budaya','Anda diundang makan di rumah warga dengan tradisi makan bersama pakai tangan. Anda biasa pakai sendok. Sikap...',NULL,'sedang','Ikuti tradisi makan bersama dengan tangan, jadikan pengalaman budaya.','Sosial budaya: hormati tradisi lokal tanpa menghina.','AI Knowledge','2026-06-01 01:27:28'),(170,1,'tkp','Profesionalisme','Anda diminta oleh 2 atasan dengan prioritas berbeda pada waktu yang sama. Tindakan...',NULL,'sedang','Komunikasikan ke kedua atasan, negosiasikan prioritas & deadline.','Profesionalisme: manajemen konflik antar atasan.','AI Knowledge','2026-06-01 01:27:28'),(171,1,'tkp','Integritas','Anda menemukan bahwa data statistik kantor dibuat-buat untuk laporan. Tindakan...',NULL,'sedang','Kumpulkan bukti, laporkan ke auditor internal/inspektorat.','Integritas: data palsu = kecurangan serius.','AI Knowledge','2026-06-01 01:27:29'),(172,1,'tkp','Komitmen','Tim Anda kalah kompetisi antar unit kerja. Sikap...',NULL,'sedang','Ucapkan selamat ke pemenang, evaluasi diri, dan motivasi tim untuk kompetisi berikutnya.','Komitmen: sportivitas dan continuous improvement.','AI Knowledge','2026-06-01 01:27:29'),(173,1,'tkp','Pelayanan Publik','Warga datang 5 menit sebelum jam tutup dengan urusan panjang. Tindakan...',NULL,'sedang','Terima dengan ramah, selesaikan urusan, atau jadwalkan lanjutan besok.','Pelayanan: jangan tolak hanya karena waktu.','AI Knowledge','2026-06-01 01:27:29'),(174,1,'tkp','Sosial Budaya','Anda melihat rekan mengejek dialek daerah warga. Tindakan...',NULL,'sedang','Ingatkan rekan bahwa setiap dialek adalah kekayaan budaya dan harus dihormati.','Sosial budaya: penghargaan terhadap keberagaman bahasa.','AI Knowledge','2026-06-01 01:27:29'),(175,1,'psikologi','Wartegg','Pola berikut: lingkaran, segitiga, lingkaran, segitiga, ... Gambar berikutnya yang tepat adalah?',NULL,'mudah','Pola berselang: lingkaran - segitiga. Berikutnya = lingkaran.','Cari pola berulang (berselang, bertambah, berputar).','AI Knowledge - Psikologi','2026-06-01 01:35:45'),(176,1,'psikologi','Wartegg','Jika gambar A adalah 1/2 lingkaran, gambar B adalah 1/2 lingkaran yang dilanjutkan menjadi lingkaran penuh, maka 1/2 persegi dilanjutkan menjadi...',NULL,'sedang','Persegi penuh.','Lanjutkan bentuk dasar menjadi bentuk utuh.','AI Knowledge - Psikologi','2026-06-01 01:35:45'),(177,1,'psikologi','Wartegg','Deret gambar: titik, garis pendek, garis panjang, ... Gambar berikutnya yang logis adalah?',NULL,'mudah','Pola: panjang bertambah. Berikutnya = lebih panjang/melebar.','Perhatikan transformasi ukuran.','AI Knowledge - Psikologi','2026-06-01 01:35:45'),(178,1,'psikologi','Wartegg','Gambar dasar berupa titik di tengah kotak. Kelanjutan yang paling kreatif dan logis adalah?',NULL,'sedang','Titik diperbesar menjadi lingkaran, atau ditambah titik lain membentuk pola.','Kreativitas + logika: kembangkan elemen dasar.','AI Knowledge - Psikologi','2026-06-01 01:35:46'),(179,1,'psikologi','Wartegg','Pola: segitiga kecil, segitiga sedang, segitiga besar, ... Berikutnya?',NULL,'sangat_mudah','Segitiga lebih besar atau bentuk baru.','Pola ukuran bertambah.','AI Knowledge - Psikologi','2026-06-01 01:35:46'),(180,1,'psikologi','Wartegg','Gambar berisi dua garis paralel. Kelanjutan yang paling tepat adalah...',NULL,'sedang','Dua garis paralel diperpanjang, diberi penghubung, atau dibentuk jadi jalan/rel.','Kembangkan elemen yang sudah ada secara logis.','AI Knowledge - Psikologi','2026-06-01 01:35:46'),(181,1,'psikologi','Wartegg','Kotak berisi kurva setengah lingkaran. Kelanjutan paling logis adalah...',NULL,'mudah','Melengkapi lingkaran penuh.','Lengkapi bentuk dasar.','AI Knowledge - Psikologi','2026-06-01 01:35:46'),(182,1,'psikologi','Wartegg','Pola gambar: bentuk geometris berisi 1, 2, 3, 4 titik di dalamnya. Berikutnya berisi...',NULL,'sedang','5 titik.','Pola numerik dalam gambar.','AI Knowledge - Psikologi','2026-06-01 01:35:46'),(183,1,'psikologi','Wartegg','Gambar dasar: zig-zag (sawtooth). Kelanjutan yang paling kreatif namun koheren adalah...',NULL,'sedang','Lanjutkan zig-zag membentuk gelombang atau pola berulang.','Konsistensi pola.','AI Knowledge - Psikologi','2026-06-01 01:35:46'),(184,1,'psikologi','Wartegg','Kotak berisi titik di pojok kiri atas. Titik bergerak ke kanan bawah membentuk garis diagonal. Gambar berikutnya seharusnya...',NULL,'sedang','Lanjutkan diagonal atau bentuk segitiga dari titik-titik.','Pergerakan/rotasi elemen.','AI Knowledge - Psikologi','2026-06-01 01:35:47'),(185,1,'psikologi','Wartegg','Pola berselang: kotak berisi garis vertikal, kotak berisi garis horizontal, ... Berikutnya?',NULL,'sangat_mudah','Garis vertikal.','Pola berselang.','AI Knowledge - Psikologi','2026-06-01 01:35:47'),(186,1,'psikologi','Wartegg','Gambar berisi bentuk seperti huruf L. Kelanjutan paling logis adalah...',NULL,'mudah','Lengkapi jadi persegi panjang / persegi.','Lengkapi bentuk dasar.','AI Knowledge - Psikologi','2026-06-01 01:35:47'),(187,1,'psikologi','Wartegg','Pola: kotak berisi 1 lingkaran, 2 lingkaran, 3 lingkaran, ... Berikutnya berisi?',NULL,'sangat_mudah','4 lingkaran.','Pola bertambah 1.','AI Knowledge - Psikologi','2026-06-01 01:35:47'),(188,1,'psikologi','Wartegg','Gambar dasar: busur / lengkungan. Kelanjutan paling kreatif adalah...',NULL,'sedang','Lengkapi jadi lingkaran / bulan / bentuk organik.','Kreativitas + logika.','AI Knowledge - Psikologi','2026-06-01 01:35:47'),(189,1,'psikologi','Wartegg','Kotak berisi tanda silang (X). Kelanjutan yang paling tepat adalah...',NULL,'sedang','Tambah elemen di sekitar X membentuk bintang / kupu-kupu / pola simetris.','Simetri dan pengembangan.','AI Knowledge - Psikologi','2026-06-01 01:36:30'),(190,1,'psikologi','EPPS','Pernyataan mana yang PALING menggambarkan diri Anda?\nA. Saya suka menjadi pemimpin dalam kelompok.\nB. Saya lebih nyaman mengikuti daripada memimpin.',NULL,'mudah','Tidak ada jawaban benar/salah. Pilihan A menunjukkan kebutuhan dominance/achievement. Pilihan B menunjukkan kebutuhan deference/affiliation.','EPPS: pilih yang PALING sesuai dengan diri Anda, bukan yang \"seharusnya\".','AI Knowledge - Psikologi','2026-06-01 01:36:30'),(191,1,'psikologi','EPPS','Pernyataan mana yang PALING menggambarkan diri Anda?\nA. Saya merasa puas ketika dapat menyelesaikan tugas yang sulit.\nB. Saya merasa lebih bahagia saat bersama teman-teman dekat.',NULL,'mudah','A = need achievement. B = need affiliation.','Pilih yang PALING sesuai.','AI Knowledge - Psikologi','2026-06-01 01:36:30'),(192,1,'psikologi','EPPS','Pernyataan mana yang PALING menggambarkan diri Anda?\nA. Saya suka bekerja secara mandiri tanpa banyak campur tangan orang lain.\nB. Saya suka bekerja dalam tim dengan arahan yang jelas dari atasan.',NULL,'mudah','A = need autonomy. B = need deference/structure.','Pilih yang PALING sesuai.','AI Knowledge - Psikologi','2026-06-01 01:36:31'),(193,1,'psikologi','EPPS','Pernyataan mana yang PALING menggambarkan diri Anda?\nA. Saya suka membantu orang lain meskipun tidak diminta.\nB. Saya lebih fokus pada tugas saya sendiri.',NULL,'mudah','A = need nurturance. B = need achievement/introversion.','Pilih yang PALING sesuai.','AI Knowledge - Psikologi','2026-06-01 01:36:31'),(194,1,'psikologi','EPPS','Pernyataan mana yang PALING menggambarkan diri Anda?\nA. Saya suka mencoba hal-hal baru dan berbeda.\nB. Saya lebih nyaman dengan rutinitas yang sudah familiar.',NULL,'mudah','A = need change/variety. B = need order/endurance.','Pilih yang PALING sesuai.','AI Knowledge - Psikologi','2026-06-01 01:36:31'),(195,1,'psikologi','EPPS','Pernyataan mana yang PALING menggambarkan diri Anda?\nA. Saya mudah merasa kasihan pada orang yang sedang kesulitan.\nB. Saya cenderung melihat masalah secara objektif tanpa emosi.',NULL,'mudah','A = need nurturance. B = need aggression/objectivity.','Pilih yang PALING sesuai.','AI Knowledge - Psikologi','2026-06-01 01:36:31'),(196,1,'psikologi','EPPS','Pernyataan mana yang PALING menggambarkan diri Anda?\nA. Saya suka berdebat untuk membuktikan pendapat saya benar.\nB. Saya suka menghindari konflik dan mencari jalan damai.',NULL,'mudah','A = need aggression. B = need abasement/harmavoidance.','Pilih yang PALING sesuai.','AI Knowledge - Psikologi','2026-06-01 01:36:31'),(197,1,'psikologi','EPPS','Pernyataan mana yang PALING menggambarkan diri Anda?\nA. Saya suka memperoleh pengakuan dan penghargaan atas prestasi saya.\nB. Saya merasa cukup puas tanpa perlu pengakuan orang lain.',NULL,'mudah','A = need exhibition/recognition. B = need intraception/self-sufficiency.','Pilih yang PALING sesuai.','AI Knowledge - Psikologi','2026-06-01 01:36:31'),(198,1,'psikologi','EPPS','Pernyataan mana yang PALING menggambarkan diri Anda?\nA. Saya suka mengatur dan mengorganisir pekerjaan orang lain.\nB. Saya lebih suka diberi tugas yang jelas daripada menyusun tugas untuk orang lain.',NULL,'mudah','A = need dominance/organization. B = need deference/clarity.','Pilih yang PALING sesuai.','AI Knowledge - Psikologi','2026-06-01 01:36:32'),(199,1,'psikologi','EPPS','Pernyataan mana yang PALING menggambarkan diri Anda?\nA. Saya merasa lebih bersemangat saat ada tantangan baru.\nB. Saya merasa lebih tenang saat semuanya terencana dengan baik.',NULL,'mudah','A = need change/variety. B = need order/security.','Pilih yang PALING sesuai.','AI Knowledge - Psikologi','2026-06-01 01:36:32'),(200,1,'psikologi','EPPS','Pernyataan mana yang PALING menggambarkan diri Anda?\nA. Saya sering memikirkan arti hidup dan perasaan orang lain.\nB. Saya lebih fokus pada fakta dan hasil yang konkret.',NULL,'mudah','A = need intraception. B = need achievement/pragmatism.','Pilih yang PALING sesuai.','AI Knowledge - Psikologi','2026-06-01 01:36:32'),(201,1,'psikologi','EPPS','Pernyataan mana yang PALING menggambarkan diri Anda?\nA. Saya suka berada di tempat ramai dengan banyak orang.\nB. Saya lebih nyaman di tempat sepi dengan sedikit teman.',NULL,'mudah','A = need affiliation/sociability. B = need solitude.','Pilih yang PALING sesuai.','AI Knowledge - Psikologi','2026-06-01 01:36:32'),(202,1,'psikologi','EPPS','Pernyataan mana yang PALING menggambarkan diri Anda?\nA. Saya merasa bersalah jika tidak dapat memenuhi harapan orang lain.\nB. Saya tidak terlalu memikirkan apa kata orang lain terhadap saya.',NULL,'mudah','A = need abasement. B = need autonomy/self-sufficiency.','Pilih yang PALING sesuai.','AI Knowledge - Psikologi','2026-06-01 01:36:32'),(203,1,'psikologi','EPPS','Pernyataan mana yang PALING menggambarkan diri Anda?\nA. Saya suka memperbaiki atau membangun sesuatu dengan tangan saya.\nB. Saya lebih suka menggunakan otak daripada tangan.',NULL,'mudah','A = need construction/sensation. B = need intraception/theoretical.','Pilih yang PALING sesuai.','AI Knowledge - Psikologi','2026-06-01 01:36:32'),(204,1,'psikologi','EPPS','Pernyataan mana yang PALING menggambarkan diri Anda?\nA. Saya suka menjadi pusat perhatian dalam pesta atau acara.\nB. Saya lebih suka diam dan mengamati dari pinggir.',NULL,'mudah','A = need exhibition/sociability. B = need intraception/introversion.','Pilih yang PALING sesuai.','AI Knowledge - Psikologi','2026-06-01 01:36:33'),(205,1,'psikologi','EPPS','Pernyataan mana yang PALING menggambarkan diri Anda?\nA. Saya mudah marah ketika ada yang meremehkan kemampuan saya.\nB. Saya cenderung mengabaikan penilaian negatif orang lain.',NULL,'mudah','A = need aggression/defensiveness. B = need autonomy/security.','Pilih yang PALING sesuai.','AI Knowledge - Psikologi','2026-06-01 01:36:33'),(206,1,'psikologi','EPPS','Pernyataan mana yang PALING menggambarkan diri Anda?\nA. Saya suka mempelajari hal-hal yang kompleks dan memerlukan analisis mendalam.\nB. Saya suka belajar hal-hal praktis yang langsung bisa diterapkan.',NULL,'mudah','A = need understanding/complexity. B = need practicality/application.','Pilih yang PALING sesuai.','AI Knowledge - Psikologi','2026-06-01 01:36:33'),(207,1,'psikologi','EPPS','Pernyataan mana yang PALING menggambarkan diri Anda?\nA. Saya suka menjaga lingkungan tetap rapi dan teratur.\nB. Saya tidak keberatan dengan sedikit kekacauan selalu.',NULL,'mudah','A = need order. B = need change/variety.','Pilih yang PALING sesuai.','AI Knowledge - Psikologi','2026-06-01 01:36:33'),(208,1,'psikologi','EPPS','Pernyataan mana yang PALING menggambarkan diri Anda?\nA. Saya suka mengambil risiko dalam pengambilan keputusan.\nB. Saya suka mempertimbangkan semua kemungkinan sebelum memutuskan.',NULL,'sedang','A = need change/risk. B = need caution/endurance.','Pilih yang PALING sesuai.','AI Knowledge - Psikologi','2026-06-01 01:36:33'),(209,1,'psikologi','EPPS','Pernyataan mana yang PALING menggambarkan diri Anda?\nA. Saya merasa nyaman menjadi pengikut yang setia dalam tim.\nB. Saya selalu ingin membuktikan bahwa saya lebih baik dari orang lain.',NULL,'sedang','A = need deference/teamwork. B = need dominance/competition.','Pilih yang PALING sesuai.','AI Knowledge - Psikologi','2026-06-01 01:36:33');
+/*!40000 ALTER TABLE `soal` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
--- Struktur dari tabel `tanya_admin`
+-- Table structure for table `tanya_admin`
 --
 
+DROP TABLE IF EXISTS `tanya_admin`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tanya_admin` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `pertanyaan` text NOT NULL,
   `jawaban` text DEFAULT NULL,
   `dijawab_by` int(11) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `dijawab_at` timestamp NULL DEFAULT NULL
+  `dijawab_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Struktur dari tabel `users`
+-- Dumping data for table `tanya_admin`
 --
 
+LOCK TABLES `tanya_admin` WRITE;
+/*!40000 ALTER TABLE `tanya_admin` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tanya_admin` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `nama` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
   `password` varchar(255) NOT NULL,
   `no_hp` varchar(20) DEFAULT NULL,
   `role` enum('admin','peserta') NOT NULL DEFAULT 'peserta',
   `target_ujian` enum('cpns','stan','stis','ipdn') DEFAULT 'cpns',
-  `created_at` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `created_at` datetime DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data untuk tabel `users`
+-- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `nama`, `email`, `password`, `no_hp`, `role`, `target_ujian`, `created_at`) VALUES
-(1, 'Admin TryOut', 'admin@tryoutku.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '081234567890', 'admin', 'cpns', '2026-05-31 20:12:22'),
-(2, 'Peserta Demo', 'peserta_demo@tryoutku.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '081234567891', 'peserta', 'cpns', '2026-05-31 20:12:22'),
-(3, 'Comprehensive Test', 'comp_1780233231994@test.com', '$2y$10$mChVM83lDLV9ekJcpJrNX.dtiW5Tq.ObBu2B4mxXstyS8bPqyTjOK', '081111111111', 'peserta', 'cpns', '2026-05-31 20:13:52'),
-(4, 'Peserta Simulasi 1', 'simulasi1780233408@test.com', '$2y$10$NB.KlxpXtG7SKKjBPiVGMOmNkuXBn28/.1bZmH6eilfUCirzAvGNG', '081234567891', 'peserta', 'cpns', '2026-05-31 20:16:48'),
-(6, 'Peserta Simulasi 1', 'simulasi1_1780233446_6a1c34e624881@test.com', '$2y$10$ROb/XanC42OiVHesByV50O18miPvSdovAwuPj4xx35L0f87DJjEGu', '081234567891', 'peserta', 'cpns', '2026-05-31 20:17:26'),
-(7, 'Peserta Simulasi 2', 'simulasi2_1780233446_6a1c34e637a06@test.com', '$2y$10$gS0JiSPpPGJU2j8QZS7BDu2MVgLHf60Umv3QsJ3eunfCkweAZE.5K', '081234567892', 'peserta', 'cpns', '2026-05-31 20:17:26'),
-(8, 'Peserta Simulasi 1', 'simulasi1_1780233521_6a1c3531c8a4b@test.com', '$2y$10$ovN8N5ZCrkzEy6zd4CZWYetgKRQh7ZHw3JYESHSXCLl9R0q/q06CG', '081234567891', 'peserta', 'cpns', '2026-05-31 20:18:41'),
-(9, 'Peserta Simulasi 2', 'simulasi2_1780233521_6a1c3531db032@test.com', '$2y$10$SA.zPMi081FidDrG4FI3redVJT77e3/l/QE/3EEXz7EBiZVkPSQFS', '081234567892', 'peserta', 'cpns', '2026-05-31 20:18:41'),
-(10, 'Peserta Simulasi 1', 'simulasi1_1780233573_6a1c356544ee7@test.com', '$2y$10$zxcNPDtUo6YMfuxtM7S.Zeke8Zv.YQtXdKOvOQJXY1tmW19Vb.ALm', '081234567891', 'peserta', 'cpns', '2026-05-31 20:19:33'),
-(11, 'Peserta Simulasi 2', 'simulasi2_1780233573_6a1c356553ea6@test.com', '$2y$10$zUa32FyWu8gcvhbvL.PP3.XjqwfZVrG3arTyExzQb6d3hBW7I1bDa', '081234567892', 'peserta', 'cpns', '2026-05-31 20:19:33'),
-(12, 'Comprehensive Test', 'comp_1780233984659@test.com', '$2y$10$PJg46IpkiBtMmGE/32YdXe6Ns/8Y6rOFXsTjU28l33xZC8awKe5Hi', '081111111111', 'peserta', 'cpns', '2026-05-31 20:26:24');
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'Admin TryOut','admin@tryoutku.com','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi','081234567890','admin','cpns','2026-05-31 20:12:22'),(2,'Peserta Demo','peserta_demo@tryoutku.com','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi','081234567891','peserta','cpns','2026-05-31 20:12:22'),(3,'Comprehensive Test','comp_1780233231994@test.com','$2y$10$mChVM83lDLV9ekJcpJrNX.dtiW5Tq.ObBu2B4mxXstyS8bPqyTjOK','081111111111','peserta','cpns','2026-05-31 20:13:52'),(4,'Peserta Simulasi 1','simulasi1780233408@test.com','$2y$10$NB.KlxpXtG7SKKjBPiVGMOmNkuXBn28/.1bZmH6eilfUCirzAvGNG','081234567891','peserta','cpns','2026-05-31 20:16:48'),(6,'Peserta Simulasi 1','simulasi1_1780233446_6a1c34e624881@test.com','$2y$10$ROb/XanC42OiVHesByV50O18miPvSdovAwuPj4xx35L0f87DJjEGu','081234567891','peserta','cpns','2026-05-31 20:17:26'),(7,'Peserta Simulasi 2','simulasi2_1780233446_6a1c34e637a06@test.com','$2y$10$gS0JiSPpPGJU2j8QZS7BDu2MVgLHf60Umv3QsJ3eunfCkweAZE.5K','081234567892','peserta','cpns','2026-05-31 20:17:26'),(8,'Peserta Simulasi 1','simulasi1_1780233521_6a1c3531c8a4b@test.com','$2y$10$ovN8N5ZCrkzEy6zd4CZWYetgKRQh7ZHw3JYESHSXCLl9R0q/q06CG','081234567891','peserta','cpns','2026-05-31 20:18:41'),(9,'Peserta Simulasi 2','simulasi2_1780233521_6a1c3531db032@test.com','$2y$10$SA.zPMi081FidDrG4FI3redVJT77e3/l/QE/3EEXz7EBiZVkPSQFS','081234567892','peserta','cpns','2026-05-31 20:18:41'),(10,'Peserta Simulasi 1','simulasi1_1780233573_6a1c356544ee7@test.com','$2y$10$zxcNPDtUo6YMfuxtM7S.Zeke8Zv.YQtXdKOvOQJXY1tmW19Vb.ALm','081234567891','peserta','cpns','2026-05-31 20:19:33'),(11,'Peserta Simulasi 2','simulasi2_1780233573_6a1c356553ea6@test.com','$2y$10$zUa32FyWu8gcvhbvL.PP3.XjqwfZVrG3arTyExzQb6d3hBW7I1bDa','081234567892','peserta','cpns','2026-05-31 20:19:33'),(12,'Comprehensive Test','comp_1780233984659@test.com','$2y$10$PJg46IpkiBtMmGE/32YdXe6Ns/8Y6rOFXsTjU28l33xZC8awKe5Hi','081111111111','peserta','cpns','2026-05-31 20:26:24'),(13,'Peserta Simulasi 014041','simulasi_1780252841_6a1c80a97701b@test.com','$2y$10$vLjrjssu2OwkZQIYq2D6OOEm6L01wNF7kXQ9EPSxm07z/kNsyrfJ6','081234567899','peserta','cpns','2026-06-01 01:40:41');
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
--- Indexes for dumped tables
+-- Dumping events for database 'db_tryout'
 --
 
 --
--- Indeks untuk tabel `catatan_pengajar`
+-- Dumping routines for database 'db_tryout'
 --
-ALTER TABLE `catatan_pengajar`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `unique_user` (`user_id`);
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
---
--- Indeks untuk tabel `detail_jawaban`
---
-ALTER TABLE `detail_jawaban`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `hasil_ujian_id` (`hasil_ujian_id`),
-  ADD KEY `soal_id` (`soal_id`);
-
---
--- Indeks untuk tabel `hasil_ujian`
---
-ALTER TABLE `hasil_ujian`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `paket_ujian_id` (`paket_ujian_id`);
-
---
--- Indeks untuk tabel `kategori_ujian`
---
-ALTER TABLE `kategori_ujian`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indeks untuk tabel `materi`
---
-ALTER TABLE `materi`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `kategori_ujian_id` (`kategori_ujian_id`);
-
---
--- Indeks untuk tabel `opsi_jawaban`
---
-ALTER TABLE `opsi_jawaban`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `soal_id` (`soal_id`);
-
---
--- Indeks untuk tabel `paket_soal`
---
-ALTER TABLE `paket_soal`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `paket_soal_unique` (`paket_ujian_id`,`soal_id`),
-  ADD KEY `soal_id` (`soal_id`);
-
---
--- Indeks untuk tabel `paket_ujian`
---
-ALTER TABLE `paket_ujian`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `kategori_ujian_id` (`kategori_ujian_id`);
-
---
--- Indeks untuk tabel `rekomendasi_belajar`
---
-ALTER TABLE `rekomendasi_belajar`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `hasil_ujian_id` (`hasil_ujian_id`),
-  ADD KEY `rb_materi` (`saran_materi_id`);
-
---
--- Indeks untuk tabel `riwayat_materi`
---
-ALTER TABLE `riwayat_materi`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `materi_id` (`materi_id`);
-
---
--- Indeks untuk tabel `soal`
---
-ALTER TABLE `soal`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `kategori_ujian_id` (`kategori_ujian_id`),
-  ADD KEY `jenis_tes` (`jenis_tes`),
-  ADD KEY `topik` (`topik`);
-
---
--- Indeks untuk tabel `tanya_admin`
---
-ALTER TABLE `tanya_admin`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indeks untuk tabel `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`);
-
---
--- AUTO_INCREMENT untuk tabel yang dibuang
---
-
---
--- AUTO_INCREMENT untuk tabel `catatan_pengajar`
---
-ALTER TABLE `catatan_pengajar`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT untuk tabel `detail_jawaban`
---
-ALTER TABLE `detail_jawaban`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
-
---
--- AUTO_INCREMENT untuk tabel `hasil_ujian`
---
-ALTER TABLE `hasil_ujian`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT untuk tabel `kategori_ujian`
---
-ALTER TABLE `kategori_ujian`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT untuk tabel `materi`
---
-ALTER TABLE `materi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
-
---
--- AUTO_INCREMENT untuk tabel `opsi_jawaban`
---
-ALTER TABLE `opsi_jawaban`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=271;
-
---
--- AUTO_INCREMENT untuk tabel `paket_soal`
---
-ALTER TABLE `paket_soal`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
-
---
--- AUTO_INCREMENT untuk tabel `paket_ujian`
---
-ALTER TABLE `paket_ujian`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT untuk tabel `rekomendasi_belajar`
---
-ALTER TABLE `rekomendasi_belajar`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
-
---
--- AUTO_INCREMENT untuk tabel `riwayat_materi`
---
-ALTER TABLE `riwayat_materi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT untuk tabel `soal`
---
-ALTER TABLE `soal`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
-
---
--- AUTO_INCREMENT untuk tabel `tanya_admin`
---
-ALTER TABLE `tanya_admin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT untuk tabel `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
-
---
--- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
---
-
---
--- Ketidakleluasaan untuk tabel `detail_jawaban`
---
-ALTER TABLE `detail_jawaban`
-  ADD CONSTRAINT `dj_hu` FOREIGN KEY (`hasil_ujian_id`) REFERENCES `hasil_ujian` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `dj_soal` FOREIGN KEY (`soal_id`) REFERENCES `soal` (`id`) ON DELETE CASCADE;
-
---
--- Ketidakleluasaan untuk tabel `hasil_ujian`
---
-ALTER TABLE `hasil_ujian`
-  ADD CONSTRAINT `hu_paket` FOREIGN KEY (`paket_ujian_id`) REFERENCES `paket_ujian` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `hu_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
-
---
--- Ketidakleluasaan untuk tabel `materi`
---
-ALTER TABLE `materi`
-  ADD CONSTRAINT `materi_kategori` FOREIGN KEY (`kategori_ujian_id`) REFERENCES `kategori_ujian` (`id`) ON DELETE SET NULL;
-
---
--- Ketidakleluasaan untuk tabel `opsi_jawaban`
---
-ALTER TABLE `opsi_jawaban`
-  ADD CONSTRAINT `opsi_soal` FOREIGN KEY (`soal_id`) REFERENCES `soal` (`id`) ON DELETE CASCADE;
-
---
--- Ketidakleluasaan untuk tabel `paket_soal`
---
-ALTER TABLE `paket_soal`
-  ADD CONSTRAINT `ps_paket` FOREIGN KEY (`paket_ujian_id`) REFERENCES `paket_ujian` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `ps_soal` FOREIGN KEY (`soal_id`) REFERENCES `soal` (`id`) ON DELETE CASCADE;
-
---
--- Ketidakleluasaan untuk tabel `paket_ujian`
---
-ALTER TABLE `paket_ujian`
-  ADD CONSTRAINT `paket_kategori` FOREIGN KEY (`kategori_ujian_id`) REFERENCES `kategori_ujian` (`id`) ON DELETE CASCADE;
-
---
--- Ketidakleluasaan untuk tabel `rekomendasi_belajar`
---
-ALTER TABLE `rekomendasi_belajar`
-  ADD CONSTRAINT `rb_hu` FOREIGN KEY (`hasil_ujian_id`) REFERENCES `hasil_ujian` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `rb_materi` FOREIGN KEY (`saran_materi_id`) REFERENCES `materi` (`id`) ON DELETE SET NULL,
-  ADD CONSTRAINT `rb_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
-
---
--- Ketidakleluasaan untuk tabel `riwayat_materi`
---
-ALTER TABLE `riwayat_materi`
-  ADD CONSTRAINT `rm_materi` FOREIGN KEY (`materi_id`) REFERENCES `materi` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `rm_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
-
---
--- Ketidakleluasaan untuk tabel `soal`
---
-ALTER TABLE `soal`
-  ADD CONSTRAINT `soal_kategori` FOREIGN KEY (`kategori_ujian_id`) REFERENCES `kategori_ujian` (`id`) ON DELETE SET NULL;
-COMMIT;
-
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2026-06-01  3:07:07

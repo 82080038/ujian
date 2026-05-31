@@ -12,14 +12,14 @@ $peserta = $conn->query("SELECT u.*, COUNT(h.id) as total_ujian, AVG(h.skor_kumu
 // Data butir soal
 $butir = [];
 if ($tab === 'butir') {
-    $sql = "SELECT s.*, k.nama as kategori_nama, COUNT(dj.id) as total_dijawab,
-        SUM(CASE WHEN dj.nilai_diperoleh > 0 THEN 1 ELSE 0 END) as total_benar
+    $sql = "SELECT * FROM (
+        SELECT s.*, k.nama as kategori_nama, COUNT(dj.id) as total_dijawab,
+            SUM(CASE WHEN dj.nilai_diperoleh > 0 THEN 1 ELSE 0 END) as total_benar
         FROM soal s
         LEFT JOIN kategori_ujian k ON s.kategori_ujian_id = k.id
         LEFT JOIN detail_jawaban dj ON s.id = dj.soal_id
         GROUP BY s.id
-        ORDER BY total_benar / NULLIF(total_dijawab,0) ASC
-        LIMIT 200";
+    ) t ORDER BY total_benar / NULLIF(total_dijawab,0) ASC LIMIT 200";
     $butir = $conn->query($sql);
 }
 

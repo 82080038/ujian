@@ -30,7 +30,7 @@ require_once __DIR__ . '/../includes/navbar_peserta.php';
             </div>
         </div>
         <?php foreach ([['label'=>'TWK','skor'=>$hasil['skor_twk'],'pg'=>$hasil['passing_grade_twk'],'color'=>'primary'],['label'=>'TIU','skor'=>$hasil['skor_tiu'],'pg'=>$hasil['passing_grade_tiu'],'color'=>'warning'],['label'=>'TKP','skor'=>$hasil['skor_tkp'],'pg'=>$hasil['passing_grade_tkp'],'color'=>'success']] as $sub): ?>
-        <div class="col-4">
+        <div class="col-12 col-sm-4">
             <div class="card score-card text-center h-100">
                 <div class="card-body">
                     <h6 class="text-<?= $sub['color'] ?> fw-bold"><?= $sub['label'] ?></h6>
@@ -73,5 +73,12 @@ require_once __DIR__ . '/../includes/navbar_peserta.php';
         <a href="rapor.php" class="btn btn-primary"><i class="bi bi-file-earmark-bar-graph"></i> Lihat Rapor</a>
     </div>
 </div>
+
+<nav class="bottom-nav-mobile d-lg-none">
+    <a href="dashboard.php"><i class="bi bi-house fs-4"></i> Beranda</a>
+    <a href="tryout_list.php" class="active"><i class="bi bi-pencil-square fs-4"></i> Try-Out</a>
+    <a href="belajar.php"><i class="bi bi-book fs-4"></i> Belajar</a>
+    <a href="rapor.php"><i class="bi bi-file-earmark-bar-graph fs-4"></i> Rapor</a>
+</nav>
 
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>

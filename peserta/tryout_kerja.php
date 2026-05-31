@@ -77,11 +77,9 @@ if ($soalAktif) {
 }
 
 $pageTitle = 'Try-Out - ' . e($paket['nama_paket']);
-$extraCss = '';
+$bodyClass = 'bg-light mode-ujian';
 require_once __DIR__ . '/../includes/header.php';
 ?>
-
-<body class="bg-light mode-ujian">
 
 <div class="sticky-top bg-white border-bottom py-2">
     <div class="container">
@@ -143,6 +141,7 @@ require_once __DIR__ . '/../includes/header.php';
                 <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#modalSubmit"><i class="bi bi-check-lg"></i> Selesai</button>
             <?php endif; ?>
         </div>
+        <div class="swipe-hint"><i class="bi bi-arrow-left-right"></i> Geser kiri/kanan untuk navigasi</div>
     </div>
     <?php else: ?>
         <div class="alert alert-info">Tidak ada soal dalam paket ini.</div>
@@ -200,7 +199,7 @@ require_once __DIR__ . '/../includes/header.php';
 document.addEventListener('DOMContentLoaded', function() {
     const waktuMenit = <?= $paket['waktu_menit'] ?? 90 ?>;
     if (typeof startTimer === 'function') {
-        startTimer(waktuMenit * 60, '#timer', '#form-ujian');
+        startTimer(waktuMenit * 60, '#timer', '#form-ujian', <?= $paket_id ?>);
     }
 });
 </script>

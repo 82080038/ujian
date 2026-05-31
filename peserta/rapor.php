@@ -9,7 +9,7 @@ $user_id = $_SESSION['user_id'];
 $riwayat = $conn->query("SELECT h.*, p.nama_paket FROM hasil_ujian h JOIN paket_ujian p ON h.paket_ujian_id = p.id WHERE h.user_id = $user_id AND h.status_lulus != 'proses' ORDER BY h.created_at DESC LIMIT 10");
 
 // Analisis topik (strength/weakness) - ambil dari semua ujian
-$analisis = $conn->query("SELECT s.jenis_tes, s.topik, COUNT(*) as total_soal, SUM(CASE WHEN dj.nilai_diperoleh > 0 THEN 1 ELSE 0 END) as benar, ROUND(AVG(dj.waktu_detik)) as rata_waktu FROM detail_jawaban dj JOIN soal s ON dj.soal_id = s.id JOIN hasil_ujian h ON dj.hasil_ujian_id = h.id WHERE h.user_id = $user_id AND h.status_lulus != 'proses' GROUP BY s.jenis_tes, s.topik ORDER BY SUM(CASE WHEN dj.nilai_diperoleh > 0 THEN 1 ELSE 0 END) / COUNT(*) ASC");
+$analisis = $conn->query("SELECT * FROM (SELECT s.jenis_tes, s.topik, COUNT(*) as total_soal, SUM(CASE WHEN dj.nilai_diperoleh > 0 THEN 1 ELSE 0 END) as benar, ROUND(AVG(dj.waktu_detik)) as rata_waktu FROM detail_jawaban dj JOIN soal s ON dj.soal_id = s.id JOIN hasil_ujian h ON dj.hasil_ujian_id = h.id WHERE h.user_id = $user_id AND h.status_lulus != 'proses' GROUP BY s.jenis_tes, s.topik) t ORDER BY benar / total_soal ASC");
 
 // Rekomendasi aktif
 $rekom = $conn->query("SELECT rb.*, m.judul as materi_judul FROM rekomendasi_belajar rb LEFT JOIN materi m ON rb.saran_materi_id = m.id WHERE rb.user_id = $user_id AND rb.status = 'belum_dikerjakan' ORDER BY rb.created_at DESC");

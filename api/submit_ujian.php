@@ -52,7 +52,7 @@ $stmt2->execute();
 
 // Generate rekomendasi belajar
 // Analisis topik lemah (< 50% benar)
-$stmt3 = $conn->query("SELECT s.jenis_tes, s.topik, COUNT(*) as total, SUM(CASE WHEN dj.nilai_diperoleh > 0 THEN 1 ELSE 0 END) as benar FROM detail_jawaban dj JOIN soal s ON dj.soal_id = s.id WHERE dj.hasil_ujian_id = $hasil_id GROUP BY s.jenis_tes, s.topik HAVING (benar/total) < 0.5");
+$stmt3 = $conn->query("SELECT jenis_tes, topik, total, benar FROM (SELECT s.jenis_tes, s.topik, COUNT(*) as total, SUM(CASE WHEN dj.nilai_diperoleh > 0 THEN 1 ELSE 0 END) as benar FROM detail_jawaban dj JOIN soal s ON dj.soal_id = s.id WHERE dj.hasil_ujian_id = $hasil_id GROUP BY s.jenis_tes, s.topik) t WHERE benar/total < 0.5");
 
 while ($row = $stmt3->fetch_assoc()) {
     $pct = round(($row['benar'] / $row['total']) * 100, 2);

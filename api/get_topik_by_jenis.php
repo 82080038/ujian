@@ -10,7 +10,10 @@ if (!in_array($jenis, ['twk','tiu','tkp'])) {
     exit;
 }
 
-$res = $conn->query("SELECT DISTINCT topik FROM soal WHERE jenis_tes = '$jenis' ORDER BY topik");
+$stmt = $conn->prepare("SELECT DISTINCT topik FROM soal WHERE jenis_tes = ? ORDER BY topik");
+$stmt->bind_param('s', $jenis);
+$stmt->execute();
+$res = $stmt->get_result();
 $topik = [];
 while ($r = $res->fetch_assoc()) $topik[] = $r['topik'];
 echo json_encode($topik);

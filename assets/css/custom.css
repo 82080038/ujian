@@ -32,9 +32,30 @@ body {
     border-radius: 8px;
 }
 
-.btn-soal.belum { background-color: #e9ecef; color: #495057; border-color: #adb5bd; }
-.btn-soal.dijawab { background-color: #198754; color: #fff; border-color: #198754; }
-.btn-soal.ragu { background-color: #ffc107; color: #000; border-color: #ffc107; }
+.navigasi-soal .btn-soal.belum,
+.navigasi-soal .btn-soal.belum.active {
+    background-color: #e9ecef !important;
+    color: #495057 !important;
+    border-color: #adb5bd !important;
+}
+.navigasi-soal .btn-soal.dijawab,
+.navigasi-soal .btn-soal.dijawab.active {
+    background-color: #198754 !important;
+    color: #fff !important;
+    border-color: #198754 !important;
+}
+.navigasi-soal .btn-soal.ragu,
+.navigasi-soal .btn-soal.ragu.active {
+    background-color: #ffc107 !important;
+    color: #000 !important;
+    border-color: #ffc107 !important;
+}
+/* Soal yang sedang aktif (nomor saat ini) */
+.navigasi-soal .btn-soal.active {
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.5);
+    transform: scale(1.1);
+    z-index: 1;
+}
 
 .timer-box {
     font-size: 1.5rem;
@@ -123,6 +144,12 @@ body {
     }
 }
 
+@media (max-width: 991.98px) {
+    body {
+        padding-bottom: 70px;
+    }
+}
+
 @media (max-width: 576px) {
     .timer-box { font-size: 1.2rem; }
     .score-value { font-size: 2rem; }
@@ -130,6 +157,53 @@ body {
         width: 36px;
         height: 36px;
         font-size: 0.8rem;
+    }
+}
+
+/* Touch-friendly improvements */
+.btn, .opsi-jawaban, .list-group-item-action, .nav-link, .dropdown-item, .form-check-input, .accordion-button {
+    min-height: 44px;
+}
+
+/* iOS input zoom prevention */
+input, select, textarea {
+    font-size: 16px;
+}
+
+/* Better tap targets on mobile */
+.bottom-nav-mobile a {
+    min-width: 60px;
+    min-height: 44px;
+    justify-content: center;
+}
+
+/* Horizontal scroll prevention */
+.container, .container-fluid {
+    max-width: 100vw;
+    overflow-x: hidden;
+}
+
+/* Table responsive improvements */
+.table-responsive {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Card improvements for mobile */
+.card-hover {
+    touch-action: manipulation;
+}
+
+/* Swipe hint for exam pages */
+.swipe-hint {
+    display: none;
+}
+@media (max-width: 576px) {
+    .swipe-hint {
+        display: block;
+        text-align: center;
+        font-size: 0.75rem;
+        color: #6c757d;
+        margin-top: 0.5rem;
     }
 }
 
