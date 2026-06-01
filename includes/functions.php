@@ -110,12 +110,17 @@ function hitungSkorTKP($conn, $hasil_ujian_id) {
     return $res['total'] ?? 0;
 }
 
-function getStatusLulus($skor_twk, $skor_tiu, $skor_tkp, $kategori) {
-    if ($skor_twk < PG_TWK || $skor_tiu < PG_TIU || $skor_tkp < PG_TKP) {
+function getStatusLulus($skor_twk, $skor_tiu, $skor_tkp, $kategori = []) {
+    $pgTWK = is_array($kategori) ? intval($kategori['passing_grade_twk'] ?? PG_TWK) : PG_TWK;
+    $pgTIU = is_array($kategori) ? intval($kategori['passing_grade_tiu'] ?? PG_TIU) : PG_TIU;
+    $pgTKP = is_array($kategori) ? intval($kategori['passing_grade_tkp'] ?? PG_TKP) : PG_TKP;
+    $pgKumulatif = is_array($kategori) ? intval($kategori['passing_grade_kumulatif'] ?? PG_KUMULATIF) : PG_KUMULATIF;
+    
+    if ($skor_twk < $pgTWK || $skor_tiu < $pgTIU || $skor_tkp < $pgTKP) {
         return 'gugur';
     }
     $kumulatif = $skor_twk + $skor_tiu + $skor_tkp;
-    if ($kumulatif >= PG_KUMULATIF) {
+    if ($kumulatif >= $pgKumulatif) {
         return 'lulus';
     }
     return 'gugur';
@@ -141,4 +146,44 @@ function getJenisTesColor($jenis) {
 
 function escapeLike($str) {
     return str_replace(['%', '_'], ['\%', '\_'], $str);
+}
+
+function cleanupStuckExams($conn) {
+    // Auto-submit ujian yang stuck lebih dari TIMEOUT_UJIAN menit
+    $timeoutMinutes = TIMEOUT_UJIAN;
+    $stmt = $conn->prepare('SELECT h.id, h.user_id, h.paket_ujian_id, p.kategori_ujian_id, k.passing_grade_twk, k.passing_grade_tiu, k.passing_grade_tkp, k.passing_grade_kumulatif FROM hasil_ujian h JOIN paket_ujian p ON h.paket_ujian_id = p.id JOIN kategori_ujian k ON p.kategori_ujian_id = k.id WHERE h.status_lulus = "proses" AND TIMESTAMPDIFF(MINUTE, h.tanggal_mulai, NOW()) > ?');
+    $stmt->bind_param('i', $timeoutMinutes);
+    $stmt->execute();
+    $stuckExams = $stmt->get_result();
+    
+    $cleaned = 0;
+    while ($exam = $stuckExams->fetch_assoc()) {
+        $hasil_id = $exam['id'];
+        // Hitung skor
+        $skorTWK = 0; $skorTIU = 0; $skorTKP = 0;
+        
+        foreach (['twk' => &$skorTWK, 'tiu' => &$skorTIU] as $jenis => &$skorVar) {
+            $s = $conn->prepare("SELECT SUM(dj.nilai_diperoleh) as total FROM detail_jawaban dj JOIN soal s ON dj.soal_id = s.id WHERE dj.hasil_ujian_id = ? AND s.jenis_tes = ?");
+            $s->bind_param('is', $hasil_id, $jenis);
+            $s->execute();
+            $skorVar = $s->get_result()->fetch_assoc()['total'] ?? 0;
+        }
+        
+        $s = $conn->prepare("SELECT SUM(dj.nilai_diperoleh) as total FROM detail_jawaban dj JOIN soal s ON dj.soal_id = s.id WHERE dj.hasil_ujian_id = ? AND s.jenis_tes = 'tkp'");
+        $s->bind_param('i', $hasil_id);
+        $s->execute();
+        $skorTKP = $s->get_result()->fetch_assoc()['total'] ?? 0;
+        
+        $kumulatif = $skorTWK + $skorTIU + $skorTKP;
+        $status = getStatusLulus($skorTWK, $skorTIU, $skorTKP, $exam);
+        
+        // Update hasil
+        $stmt2 = $conn->prepare('UPDATE hasil_ujian SET skor_twk = ?, skor_tiu = ?, skor_tkp = ?, skor_kumulatif = ?, status_lulus = ?, tanggal_selesai = NOW() WHERE id = ?');
+        $stmt2->bind_param('iiiisi', $skorTWK, $skorTIU, $skorTKP, $kumulatif, $status, $hasil_id);
+        $stmt2->execute();
+        
+        $cleaned++;
+    }
+    
+    return $cleaned;
 }

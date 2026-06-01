@@ -6,7 +6,7 @@ $pageTitle = 'Dashboard Peserta - ' . APP_NAME;
 $user = getUserById($conn, $_SESSION['user_id']);
 
 // Statistik
-$stmt = $conn->prepare('SELECT COUNT(*) as total, AVG(skor_kumulatif) as rata FROM hasil_ujian WHERE user_id = ?');
+$stmt = $conn->prepare('SELECT COUNT(*) as total, AVG(skor_kumulatif) as rata FROM hasil_ujian WHERE user_id = ? AND status_lulus != "proses"');
 $stmt->bind_param('i', $_SESSION['user_id']);
 $stmt->execute();
 $stat = $stmt->get_result()->fetch_assoc();

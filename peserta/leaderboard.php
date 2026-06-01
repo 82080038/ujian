@@ -18,12 +18,16 @@ $inTop10 = in_array($user_id, $top10Ids);
 // Jika user tidak di top 10, ambil data ranking sendiri
 $myRank = null;
 if (!$inTop10) {
-    $myRes = $conn->query("SELECT u.nama, u.target_ujian, ROUND(AVG(h.skor_kumulatif),1) as rata_skor, COUNT(h.id) as total_ujian FROM users u LEFT JOIN hasil_ujian h ON u.id = h.user_id AND h.status_lulus != 'proses' WHERE u.role = 'peserta' AND u.id = $user_id GROUP BY u.id");
-    $myData = $myRes->fetch_assoc();
+    $stmtMe = $conn->prepare("SELECT u.nama, u.target_ujian, ROUND(AVG(h.skor_kumulatif),1) as rata_skor, COUNT(h.id) as total_ujian FROM users u LEFT JOIN hasil_ujian h ON u.id = h.user_id AND h.status_lulus != 'proses' WHERE u.role = 'peserta' AND u.id = ? GROUP BY u.id");
+    $stmtMe->bind_param('i', $user_id);
+    $stmtMe->execute();
+    $myData = $stmtMe->get_result()->fetch_assoc();
     if ($myData) {
         // Hitung posisi ranking
-        $rankRes = $conn->query("SELECT COUNT(*) + 1 as pos FROM (SELECT u.id, ROUND(AVG(h.skor_kumulatif),1) as rata_skor FROM users u LEFT JOIN hasil_ujian h ON u.id = h.user_id AND h.status_lulus != 'proses' WHERE u.role = 'peserta' GROUP BY u.id HAVING rata_skor > (SELECT COALESCE(ROUND(AVG(h2.skor_kumulatif),1),0) FROM hasil_ujian h2 WHERE h2.user_id = $user_id AND h2.status_lulus != 'proses')) t");
-        $myRank = $rankRes->fetch_assoc()['pos'] ?? '-';
+        $stmtRank = $conn->prepare("SELECT COUNT(*) + 1 as pos FROM (SELECT u.id, ROUND(AVG(h.skor_kumulatif),1) as rata_skor FROM users u LEFT JOIN hasil_ujian h ON u.id = h.user_id AND h.status_lulus != 'proses' WHERE u.role = 'peserta' GROUP BY u.id HAVING rata_skor > (SELECT COALESCE(ROUND(AVG(h2.skor_kumulatif),1),0) FROM hasil_ujian h2 WHERE h2.user_id = ? AND h2.status_lulus != 'proses')) t");
+        $stmtRank->bind_param('i', $user_id);
+        $stmtRank->execute();
+        $myRank = $stmtRank->get_result()->fetch_assoc()['pos'] ?? '-';
     }
 }
 

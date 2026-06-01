@@ -3,13 +3,21 @@ require_once __DIR__ . '/../includes/functions.php';
 requirePeserta();
 
 $user_id = $_SESSION['user_id'];
-$user = $conn->query("SELECT * FROM users WHERE id = $user_id")->fetch_assoc();
+$stmtUser = $conn->prepare('SELECT * FROM users WHERE id = ?');
+$stmtUser->bind_param('i', $user_id);
+$stmtUser->execute();
+$user = $stmtUser->get_result()->fetch_assoc();
 
 $error = '';
 $success = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $action = $_POST['action'] ?? '';
+    $action = '';
+    if (!verifyCSRF($_POST['csrf_token'] ?? '')) {
+        $error = 'Token tidak valid. Muat ulang halaman dan coba lagi.';
+    } else {
+        $action = $_POST['action'] ?? '';
+    }
 
     if ($action === 'update_profil') {
         $nama = trim($_POST['nama'] ?? '');
@@ -24,7 +32,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($stmt->execute()) {
                 $success = 'Profil berhasil diperbarui.';
                 $_SESSION['nama'] = $nama;
-                $user = $conn->query("SELECT * FROM users WHERE id = $user_id")->fetch_assoc();
+                $stmtRefresh = $conn->prepare('SELECT * FROM users WHERE id = ?');
+                $stmtRefresh->bind_param('i', $user_id);
+                $stmtRefresh->execute();
+                $user = $stmtRefresh->get_result()->fetch_assoc();
             } else {
                 $error = 'Gagal memperbarui profil.';
             }
@@ -72,6 +83,7 @@ require_once __DIR__ . '/../includes/navbar_peserta.php';
                 <div class="card-body">
                     <form method="POST">
                         <input type="hidden" name="action" value="update_profil">
+                        <input type="hidden" name="csrf_token" value="<?= generateCSRF() ?>">
                         <div class="mb-3">
                             <label class="form-label">Nama Lengkap</label>
                             <input type="text" name="nama" class="form-control" value="<?= e($user['nama']) ?>" required>
@@ -103,6 +115,7 @@ require_once __DIR__ . '/../includes/navbar_peserta.php';
                 <div class="card-body">
                     <form method="POST">
                         <input type="hidden" name="action" value="update_password">
+                        <input type="hidden" name="csrf_token" value="<?= generateCSRF() ?>">
                         <div class="mb-3">
                             <label class="form-label">Password Lama</label>
                             <input type="password" name="old_password" class="form-control" required>

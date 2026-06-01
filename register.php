@@ -16,8 +16,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password2 = $_POST['password2'] ?? '';
     $no_hp = trim($_POST['no_hp'] ?? '');
     $target_ujian = $_POST['target_ujian'] ?? 'cpns';
+    $csrf = $_POST['csrf_token'] ?? '';
 
-    if (empty($nama) || empty($email) || empty($password)) {
+    if (!verifyCSRF($csrf)) {
+        $error = 'Sesi tidak valid. Silakan muat ulang halaman.';
+    } elseif (empty($nama) || empty($email) || empty($password)) {
         $error = 'Semua field wajib diisi.';
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = 'Format email tidak valid.';
@@ -74,17 +77,18 @@ require_once __DIR__ . '/includes/header.php';
                     <?php endif; ?>
 
                     <form method="POST" action="">
+                        <input type="hidden" name="csrf_token" value="<?= e(generateCSRF()) ?>">
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Nama Lengkap</label>
-                            <input type="text" name="nama" class="form-control" required value="<?= e($_POST['nama'] ?? '') ?>">
+                            <input type="text" name="nama" class="form-control" required autocomplete="name" value="<?= e($_POST['nama'] ?? '') ?>">
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Email</label>
-                            <input type="email" name="email" class="form-control" required value="<?= e($_POST['email'] ?? '') ?>">
+                            <input type="email" name="email" class="form-control" required autocomplete="email" value="<?= e($_POST['email'] ?? '') ?>">
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold">No. HP</label>
-                            <input type="tel" name="no_hp" class="form-control" value="<?= e($_POST['no_hp'] ?? '') ?>">
+                            <input type="tel" name="no_hp" class="form-control" autocomplete="tel" value="<?= e($_POST['no_hp'] ?? '') ?>">
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Target Ujian</label>
@@ -97,11 +101,11 @@ require_once __DIR__ . '/includes/header.php';
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Password</label>
-                            <input type="password" name="password" class="form-control" required minlength="6">
+                            <input type="password" name="password" class="form-control" required minlength="6" autocomplete="new-password">
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Konfirmasi Password</label>
-                            <input type="password" name="password2" class="form-control" required minlength="6">
+                            <input type="password" name="password2" class="form-control" required minlength="6" autocomplete="new-password">
                         </div>
                         <button type="submit" class="btn btn-success w-100 fw-bold"><i class="bi bi-person-check"></i> Daftar</button>
                     </form>

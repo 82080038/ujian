@@ -5,30 +5,54 @@ requirePeserta();
 $jenis = $_GET['jenis'] ?? '';
 $topik = $_GET['topik'] ?? '';
 $jumlah = intval($_GET['jumlah'] ?? 10);
+$nomor = intval($_GET['n'] ?? 1);
+if ($nomor < 1) $nomor = 1;
 
 if (!$jenis || !$topik || !in_array($jenis, ['twk','tiu','tkp'])) {
     flash('error', 'Parameter tidak valid.');
     redirect('peserta/latihan_topik.php');
 }
 
-$stmt = $conn->prepare("SELECT * FROM soal WHERE jenis_tes = ? AND topik = ? ORDER BY RAND() LIMIT ?");
-$stmt->bind_param('ssi', $jenis, $topik, $jumlah);
-$stmt->execute();
-$soalRes = $stmt->get_result();
-$soalAll = [];
-while ($r = $soalRes->fetch_assoc()) $soalAll[] = $r;
+// Kunci sesi per kombinasi jenis+topik
+$sessionKey = 'latihan_ids_' . md5($jenis . '_' . $topik);
+$isTopikBaru = ($_SESSION['latihan_jenis'] ?? '') !== $jenis
+            || ($_SESSION['latihan_topik'] ?? '') !== $topik;
 
-if (empty($soalAll)) {
+// Re-randomize hanya saat session key belum ada atau topik berubah; navigasi pakai urutan yang tersimpan
+if (empty($_SESSION[$sessionKey]) || $isTopikBaru) {
+    $stmt = $conn->prepare("SELECT id FROM soal WHERE jenis_tes = ? AND topik = ? ORDER BY RAND() LIMIT ?");
+    $stmt->bind_param('ssi', $jenis, $topik, $jumlah);
+    $stmt->execute();
+    $ids = array_column($stmt->get_result()->fetch_all(MYSQLI_ASSOC), 'id');
+    $_SESSION[$sessionKey]      = $ids;
+    $_SESSION['latihan_jenis']  = $jenis;
+    $_SESSION['latihan_topik']  = $topik;
+    // Bersihkan jawaban & reveal lama saat mulai sesi baru
+    unset($_SESSION['latihan_jawaban'], $_SESSION['latihan_reveal']);
+} else {
+    $ids = $_SESSION[$sessionKey];
+}
+
+if (empty($ids)) {
     flash('error', 'Soal tidak tersedia.');
     redirect('peserta/latihan_topik.php');
 }
 
-$_SESSION['latihan_soal'] = array_column($soalAll, 'id');
-$_SESSION['latihan_jenis'] = $jenis;
-$_SESSION['latihan_topik'] = $topik;
+// Ambil soal berdasarkan ID tersimpan (urutan tetap)
+$placeholders = implode(',', array_map('intval', $ids));
+$soalRes = $conn->query("SELECT * FROM soal WHERE id IN ($placeholders)");
+$soalById = [];
+while ($r = $soalRes->fetch_assoc()) $soalById[$r['id']] = $r;
+$soalAll = [];
+foreach ($ids as $sid) {
+    if (isset($soalById[$sid])) $soalAll[] = $soalById[$sid];
+}
 
-$nomor = intval($_GET['n'] ?? 1);
-if ($nomor < 1) $nomor = 1;
+if (empty($soalAll)) {
+    flash('error', 'Soal tidak ditemukan.');
+    redirect('peserta/latihan_topik.php');
+}
+
 if ($nomor > count($soalAll)) $nomor = count($soalAll);
 $soalAktif = $soalAll[$nomor - 1];
 
@@ -118,18 +142,19 @@ require_once __DIR__ . '/../includes/header.php';
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>
 
 <script>
+window.CSRF_TOKEN = '<?= e(generateCSRF()) ?>';
 $('.latihan-opsi').on('click', function() {
     if ($(this).hasClass('disabled-opsi')) return;
     const soalId = $(this).data('soal-id');
     const opsiId = $(this).data('opsi-id');
-    $.post('<?= BASE_URL ?>api/simpan_jawaban_latihan.php', { soal_id: soalId, opsi_id: opsiId }, function(res) {
+    $.post('<?= BASE_URL ?>api/simpan_jawaban_latihan.php', { soal_id: soalId, opsi_id: opsiId, csrf_token: window.CSRF_TOKEN }, function(res) {
         location.reload();
     });
 });
 
 $('.reveal-btn').on('click', function() {
     const soalId = $(this).data('soal-id');
-    $.post('<?= BASE_URL ?>api/simpan_jawaban_latihan.php', { soal_id: soalId, reveal: 1 }, function(res) {
+    $.post('<?= BASE_URL ?>api/simpan_jawaban_latihan.php', { soal_id: soalId, reveal: 1, csrf_token: window.CSRF_TOKEN }, function(res) {
         location.reload();
     });
 });

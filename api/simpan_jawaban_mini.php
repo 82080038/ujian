@@ -11,6 +11,12 @@ if (!isPeserta() || $_SERVER['REQUEST_METHOD'] !== 'POST') {
 $soal_id = intval($_POST['soal_id'] ?? 0);
 $opsi_id = intval($_POST['opsi_id'] ?? 0);
 $is_ragu = intval($_POST['is_ragu'] ?? -1);
+$csrf = $_POST['csrf_token'] ?? '';
+
+if (!verifyCSRF($csrf)) {
+    echo json_encode(['status' => 'error']);
+    exit;
+}
 
 if ($opsi_id > 0) {
     $_SESSION['mini_jawaban'][$soal_id] = $opsi_id;

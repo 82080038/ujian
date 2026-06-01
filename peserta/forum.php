@@ -67,7 +67,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tanya'])) {
 }
 
 // Riwayat tanya user
-$riwayat = $conn->query("SELECT * FROM tanya_admin WHERE user_id = $user_id ORDER BY created_at DESC LIMIT 20");
+$stmtRiw = $conn->prepare('SELECT * FROM tanya_admin WHERE user_id = ? ORDER BY created_at DESC LIMIT 20');
+$stmtRiw->bind_param('i', $user_id);
+$stmtRiw->execute();
+$riwayat = $stmtRiw->get_result();
 
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/navbar_peserta.php';

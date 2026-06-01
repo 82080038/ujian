@@ -1,11 +1,11 @@
-$(document).ready(function() {
+$(document).ready(function () {
     // Auto-dismiss alert after 5s
-    setTimeout(function() {
+    setTimeout(function () {
         $('.auto-dismiss').fadeOut('slow');
     }, 5000);
 
     // Disable right-click
-    $(document).on('contextmenu', function(e) {
+    $(document).on('contextmenu', function (e) {
         if ($('body').hasClass('mode-ujian')) {
             e.preventDefault();
             return false;
@@ -14,43 +14,35 @@ $(document).ready(function() {
 
     // Strict Anti-Cheat during exam
     if ($('body').hasClass('mode-ujian')) {
-        let tabSwitchCount = parseInt(localStorage.getItem('tabSwitchCount') || '0');
-        let cheatLog = [];
+        // Key per-hasil agar counter tidak carry-over antar sesi ujian
+        const hasilId = $('input[name="hasil_id"]').val() || 'exam';
+        const cheatKey = 'cheat_' + hasilId;
+        let tabSwitchCount = parseInt(localStorage.getItem(cheatKey) || '0');
+        const maxWarnings = 3;
 
-        // Tab visibility change
-        $(document).on('visibilitychange', function() {
+        // Hanya gunakan visibilitychange (JANGAN blur - blur+visibilitychange fire bersamaan = double count)
+        $(document).on('visibilitychange', function () {
             if (document.hidden) {
                 tabSwitchCount++;
-                localStorage.setItem('tabSwitchCount', tabSwitchCount);
-                cheatLog.push({type:'tab', time: new Date().toISOString()});
-                if (tabSwitchCount >= 2) {
-                    alert('PERINGATAN KERAS: Anda berpindah tab/tab window. Ujian akan disubmit.');
+                localStorage.setItem(cheatKey, tabSwitchCount);
+                if (tabSwitchCount >= maxWarnings) {
+                    alert('PERINGATAN KERAS: Anda berpindah tab sebanyak ' + tabSwitchCount + ' kali. Ujian akan disubmit otomatis.');
+                    localStorage.removeItem(cheatKey);
                     $('#form-ujian').submit();
                 } else {
-                    alert('PERINGATAN: Jangan berpindah tab/window saat ujian! Peringatan ke-' + tabSwitchCount);
+                    alert('PERINGATAN (' + tabSwitchCount + '/' + (maxWarnings - 1) + '): Jangan berpindah tab/window saat ujian!');
                 }
             }
         });
 
-        // Window blur (alt-tab, minimize, etc)
-        $(window).on('blur', function() {
-            tabSwitchCount++;
-            localStorage.setItem('tabSwitchCount', tabSwitchCount);
-            cheatLog.push({type:'blur', time: new Date().toISOString()});
-            if (tabSwitchCount >= 2) {
-                alert('PERINGATAN KERAS: Window kehilangan fokus. Ujian disubmit otomatis.');
-                $('#form-ujian').submit();
-            }
-        });
-
         // Prevent copy/paste/cut
-        $(document).on('copy cut paste', function(e) {
+        $(document).on('copy cut paste', function (e) {
             e.preventDefault();
             return false;
         });
 
         // Prevent F12, Ctrl+Shift+I, Ctrl+U
-        $(document).on('keydown', function(e) {
+        $(document).on('keydown', function (e) {
             if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) || (e.ctrlKey && e.key === 'u')) {
                 e.preventDefault();
                 return false;
@@ -59,7 +51,7 @@ $(document).ready(function() {
     }
 
     // Opsi jawaban click
-    $(document).on('click', '.opsi-jawaban', function() {
+    $(document).on('click', '.opsi-jawaban', function () {
         const $this = $(this);
         const $container = $this.closest('.soal-box');
         $container.find('.opsi-jawaban').removeClass('terpilih');
@@ -79,14 +71,14 @@ $(document).ready(function() {
         $.ajax({
             url: (window.BASE_URL || '/') + 'api/simpan_jawaban_temp.php',
             method: 'POST',
-            data: { soal_id: soalId, opsi_id: opsiId, paket_id: paketId, is_ragu: isRagu },
+            data: { soal_id: soalId, opsi_id: opsiId, paket_id: paketId, is_ragu: isRagu, csrf_token: window.CSRF_TOKEN || '' },
             dataType: 'json',
-            success: function(res) {
+            success: function (res) {
                 if (res.status === 'ok') {
                     updateNavigasiColor(soalId, isRagu ? 'ragu' : 'dijawab');
                     // Auto-navigate to next question after short delay
                     if (nextUrl) {
-                        setTimeout(function() {
+                        setTimeout(function () {
                             window.location.href = nextUrl;
                         }, 400);
                     }
@@ -96,7 +88,7 @@ $(document).ready(function() {
     });
 
     // Toggle ragu-ragu
-    $(document).on('change', '.toggle-ragu', function() {
+    $(document).on('change', '.toggle-ragu', function () {
         const soalId = $(this).data('soal-id');
         const isRagu = $(this).is(':checked') ? 1 : 0;
         updateNavigasiColor(soalId, isRagu ? 'ragu' : 'dijawab');
@@ -119,7 +111,7 @@ function startTimer(totalSeconds, displaySelector, formSelector, paketId) {
     const display = $(displaySelector);
     const form = $(formSelector);
 
-    const interval = setInterval(function() {
+    const interval = setInterval(function () {
         let m = Math.floor(remaining / 60);
         let s = remaining % 60;
         display.text((m < 10 ? '0' + m : m) + ':' + (s < 10 ? '0' + s : s));
@@ -132,6 +124,9 @@ function startTimer(totalSeconds, displaySelector, formSelector, paketId) {
         if (remaining <= 0) {
             clearInterval(interval);
             localStorage.removeItem(timerKey);
+            // Bersihkan cheat counter sesi ini
+            const hasilIdTimer = $('input[name="hasil_id"]').val();
+            if (hasilIdTimer) localStorage.removeItem('cheat_' + hasilIdTimer);
             alert('Waktu habis! Ujian akan disubmit otomatis.');
             if (form && form.length) form.submit();
         }
@@ -144,17 +139,17 @@ function startTimer(totalSeconds, displaySelector, formSelector, paketId) {
 }
 
 // Swipe navigation for mobile exam pages
-$(document).ready(function() {
+$(document).ready(function () {
     if ($('body').hasClass('mode-ujian')) {
         let touchStartX = 0;
         let touchEndX = 0;
         const minSwipeDistance = 50;
 
-        $(document).on('touchstart', function(e) {
+        $(document).on('touchstart', function (e) {
             touchStartX = e.changedTouches[0].screenX;
         });
 
-        $(document).on('touchend', function(e) {
+        $(document).on('touchend', function (e) {
             touchEndX = e.changedTouches[0].screenX;
             handleSwipe();
         });

@@ -18,6 +18,12 @@ $soal_id = intval($_POST['soal_id'] ?? 0);
 $opsi_id = intval($_POST['opsi_id'] ?? 0);
 $paket_id = intval($_POST['paket_id'] ?? 0);
 $is_ragu = intval($_POST['is_ragu'] ?? 0);
+$csrf = $_POST['csrf_token'] ?? '';
+
+if (!verifyCSRF($csrf)) {
+    echo json_encode(['status' => 'error', 'message' => 'Invalid CSRF token']);
+    exit;
+}
 
 if (!$soal_id || !$paket_id) {
     echo json_encode(['status' => 'error', 'message' => 'Data tidak lengkap']);

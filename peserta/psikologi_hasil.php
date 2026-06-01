@@ -4,8 +4,7 @@ requirePeserta();
 
 $user_id = $_SESSION['user_id'];
 
-// Ambil hasil tes psikologi terbaru (paket_id = 0 artinya psikologi)
-$stmt = $conn->prepare("SELECT * FROM hasil_ujian WHERE user_id = ? AND paket_ujian_id = 0 ORDER BY created_at DESC LIMIT 1");
+$stmt = $conn->prepare("SELECT * FROM hasil_ujian WHERE user_id = ? AND paket_ujian_id IS NULL ORDER BY created_at DESC LIMIT 1");
 $stmt->bind_param('i', $user_id);
 $stmt->execute();
 $hasil = $stmt->get_result()->fetch_assoc();
@@ -58,7 +57,7 @@ require_once __DIR__ . '/../includes/navbar_peserta.php';
                     </thead>
                     <tbody>
                         <?php
-                        $riwayat = $conn->query("SELECT * FROM hasil_ujian WHERE user_id = $user_id AND paket_ujian_id = 0 ORDER BY created_at DESC LIMIT 10");
+                        $riwayat = $conn->query("SELECT * FROM hasil_ujian WHERE user_id = $user_id AND paket_ujian_id IS NULL ORDER BY created_at DESC LIMIT 10");
                         while ($r = $riwayat->fetch_assoc()):
                         ?>
                         <tr>

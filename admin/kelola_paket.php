@@ -68,7 +68,7 @@ if (isset($_GET['edit'])) {
     $editData = $stmt->get_result()->fetch_assoc();
 }
 
-$kelolaPaketId = $_GET['kelola_soal'] ?? 0;
+$kelolaPaketId = intval($_GET['kelola_soal'] ?? 0);
 $soalTerpilih = [];
 $soalSisa = [];
 if ($kelolaPaketId) {

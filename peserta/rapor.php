@@ -6,13 +6,22 @@ $pageTitle = 'Rapor - ' . APP_NAME;
 $user_id = $_SESSION['user_id'];
 
 // Riwayat skor untuk grafik
-$riwayat = $conn->query("SELECT h.*, p.nama_paket FROM hasil_ujian h JOIN paket_ujian p ON h.paket_ujian_id = p.id WHERE h.user_id = $user_id AND h.status_lulus != 'proses' ORDER BY h.created_at DESC LIMIT 10");
+$stmtR = $conn->prepare('SELECT h.*, p.nama_paket FROM hasil_ujian h JOIN paket_ujian p ON h.paket_ujian_id = p.id WHERE h.user_id = ? AND h.status_lulus != "proses" ORDER BY h.created_at DESC LIMIT 10');
+$stmtR->bind_param('i', $user_id);
+$stmtR->execute();
+$riwayat = $stmtR->get_result();
 
 // Analisis topik (strength/weakness) - ambil dari semua ujian
-$analisis = $conn->query("SELECT * FROM (SELECT s.jenis_tes, s.topik, COUNT(*) as total_soal, SUM(CASE WHEN dj.nilai_diperoleh > 0 THEN 1 ELSE 0 END) as benar, ROUND(AVG(dj.waktu_detik)) as rata_waktu FROM detail_jawaban dj JOIN soal s ON dj.soal_id = s.id JOIN hasil_ujian h ON dj.hasil_ujian_id = h.id WHERE h.user_id = $user_id AND h.status_lulus != 'proses' GROUP BY s.jenis_tes, s.topik) t ORDER BY benar / total_soal ASC");
+$stmtA = $conn->prepare("SELECT * FROM (SELECT s.jenis_tes, s.topik, COUNT(*) as total_soal, SUM(CASE WHEN dj.nilai_diperoleh > 0 THEN 1 ELSE 0 END) as benar, ROUND(AVG(dj.waktu_detik)) as rata_waktu FROM detail_jawaban dj JOIN soal s ON dj.soal_id = s.id JOIN hasil_ujian h ON dj.hasil_ujian_id = h.id WHERE h.user_id = ? AND h.status_lulus != 'proses' GROUP BY s.jenis_tes, s.topik) t ORDER BY benar / total_soal ASC");
+$stmtA->bind_param('i', $user_id);
+$stmtA->execute();
+$analisis = $stmtA->get_result();
 
 // Rekomendasi aktif
-$rekom = $conn->query("SELECT rb.*, m.judul as materi_judul FROM rekomendasi_belajar rb LEFT JOIN materi m ON rb.saran_materi_id = m.id WHERE rb.user_id = $user_id AND rb.status = 'belum_dikerjakan' ORDER BY rb.created_at DESC");
+$stmtRek = $conn->prepare("SELECT rb.*, m.judul as materi_judul FROM rekomendasi_belajar rb LEFT JOIN materi m ON rb.saran_materi_id = m.id WHERE rb.user_id = ? AND rb.status = 'belum_dikerjakan' ORDER BY rb.created_at DESC");
+$stmtRek->bind_param('i', $user_id);
+$stmtRek->execute();
+$rekom = $stmtRek->get_result();
 
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/navbar_peserta.php';
@@ -131,14 +140,10 @@ new Chart(ctx, {
 
 // Radar Chart
 <?php
-$radar = $conn->query("SELECT 
-    ROUND(AVG(CASE WHEN s.jenis_tes='twk' THEN dj.nilai_diperoleh END),1) as twk,
-    ROUND(AVG(CASE WHEN s.jenis_tes='tiu' THEN dj.nilai_diperoleh END),1) as tiu,
-    ROUND(AVG(CASE WHEN s.jenis_tes='tkp' THEN dj.nilai_diperoleh END),1) as tkp,
-    ROUND(AVG(CASE WHEN dj.nilai_diperoleh>0 THEN 100 ELSE 0 END),1) as ketelitian,
-    ROUND(100 - AVG(dj.waktu_detik)/3,1) as kecepatan
-FROM detail_jawaban dj JOIN soal s ON dj.soal_id=s.id JOIN hasil_ujian h ON dj.hasil_ujian_id=h.id WHERE h.user_id=$user_id AND h.status_lulus!='proses'");
-$rv = $radar->fetch_assoc();
+$stmtRad = $conn->prepare("SELECT ROUND(AVG(CASE WHEN s.jenis_tes='twk' THEN dj.nilai_diperoleh END),1) as twk, ROUND(AVG(CASE WHEN s.jenis_tes='tiu' THEN dj.nilai_diperoleh END),1) as tiu, ROUND(AVG(CASE WHEN s.jenis_tes='tkp' THEN dj.nilai_diperoleh END),1) as tkp, ROUND(AVG(CASE WHEN dj.nilai_diperoleh>0 THEN 100 ELSE 0 END),1) as ketelitian, ROUND(100 - AVG(dj.waktu_detik)/3,1) as kecepatan FROM detail_jawaban dj JOIN soal s ON dj.soal_id=s.id JOIN hasil_ujian h ON dj.hasil_ujian_id=h.id WHERE h.user_id=? AND h.status_lulus!='proses'");
+$stmtRad->bind_param('i', $user_id);
+$stmtRad->execute();
+$rv = $stmtRad->get_result()->fetch_assoc();
 ?>
 new Chart(document.getElementById('grafikRadar'), {
     type: 'radar',

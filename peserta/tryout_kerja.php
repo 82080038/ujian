@@ -2,6 +2,9 @@
 require_once __DIR__ . '/../includes/functions.php';
 requirePeserta();
 
+// Cleanup stuck exams sebelum mulai ujian baru
+cleanupStuckExams($conn);
+
 if (!isset($_GET['paket'])) {
     flash('error', 'Paket ujian tidak valid.');
     redirect('peserta/tryout_list.php');
@@ -184,6 +187,7 @@ require_once __DIR__ . '/../includes/header.php';
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                 <form method="POST" action="<?= BASE_URL ?>api/submit_ujian.php" id="form-ujian">
+                    <input type="hidden" name="csrf_token" value="<?= e(generateCSRF()) ?>">
                     <input type="hidden" name="hasil_id" value="<?= $hasil_id ?>">
                     <button type="submit" class="btn btn-success fw-bold"><i class="bi bi-check-lg"></i> Ya, Submit</button>
                 </form>
@@ -195,6 +199,7 @@ require_once __DIR__ . '/../includes/header.php';
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>
 
 <script>
+window.CSRF_TOKEN = '<?= e(generateCSRF()) ?>';
 // Timer - ensure app.js is loaded first
 document.addEventListener('DOMContentLoaded', function() {
     const waktuMenit = <?= $paket['waktu_menit'] ?? 90 ?>;

@@ -15,9 +15,16 @@ $kosong = 0;
 $skor = 0;
 $detail = [];
 
+$stmtSoal  = $conn->prepare('SELECT * FROM soal WHERE id = ?');
+$stmtOpsi  = $conn->prepare('SELECT * FROM opsi_jawaban WHERE id = ?');
+$stmtKunci = $conn->prepare('SELECT * FROM opsi_jawaban WHERE soal_id = ? AND is_kunci = 1');
+
 foreach ($_SESSION['mini_soal'] as $soal_id) {
-    $s = $conn->query("SELECT * FROM soal WHERE id = $soal_id")->fetch_assoc();
-    $opsi_dipilih = $_SESSION['mini_jawaban'][$soal_id] ?? null;
+    $soal_id = intval($soal_id);
+    $stmtSoal->bind_param('i', $soal_id);
+    $stmtSoal->execute();
+    $s = $stmtSoal->get_result()->fetch_assoc();
+    $opsi_dipilih = intval($_SESSION['mini_jawaban'][$soal_id] ?? 0);
 
     if (!$opsi_dipilih) {
         $kosong++;
@@ -25,8 +32,13 @@ foreach ($_SESSION['mini_soal'] as $soal_id) {
         continue;
     }
 
-    $opsi = $conn->query("SELECT * FROM opsi_jawaban WHERE id = $opsi_dipilih")->fetch_assoc();
-    $kunci = $conn->query("SELECT * FROM opsi_jawaban WHERE soal_id = $soal_id AND is_kunci = 1")->fetch_assoc();
+    $stmtOpsi->bind_param('i', $opsi_dipilih);
+    $stmtOpsi->execute();
+    $opsi = $stmtOpsi->get_result()->fetch_assoc();
+
+    $stmtKunci->bind_param('i', $soal_id);
+    $stmtKunci->execute();
+    $kunci = $stmtKunci->get_result()->fetch_assoc();
 
     if ($jenis === 'tkp') {
         $nilai = $opsi['bobot_nilai'] ?? 0;

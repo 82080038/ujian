@@ -9,10 +9,11 @@ if (!in_array($jenis, ['wartegg', 'epps'])) {
 }
 
 $title = $jenis === 'wartegg' ? 'Tes Wartegg' : 'Tes EPPS';
+$topik = $jenis === 'wartegg' ? 'Wartegg' : 'EPPS';
 
 // Ambil soal psikologi sesuai jenis (limit 20)
 $stmt = $conn->prepare("SELECT s.* FROM soal s WHERE s.jenis_tes = 'psikologi' AND s.topik = ? ORDER BY RAND() LIMIT 20");
-$stmt->bind_param('s', $jenis);
+$stmt->bind_param('s', $topik);
 $stmt->execute();
 $soal = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
@@ -53,6 +54,7 @@ require_once __DIR__ . '/../includes/navbar_peserta.php';
     <?php else: ?>
 
     <form id="form-psikologi" method="POST" action="<?= BASE_URL ?>api/submit_psikologi.php">
+        <input type="hidden" name="csrf_token" value="<?= e(generateCSRF()) ?>">
         <input type="hidden" name="jenis" value="<?= $jenis ?>">
 
         <?php foreach ($soal as $idx => $s): ?>
@@ -96,19 +98,21 @@ require_once __DIR__ . '/../includes/navbar_peserta.php';
 </div>
 
 <script>
-const waktuMenit = 15;
 const timerEl = document.getElementById('timer');
-let timeLeft = waktuMenit * 60;
-const timerInterval = setInterval(() => {
-    timeLeft--;
-    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
-    const s = (timeLeft % 60).toString().padStart(2, '0');
-    timerEl.textContent = m + ':' + s;
-    if (timeLeft <= 0) {
-        clearInterval(timerInterval);
-        document.getElementById('form-psikologi').submit();
-    }
-}, 1000);
+if (timerEl) {
+    const waktuMenit = 15;
+    let timeLeft = waktuMenit * 60;
+    const timerInterval = setInterval(() => {
+        timeLeft--;
+        const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+        const s = (timeLeft % 60).toString().padStart(2, '0');
+        timerEl.textContent = m + ':' + s;
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            document.getElementById('form-psikologi').submit();
+        }
+    }, 1000);
+}
 
 document.querySelectorAll('.btn-nav').forEach(btn => {
     btn.addEventListener('click', function() {

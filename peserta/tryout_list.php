@@ -38,7 +38,19 @@ require_once __DIR__ . '/../includes/navbar_peserta.php';
                     <div class="d-flex justify-content-between align-items-start mb-2">
                         <span class="badge bg-<?= getJenisTesColor('twk') ?>"><?= e($row['kategori_nama']) ?></span>
                         <?php if ($status): ?>
-                            <span class="badge bg-<?= $status['status_lulus'] === 'lulus' ? 'success' : 'danger' ?>"><?= $status['status_lulus'] === 'lulus' ? 'LULUS' : 'GUGUR' ?></span>
+                            <?php
+                                $badgeColor = match($status['status_lulus']) {
+                                    'lulus'  => 'success',
+                                    'proses' => 'warning text-dark',
+                                    default  => 'danger',
+                                };
+                                $badgeText = match($status['status_lulus']) {
+                                    'lulus'  => 'LULUS',
+                                    'proses' => 'PROSES',
+                                    default  => 'GUGUR',
+                                };
+                            ?>
+                            <span class="badge bg-<?= $badgeColor ?>"><?= $badgeText ?></span>
                         <?php else: ?>
                             <span class="badge bg-secondary">Belum</span>
                         <?php endif; ?>

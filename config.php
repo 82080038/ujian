@@ -1,5 +1,17 @@
 <?php
-session_start();
+$isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (($_SERVER['SERVER_PORT'] ?? null) == 443);
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_set_cookie_params([
+        'lifetime' => 0,
+        'path' => '/',
+        'domain' => '',
+        'secure' => $isHttps,
+        'httponly' => true,
+        'samesite' => 'Lax'
+    ]);
+    session_start();
+}
 
 // Konfigurasi Database
 define('DB_HOST', 'localhost');
@@ -16,8 +28,9 @@ define('APP_VERSION', '1.0.0');
 date_default_timezone_set('Asia/Jakarta');
 
 // Error reporting (ganti 0 saat production)
+define('DEV_MODE', true);
 error_reporting(E_ALL);
-ini_set('display_errors', 1);
+ini_set('display_errors', DEV_MODE ? 1 : 0);
 
 // Passing Grade Default
 define('PG_TWK', 65);
@@ -29,6 +42,6 @@ define('PG_PSIKOLOGI', 100);
 // Maks peserta
 define('MAX_PESERTA', 10);
 
-// Development Mode: nonaktifkan PWA/service worker saat develop
-// Ubah ke false saat production
-define('DEV_MODE', true);
+// Timeout ujian (dalam menit) - auto-submit jika melebihi waktu ini
+define('TIMEOUT_UJIAN', 120); // 2 jam
+

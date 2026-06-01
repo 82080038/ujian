@@ -23,8 +23,11 @@ if (time() < $_SESSION['login_locked_until']) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$error) {
     $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
+    $csrf = $_POST['csrf_token'] ?? '';
 
-    if (empty($email) || empty($password)) {
+    if (!verifyCSRF($csrf)) {
+        $error = 'Sesi tidak valid. Silakan muat ulang halaman.';
+    } elseif (empty($email) || empty($password)) {
         $error = 'Email dan password wajib diisi.';
     } else {
         $stmt = $conn->prepare('SELECT id, nama, email, password, role FROM users WHERE email = ?');
@@ -40,6 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$error) {
                 $_SESSION['nama'] = $user['nama'];
                 $_SESSION['email'] = $user['email'];
                 $_SESSION['role'] = $user['role'];
+                generateCSRF();
                 $_SESSION['login_attempts'] = 0;
                 $_SESSION['login_locked_until'] = 0;
 
@@ -84,18 +88,35 @@ require_once __DIR__ . '/includes/header.php';
                     <?php endif; ?>
 
                     <form method="POST" action="">
+                        <input type="hidden" name="csrf_token" value="<?= e(generateCSRF()) ?>">
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Email</label>
-                            <input type="email" name="email" class="form-control form-control-lg" required autofocus placeholder="nama@email.com" value="<?= e($_POST['email'] ?? '') ?>">
+                            <input type="email" name="email" class="form-control form-control-lg" required autofocus autocomplete="email" placeholder="nama@email.com" value="<?= e($_POST['email'] ?? '') ?>">
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Password</label>
-                            <input type="password" name="password" class="form-control form-control-lg" required placeholder="Password">
+                            <input type="password" name="password" class="form-control form-control-lg" required autocomplete="current-password" placeholder="Password">
                         </div>
                         <button type="submit" class="btn btn-primary w-100 btn-lg fw-bold"><i class="bi bi-box-arrow-in-right"></i> Masuk</button>
                     </form>
 
                     <hr class="my-4">
+                    
+                    <?php if (DEV_MODE): ?>
+                    <div class="mb-3">
+                        <small class="text-muted d-block mb-2 text-center">⚡ Dev Quick Login</small>
+                        <div class="d-grid gap-2">
+                            <button type="button" onclick="devLogin('admin@tryoutku.com', 'password')" class="btn btn-outline-warning btn-sm">
+                                <i class="bi bi-person-gear"></i> Admin Demo
+                            </button>
+                            <button type="button" onclick="devLogin('peserta_demo@tryoutku.com', 'password')" class="btn btn-outline-info btn-sm">
+                                <i class="bi bi-person"></i> Peserta Demo
+                            </button>
+                        </div>
+                    </div>
+                    <hr class="my-3">
+                    <?php endif; ?>
+                    
                     <div class="text-center">
                         <small class="text-muted">Belum punya akun? <a href="register.php" class="fw-bold text-decoration-none">Daftar di sini</a></small><br>
                         <small class="text-muted"><a href="index.php" class="text-decoration-none"><i class="bi bi-arrow-left"></i> Kembali ke beranda</a></small>
@@ -105,5 +126,15 @@ require_once __DIR__ . '/includes/header.php';
         </div>
     </div>
 </div>
+
+<?php if (DEV_MODE): ?>
+<script>
+function devLogin(email, password) {
+    document.querySelector('input[name="email"]').value = email;
+    document.querySelector('input[name="password"]').value = password;
+    document.querySelector('form').submit();
+}
+</script>
+<?php endif; ?>
 
 <?php require_once __DIR__ . '/includes/footer.php'; ?>

@@ -15,7 +15,11 @@ $params = [];
 $types = '';
 
 // Sesuaikan dengan target peserta
-$targetKat = $conn->query("SELECT id FROM kategori_ujian WHERE nama LIKE '%" . $user['target_ujian'] . "%' LIMIT 1")->fetch_assoc();
+$targetKatParam = '%' . $user['target_ujian'] . '%';
+$stmtKat = $conn->prepare("SELECT id FROM kategori_ujian WHERE nama LIKE ? LIMIT 1");
+$stmtKat->bind_param('s', $targetKatParam);
+$stmtKat->execute();
+$targetKat = $stmtKat->get_result()->fetch_assoc();
 if ($targetKat) { $where[] = 'm.kategori_ujian_id = ?'; $params[] = $targetKat['id']; $types .= 'i'; }
 
 if ($jenis_filter) { $where[] = 'm.jenis_tes = ?'; $params[] = $jenis_filter; $types .= 's'; }

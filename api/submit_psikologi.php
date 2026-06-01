@@ -10,6 +10,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $jenis = $_POST['jenis'] ?? '';
 $jawaban = $_POST['jawaban'] ?? [];
 $user_id = $_SESSION['user_id'];
+$csrf = $_POST['csrf_token'] ?? '';
+
+if (!verifyCSRF($csrf)) {
+    flash('error', 'Sesi tidak valid. Silakan ulangi tes.');
+    redirect('peserta/psikologi.php');
+}
 
 $total = count($jawaban);
 $benar = 0;
@@ -31,8 +37,7 @@ foreach ($jawaban as $soal_id => $opsi_id) {
     $skor += $nilai;
 }
 
-// Simpan hasil psikologi ke tabel hasil_ujian (paket_id NULL atau default 0)
-$stmt2 = $conn->prepare("INSERT INTO hasil_ujian (user_id, paket_ujian_id, skor_twk, skor_tiu, skor_tkp, skor_kumulatif, status_lulus) VALUES (?, 0, 0, 0, ?, ?, ?)");
+$stmt2 = $conn->prepare("INSERT INTO hasil_ujian (user_id, paket_ujian_id, skor_twk, skor_tiu, skor_tkp, skor_kumulatif, status_lulus, tanggal_mulai, tanggal_selesai) VALUES (?, NULL, 0, 0, ?, ?, ?, NOW(), NOW())");
 $status = $skor >= PG_PSIKOLOGI ? 'lulus' : 'gugur';
 $stmt2->bind_param('iiis', $user_id, $skor, $skor, $status);
 $stmt2->execute();

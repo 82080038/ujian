@@ -2,12 +2,20 @@
 require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/../includes/functions.php';
 
+requirePeserta();
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     redirect('peserta/dashboard.php');
 }
 
 $hasil_id = intval($_POST['hasil_id'] ?? 0);
 $user_id = $_SESSION['user_id'] ?? 0;
+$csrf = $_POST['csrf_token'] ?? '';
+
+if (!verifyCSRF($csrf)) {
+    flash('error', 'Sesi tidak valid. Silakan submit ulang.');
+    redirect('peserta/dashboard.php');
+}
 
 if (!$hasil_id || !$user_id) {
     flash('error', 'Data tidak valid.');
@@ -23,6 +31,11 @@ $hasil = $stmt->get_result()->fetch_assoc();
 if (!$hasil) {
     flash('error', 'Hasil tidak ditemukan.');
     redirect('peserta/dashboard.php');
+}
+
+if ($hasil['status_lulus'] !== 'proses') {
+    flash('error', 'Ujian ini sudah pernah disubmit.');
+    redirect('peserta/tryout_hasil.php?id=' . $hasil_id);
 }
 
 // Hitung skor per jenis
@@ -43,7 +56,7 @@ $s->execute();
 $skorTKP = $s->get_result()->fetch_assoc()['total'] ?? 0;
 
 $kumulatif = $skorTWK + $skorTIU + $skorTKP;
-$status = getStatusLulus($skorTWK, $skorTIU, $skorTKP, $hasil['kategori_ujian_id']);
+$status = getStatusLulus($skorTWK, $skorTIU, $skorTKP, $hasil);
 
 // Update hasil
 $stmt2 = $conn->prepare('UPDATE hasil_ujian SET skor_twk = ?, skor_tiu = ?, skor_tkp = ?, skor_kumulatif = ?, status_lulus = ?, tanggal_selesai = NOW() WHERE id = ?');
@@ -52,9 +65,12 @@ $stmt2->execute();
 
 // Generate rekomendasi belajar
 // Analisis topik lemah (< 50% benar)
-$stmt3 = $conn->query("SELECT jenis_tes, topik, total, benar FROM (SELECT s.jenis_tes, s.topik, COUNT(*) as total, SUM(CASE WHEN dj.nilai_diperoleh > 0 THEN 1 ELSE 0 END) as benar FROM detail_jawaban dj JOIN soal s ON dj.soal_id = s.id WHERE dj.hasil_ujian_id = $hasil_id GROUP BY s.jenis_tes, s.topik) t WHERE benar/total < 0.5");
+$stmt3 = $conn->prepare('SELECT jenis_tes, topik, total, benar FROM (SELECT s.jenis_tes, s.topik, COUNT(*) as total, SUM(CASE WHEN dj.nilai_diperoleh > 0 THEN 1 ELSE 0 END) as benar FROM detail_jawaban dj JOIN soal s ON dj.soal_id = s.id WHERE dj.hasil_ujian_id = ? GROUP BY s.jenis_tes, s.topik) t WHERE benar/total < 0.5');
+$stmt3->bind_param('i', $hasil_id);
+$stmt3->execute();
+$rekomendasi = $stmt3->get_result();
 
-while ($row = $stmt3->fetch_assoc()) {
+while ($row = $rekomendasi->fetch_assoc()) {
     $pct = round(($row['benar'] / $row['total']) * 100, 2);
     $tingkat = $pct < 30 ? 'mudah' : ($pct < 50 ? 'sedang' : 'sulit');
     // Cari materi terkait

@@ -12,36 +12,63 @@ if (!in_array($jenis, ['twk','tiu','tkp']) || $jumlah < 1 || $jumlah > 50) {
     redirect('peserta/mini_tryout.php');
 }
 
-// Build query dengan prepared statement
-$params = [$jenis];
-$types = 's';
-$where = "jenis_tes = ?";
-if ($topik) { $where .= " AND topik = ?"; $params[] = $topik; $types .= 's'; }
-if ($level) { $where .= " AND tingkat_kesulitan = ?"; $params[] = $level; $types .= 's'; }
+// Ambil nomor soal lebih awal agar bisa cek apakah sesi perlu di-reset
+$nomor = intval($_GET['n'] ?? 1);
+if ($nomor < 1) $nomor = 1;
 
-$stmt = $conn->prepare("SELECT * FROM soal WHERE $where ORDER BY RAND() LIMIT ?");
-$types .= 'i';
-$params[] = $jumlah;
-$stmt->bind_param($types, ...$params);
-$stmt->execute();
-$soalRes = $stmt->get_result();
+// Kunci sesi unik per kombinasi parameter
+$miniKey = 'mini_ids_' . md5($jenis . '_' . $topik . '_' . $level . '_' . $jumlah);
+$isSesiBaru = empty($_SESSION[$miniKey])
+    || ($_SESSION['mini_jenis'] ?? '') !== $jenis;
+
+if ($isSesiBaru) {
+    // Build query untuk mengambil ID saja
+    $params = [$jenis];
+    $types  = 's';
+    $where  = "jenis_tes = ?";
+    if ($topik) { $where .= " AND topik = ?"; $params[] = $topik; $types .= 's'; }
+    if ($level) { $where .= " AND tingkat_kesulitan = ?"; $params[] = $level; $types .= 's'; }
+
+    $stmt = $conn->prepare("SELECT id FROM soal WHERE $where ORDER BY RAND() LIMIT ?");
+    $types .= 'i';
+    $params[] = $jumlah;
+    $stmt->bind_param($types, ...$params);
+    $stmt->execute();
+    $ids = array_column($stmt->get_result()->fetch_all(MYSQLI_ASSOC), 'id');
+
+    if (empty($ids)) {
+        flash('error', 'Soal tidak tersedia untuk filter tersebut.');
+        redirect('peserta/mini_tryout.php');
+    }
+
+    $_SESSION[$miniKey]       = $ids;
+    $_SESSION['mini_soal']    = $ids;
+    $_SESSION['mini_jenis']   = $jenis;
+    $_SESSION['mini_jumlah']  = count($ids);
+    $_SESSION['mini_start']   = time();
+    // Bersihkan jawaban sesi lama saat mulai ulang
+    if ($nomor === 1) {
+        unset($_SESSION['mini_jawaban'], $_SESSION['mini_ragu']);
+    }
+} else {
+    $ids = $_SESSION[$miniKey];
+}
+
+// Ambil soal berdasarkan ID tersimpan (urutan tetap)
+$placeholders = implode(',', array_map('intval', $ids));
+$soalRes = $conn->query("SELECT * FROM soal WHERE id IN ($placeholders)");
+$soalById = [];
+while ($r = $soalRes->fetch_assoc()) $soalById[$r['id']] = $r;
 $soalAll = [];
-while ($r = $soalRes->fetch_assoc()) $soalAll[] = $r;
+foreach ($ids as $sid) {
+    if (isset($soalById[$sid])) $soalAll[] = $soalById[$sid];
+}
 
 if (empty($soalAll)) {
     flash('error', 'Soal tidak tersedia untuk filter tersebut.');
     redirect('peserta/mini_tryout.php');
 }
 
-// Simpan sesi mini tryout
-$_SESSION['mini_soal'] = array_column($soalAll, 'id');
-$_SESSION['mini_jenis'] = $jenis;
-$_SESSION['mini_jumlah'] = count($soalAll);
-$_SESSION['mini_start'] = time();
-
-// Ambil soal pertama
-$nomor = intval($_GET['n'] ?? 1);
-if ($nomor < 1) $nomor = 1;
 if ($nomor > count($soalAll)) $nomor = count($soalAll);
 $soalAktif = $soalAll[$nomor - 1];
 
@@ -148,11 +175,12 @@ require_once __DIR__ . '/../includes/header.php';
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>
 
 <script>
+window.CSRF_TOKEN = '<?= e(generateCSRF()) ?>';
 // Simpan jawaban mini via AJAX
 $('.mini-opsi').on('click', function() {
     const soalId = $(this).data('soal-id');
     const opsiId = $(this).data('opsi-id');
-    $.post('<?= BASE_URL ?>api/simpan_jawaban_mini.php', { soal_id: soalId, opsi_id: opsiId }, function(res) {
+    $.post('<?= BASE_URL ?>api/simpan_jawaban_mini.php', { soal_id: soalId, opsi_id: opsiId, csrf_token: window.CSRF_TOKEN }, function(res) {
         location.reload();
     });
 });
@@ -160,7 +188,7 @@ $('.mini-opsi').on('click', function() {
 $('.toggle-ragu-mini').on('change', function() {
     const soalId = $(this).data('soal-id');
     const isRagu = $(this).is(':checked') ? 1 : 0;
-    $.post('<?= BASE_URL ?>api/simpan_jawaban_mini.php', { soal_id: soalId, is_ragu: isRagu }, function(res) {
+    $.post('<?= BASE_URL ?>api/simpan_jawaban_mini.php', { soal_id: soalId, is_ragu: isRagu, csrf_token: window.CSRF_TOKEN }, function(res) {
         location.reload();
     });
 });
